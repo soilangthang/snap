@@ -11,6 +11,27 @@ import time
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
 
+# Visitor counter (in-memory storage, reset on server restart)
+# In production, you might want to use a database or file storage
+visitor_count = 0
+visitor_file = 'visitor_count.txt'
+
+# Load visitor count from file if exists
+try:
+    if os.path.exists(visitor_file):
+        with open(visitor_file, 'r') as f:
+            visitor_count = int(f.read().strip() or 0)
+except:
+    visitor_count = 0
+
+def save_visitor_count():
+    """Save visitor count to file"""
+    try:
+        with open(visitor_file, 'w') as f:
+            f.write(str(visitor_count))
+    except:
+        pass
+
 # Privacy Policy HTML Template
 PRIVACY_POLICY_HTML = """
 <!DOCTYPE html>
@@ -105,15 +126,17 @@ def rate_limit(max_per_minute=10):
 def extract_tiktok_id(url):
     """Trích xuất video ID từ URL TikTok"""
     patterns = [
-        r'tiktok\.com/@[\w\.-]+/video/(\d+)',
-        r'vm\.tiktok\.com/(\w+)',
-        r'tiktok\.com/t/(\w+)',
+        r'tiktok\.com/@[\w\.-]+/video/(\d+)',  # Standard format: /@username/video/1234567890
+        r'vm\.tiktok\.com/(\w+)',  # Short link format
+        r'tiktok\.com/t/(\w+)',  # Alternative format
+        r'tiktok\.com/video/(\d+)',  # Direct video format
     ]
     
     for pattern in patterns:
         match = re.search(pattern, url)
         if match:
-            return match.group(1) if '(' in pattern else match.group(0)
+            # Return the captured group (video ID)
+            return match.group(1)
     return None
 
 def get_tiktok_video_info(url):
@@ -142,11 +165,38 @@ def get_tiktok_video_info(url):
                     url_list = play_addr.get('url_list', [])
                     
                     if url_list:
+                        # Extract video ID for consistent filename
+                        video_id = video_data.get('aweme_id', '') or extract_tiktok_id(url) or ''
+                        
+                        # Lấy video HD nếu có
+                        bit_rate = video_info.get('bit_rate', [])
+                        hd_url = url_list[0]  # Default to first URL
+                        if bit_rate and len(bit_rate) > 0:
+                            # Tìm video có bitrate cao nhất (HD)
+                            play_addr_hd = bit_rate[0].get('play_addr', {})
+                            hd_url_list = play_addr_hd.get('url_list', [])
+                            if hd_url_list:
+                                hd_url = hd_url_list[0]
+                        
+                        # Lấy thumbnail
+                        cover = video_data.get('video', {}).get('cover', {})
+                        cover_url_list = cover.get('url_list', []) if cover else []
+                        thumbnail = cover_url_list[0] if cover_url_list else ''
+                        
+                        # Lấy avatar author
+                        author_info = video_data.get('author', {})
+                        avatar = author_info.get('avatar_thumb', {}).get('url_list', [])
+                        author_avatar = avatar[0] if avatar else ''
+                        
                         return {
                             'success': True,
-                            'video_url': url_list[0],
+                            'video_url': url_list[0],  # SD/Default
+                            'video_url_hd': hd_url,  # HD
                             'title': video_data.get('desc', 'TikTok Video'),
-                            'author': video_data.get('author', {}).get('nickname', 'Unknown'),
+                            'author': author_info.get('nickname', 'Unknown'),
+                            'author_avatar': author_avatar,
+                            'video_id': video_id,
+                            'thumbnail': thumbnail,
                         }
         
         # Fallback: Sử dụng API khác
@@ -183,11 +233,33 @@ def get_tiktok_video_alternative(url):
                         video_url = video_data.get('play', '') or video_data.get('play_addr', {}).get('url_list', [None])[0]
                         
                         if video_url:
+                            # Extract video ID for consistent filename
+                            video_id = extract_tiktok_id(url) or ''
+                            
+                            # Lấy HD video nếu có
+                            hd_url = video_data.get('hdplay', '') or video_data.get('play', '') or video_url
+                            
+                            # Lấy thumbnail
+                            thumbnail = video_data.get('cover', '') or video_data.get('thumbnail', '') or ''
+                            
+                            # Lấy author info
+                            author_info = video_data.get('author', {})
+                            if isinstance(author_info, dict):
+                                author_name = author_info.get('nickname', 'Unknown')
+                                author_avatar = author_info.get('avatar', '') or ''
+                            else:
+                                author_name = 'Unknown'
+                                author_avatar = ''
+                            
                             return {
                                 'success': True,
-                                'video_url': video_url,
+                                'video_url': video_url,  # SD/Default
+                                'video_url_hd': hd_url,  # HD
                                 'title': video_data.get('title', '') or video_data.get('desc', 'TikTok Video'),
-                                'author': video_data.get('author', {}).get('nickname', '') if isinstance(video_data.get('author'), dict) else 'Unknown',
+                                'author': author_name,
+                                'author_avatar': author_avatar,
+                                'video_id': video_id,
+                                'thumbnail': thumbnail,
                             }
             except:
                 continue
@@ -268,6 +340,7 @@ def download_video():
             return jsonify({'success': False, 'error': 'Dữ liệu không hợp lệ'}), 400
             
         url = data.get('url', '').strip()
+        platform = data.get('platform', '').strip().lower()
         
         if not url:
             return jsonify({'success': False, 'error': 'Vui lòng nhập URL'}), 400
@@ -276,10 +349,11 @@ def download_video():
         if not (url.startswith('http://') or url.startswith('https://')):
             return jsonify({'success': False, 'error': 'URL phải bắt đầu bằng http:// hoặc https://'}), 400
         
+        # Validate TikTok URL
         if 'tiktok.com' not in url and 'vm.tiktok.com' not in url:
             return jsonify({'success': False, 'error': 'URL không hợp lệ. Vui lòng nhập link TikTok'}), 400
         
-        # Lấy thông tin video
+        # Lấy thông tin video TikTok
         video_info = get_tiktok_video_info(url)
         
         if not video_info.get('success'):
@@ -290,6 +364,27 @@ def download_video():
     except Exception as e:
         app.logger.error(f"Download error: {str(e)}")
         return jsonify({'success': False, 'error': 'Đã xảy ra lỗi. Vui lòng thử lại sau.'}), 500
+
+@app.route('/api/visitor', methods=['GET', 'POST'])
+def visitor_counter():
+    """API để đếm số lượt truy cập"""
+    global visitor_count
+    try:
+        if request.method == 'POST':
+            # Increment counter
+            visitor_count += 1
+            save_visitor_count()
+        # Return current count
+        return jsonify({
+            'success': True,
+            'count': visitor_count
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'count': visitor_count,
+            'error': str(e)
+        })
 
 @app.route('/api/proxy', methods=['GET'])
 def proxy_video():
@@ -303,39 +398,53 @@ def proxy_video():
         from urllib.parse import unquote
         video_url = unquote(video_url)
         
-        response = requests.get(video_url, stream=True, timeout=30, headers={
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        # Không dùng Range header để tránh lỗi chunked encoding
+        response = requests.get(video_url, stream=True, timeout=60, headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Referer': 'https://www.tiktok.com/',
             'Accept': '*/*',
             'Accept-Language': 'en-US,en;q=0.9',
-            'Range': 'bytes=0-'
+            'Accept-Encoding': 'identity',  # Disable compression to avoid encoding issues
         })
         
         if response.status_code in [200, 206]:  # 206 for partial content
-            from flask import Response
+            from flask import Response, stream_with_context
             import mimetypes
-            
-            # Tạo response stream để tải xuống
-            def generate():
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:
-                        yield chunk
             
             # Lấy tên file từ URL hoặc dùng tên mặc định
             filename = 'tiktok_video.mp4'
             if '?' in video_url:
-                filename = video_url.split('?')[0].split('/')[-1]
-                if not filename.endswith('.mp4'):
-                    filename = 'tiktok_video.mp4'
+                url_filename = video_url.split('?')[0].split('/')[-1]
+                if url_filename.endswith('.mp4'):
+                    filename = url_filename
+            
+            # Tạo response stream với stream_with_context để tránh lỗi chunked encoding
+            @stream_with_context
+            def generate():
+                try:
+                    for chunk in response.iter_content(chunk_size=16384):  # Larger chunk size
+                        if chunk:
+                            yield chunk
+                except Exception as e:
+                    print(f"Stream error: {str(e)}")
+                    # Don't raise, just stop streaming
+                    return
+            
+            # Headers - không set Transfer-Encoding, Flask sẽ tự động xử lý
+            headers = {
+                'Content-Disposition': f'attachment; filename="{filename}"',
+                'Content-Type': 'video/mp4',
+                'Cache-Control': 'no-cache',
+            }
+            
+            # Không set Content-Length để tránh mismatch
+            # Flask sẽ tự động sử dụng chunked encoding
             
             return Response(
                 generate(),
                 mimetype='video/mp4',
-                headers={
-                    'Content-Disposition': f'attachment; filename="{filename}"',
-                    'Content-Type': 'video/mp4',
-                    'Content-Length': response.headers.get('Content-Length', ''),
-                }
+                headers=headers,
+                direct_passthrough=True  # Important for streaming
             )
         else:
             return jsonify({'error': 'Failed to download video'}), 500

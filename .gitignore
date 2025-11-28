@@ -43,3 +43,6 @@ Thumbs.db
 *.log
 *.mp4
 
+# Visitor counter
+visitor_count.txt
+

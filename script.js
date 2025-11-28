@@ -1,11 +1,14 @@
-const tiktokUrlInput = document.getElementById('tiktokUrl');
+const videoUrlInput = document.getElementById('videoUrl');
 const downloadBtn = document.getElementById('downloadBtn');
 const resultSection = document.getElementById('resultSection');
 const errorMessage = document.getElementById('errorMessage');
 const videoTitle = document.getElementById('videoTitle');
 const videoAuthor = document.getElementById('videoAuthor');
-const downloadLink = document.getElementById('downloadLink');
-const copyLinkBtn = document.getElementById('copyLinkBtn');
+const videoThumbnail = document.getElementById('videoThumbnail');
+const authorAvatar = document.getElementById('authorAvatar');
+const downloadSD = document.getElementById('downloadSD');
+const downloadHD = document.getElementById('downloadHD');
+const downloadOther = document.getElementById('downloadOther');
 const progressContainer = document.getElementById('progressContainer');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
@@ -13,43 +16,89 @@ const progressPercent = document.getElementById('progressPercent');
 const progressSize = document.getElementById('progressSize');
 const progressSpeed = document.getElementById('progressSpeed');
 
-let currentVideoUrl = '';
+let currentVideoData = {
+    video_url: '',
+    video_url_hd: '',
+    title: '',
+    author: '',
+    video_id: '',
+    filename: ''
+};
+let currentVideoUrl = ''; // For copy link functionality
 let downloadStartTime = 0;
 let lastLoaded = 0;
 let lastTime = 0;
+
+// Hàm tạo tên file nhất quán
+function generateFilename(videoId, title) {
+    // Sanitize title: loại bỏ ký tự đặc biệt, giữ lại chữ, số, khoảng trắng
+    let sanitizedTitle = '';
+    if (title && title !== 'TikTok Video') {
+        // Chuyển đổi tiếng Việt có dấu thành không dấu và sanitize
+        sanitizedTitle = title
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+            .replace(/[^a-z0-9\s-]/gi, '') // Remove special chars except spaces and hyphens
+            .replace(/\s+/g, '_') // Replace spaces with underscores
+            .substring(0, 50) // Limit length
+            .toLowerCase();
+    }
+    
+    // Sử dụng video ID làm phần chính, thêm title nếu có
+    if (videoId) {
+        if (sanitizedTitle) {
+            return `tiktok_${videoId}_${sanitizedTitle}.mp4`;
+        }
+        return `tiktok_${videoId}.mp4`;
+    }
+    
+    // Fallback nếu không có video ID
+    if (sanitizedTitle) {
+        return `tiktok_${sanitizedTitle}.mp4`;
+    }
+    
+    return 'tiktok_video.mp4';
+}
 
 // Xử lý khi nhấn nút tải
 downloadBtn.addEventListener('click', handleDownload);
 
 // Xử lý khi nhấn Enter
-tiktokUrlInput.addEventListener('keypress', (e) => {
+videoUrlInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         handleDownload();
     }
 });
 
-// Xử lý sao chép link
-copyLinkBtn.addEventListener('click', () => {
-    if (currentVideoUrl) {
-        navigator.clipboard.writeText(currentVideoUrl).then(() => {
-            const originalText = copyLinkBtn.innerHTML;
-            copyLinkBtn.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Đã Sao Chép!
-            `;
-            setTimeout(() => {
-                copyLinkBtn.innerHTML = originalText;
-            }, 2000);
-        }).catch(() => {
-            showError('Không thể sao chép link');
-        });
-    }
-});
+// Setup download buttons
+function setupDownloadButtons() {
+    // Download SD
+    downloadSD.onclick = () => {
+        if (currentVideoData.video_url) {
+            downloadVideoAsBlob(currentVideoData.video_url, currentVideoData.filename);
+        }
+    };
+    
+    // Download HD
+    downloadHD.onclick = () => {
+        const hdUrl = currentVideoData.video_url_hd || currentVideoData.video_url;
+        const hdFilename = currentVideoData.filename.replace('.mp4', '_HD.mp4');
+        if (hdUrl) {
+            downloadVideoAsBlob(hdUrl, hdFilename);
+        }
+    };
+    
+    // Download other video (reset form)
+    downloadOther.onclick = () => {
+        videoUrlInput.value = '';
+        resultSection.style.display = 'none';
+        errorMessage.style.display = 'none';
+        videoUrlInput.focus();
+    };
+}
 
 async function handleDownload() {
-    const url = tiktokUrlInput.value.trim();
+    const url = videoUrlInput.value.trim();
     
     // Validate URL
     if (!url) {
@@ -57,6 +106,7 @@ async function handleDownload() {
         return;
     }
     
+    // Validate TikTok URL
     if (!url.includes('tiktok.com') && !url.includes('vm.tiktok.com')) {
         showError('URL không hợp lệ. Vui lòng nhập link TikTok');
         return;
@@ -81,28 +131,50 @@ async function handleDownload() {
         const data = await response.json();
         
         if (data.success) {
-            currentVideoUrl = data.video_url;
-            videoTitle.textContent = data.title || 'TikTok Video';
-            videoAuthor.textContent = data.author || 'Unknown';
-            
-            // Sử dụng proxy endpoint để force download
-            const proxyUrl = `/api/proxy?url=${encodeURIComponent(data.video_url)}`;
-            downloadLink.href = proxyUrl;
-            downloadLink.download = 'tiktok_video.mp4';
-            downloadLink.target = '_self';
-            
-            // Thêm event listener để đảm bảo download
-            downloadLink.onclick = function(e) {
-                // Tải video bằng fetch và blob để đảm bảo download
-                e.preventDefault();
-                downloadVideoAsBlob(data.video_url, data.title || 'tiktok_video');
+            // Lưu thông tin video
+            currentVideoData = {
+                video_url: data.video_url || '',
+                video_url_hd: data.video_url_hd || data.video_url || '',
+                title: data.title || 'TikTok Video',
+                author: data.author || 'Unknown',
+                video_id: data.video_id || '',
+                filename: generateFilename(data.video_id, data.title)
             };
+            
+            // Hiển thị thông tin video
+            videoTitle.textContent = currentVideoData.title;
+            videoAuthor.textContent = currentVideoData.author;
+            
+            // Hiển thị thumbnail
+            if (data.thumbnail) {
+                videoThumbnail.src = data.thumbnail;
+                videoThumbnail.style.display = 'block';
+                videoThumbnail.onerror = function() {
+                    this.style.display = 'none';
+                };
+            } else {
+                videoThumbnail.style.display = 'none';
+            }
+            
+            // Hiển thị author avatar
+            if (data.author_avatar) {
+                authorAvatar.src = data.author_avatar;
+                authorAvatar.style.display = 'block';
+                authorAvatar.onerror = function() {
+                    this.style.display = 'none';
+                };
+            } else {
+                authorAvatar.style.display = 'none';
+            }
+            
+            // Update currentVideoUrl for copy functionality
+            currentVideoUrl = currentVideoData.video_url;
+            
+            // Setup download buttons
+            setupDownloadButtons();
             
             // Hiển thị kết quả
             resultSection.style.display = 'block';
-            
-            // Tự động tải video
-            downloadVideoAsBlob(data.video_url, data.title || 'tiktok_video');
         } else {
             showError(data.error || 'Không thể tải video. Vui lòng thử lại.');
             showProgress(false);
@@ -148,12 +220,39 @@ async function downloadVideoAsBlob(videoUrl, filename) {
         lastLoaded = 0;
         lastTime = downloadStartTime;
         
-        // Tải video qua proxy với progress tracking
+        // Tải video qua proxy
         const proxyUrl = `/api/proxy?url=${encodeURIComponent(videoUrl)}`;
-        const response = await fetch(proxyUrl);
+        let response;
         
-        if (!response.ok) {
-            throw new Error('Failed to download video');
+        try {
+            response = await fetch(proxyUrl, {
+                method: 'GET',
+                cache: 'no-cache',
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Proxy error:', error);
+            // Fallback: tải trực tiếp từ URL gốc
+            showProgress(false);
+            updateProgress(0, 'Đang mở link tải trực tiếp...', 0, 0);
+            
+            // Tạo link download trực tiếp
+            const a = document.createElement('a');
+            a.href = videoUrl;
+            a.download = filename.endsWith('.mp4') ? filename : filename + '.mp4';
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            setTimeout(() => {
+                showProgress(false);
+                setLoading(false);
+            }, 1000);
+            return;
         }
         
         const contentLength = response.headers.get('content-length');
@@ -226,7 +325,8 @@ async function downloadVideoAsBlob(videoUrl, filename) {
         // Tạo link tải xuống
         const a = document.createElement('a');
         a.href = blobUrl;
-        a.download = filename.replace(/[^a-z0-9]/gi, '_') + '.mp4';
+        // Filename đã được sanitize trong generateFilename
+        a.download = filename.endsWith('.mp4') ? filename : filename + '.mp4';
         document.body.appendChild(a);
         a.click();
         
@@ -242,7 +342,18 @@ async function downloadVideoAsBlob(videoUrl, filename) {
     } catch (error) {
         console.error('Download error:', error);
         showProgress(false);
-        showError('Lỗi khi tải video: ' + error.message);
+        
+        // Better error messages
+        let errorMsg = 'Lỗi khi tải video';
+        if (error.message.includes('network') || error.message.includes('Network')) {
+            errorMsg = 'Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.';
+        } else if (error.message.includes('server')) {
+            errorMsg = 'Lỗi server. Vui lòng thử lại sau.';
+        } else if (error.message) {
+            errorMsg = 'Lỗi: ' + error.message;
+        }
+        
+        showError(errorMsg);
         setLoading(false);
     }
 }
@@ -282,13 +393,60 @@ function updateProgress(percent, text, loaded, speed) {
 }
 
 // Xóa placeholder khi focus
-tiktokUrlInput.addEventListener('focus', function() {
+videoUrlInput.addEventListener('focus', function() {
     this.placeholder = '';
 });
 
-tiktokUrlInput.addEventListener('blur', function() {
+videoUrlInput.addEventListener('blur', function() {
     if (!this.value) {
-        this.placeholder = 'Dán link TikTok vào đây...';
+        this.placeholder = 'https://www.tiktok.com/@username/video/1234567890';
     }
+});
+
+// Visitor Counter
+async function updateVisitorCount() {
+    try {
+        const visitorCountEl = document.getElementById('visitorCount');
+        if (!visitorCountEl) return;
+        
+        // Check if user already visited in this session
+        const sessionKey = 'visitor_counted_' + new Date().toDateString();
+        const hasCounted = sessionStorage.getItem(sessionKey);
+        
+        if (!hasCounted) {
+            // Increment counter
+            const response = await fetch('/api/visitor', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            
+            if (response.ok) {
+                sessionStorage.setItem(sessionKey, 'true');
+            }
+        }
+        
+        // Get current count
+        const countResponse = await fetch('/api/visitor', {
+            method: 'GET'
+        });
+        
+        if (countResponse.ok) {
+            const data = await countResponse.json();
+            if (data.success && data.count !== undefined) {
+                // Format number with thousand separators
+                const formattedCount = data.count.toLocaleString('vi-VN');
+                visitorCountEl.textContent = formattedCount;
+            }
+        }
+    } catch (error) {
+        console.error('Error updating visitor count:', error);
+    }
+}
+
+// Update visitor count on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateVisitorCount();
 });
 

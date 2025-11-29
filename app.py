@@ -312,7 +312,9 @@ def script_js():
 @app.route('/favicon.ico')
 def favicon_ico():
     response = send_file('favicon.ico', mimetype='image/x-icon')
-    response.headers['Cache-Control'] = 'public, max-age=31536000'  # Cache for 1 year
+    # Reduce cache time temporarily to help with updates
+    response.headers['Cache-Control'] = 'public, max-age=3600'  # Cache for 1 hour
+    response.headers['Expires'] = ''
     return response
 
 @app.route('/privacy')

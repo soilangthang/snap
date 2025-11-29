@@ -7,7 +7,7 @@
   
   <!-- Homepage - Highest Priority -->
   <url>
-    <loc>https://your-domain.vercel.app/</loc>
+    <loc>https://tik1s.vercel.app/</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -15,7 +15,7 @@
   
   <!-- Blog Page - High Priority for SEO -->
   <url>
-    <loc>https://your-domain.vercel.app/blog</loc>
+    <loc>https://tik1s.vercel.app/blog</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -23,7 +23,7 @@
   
   <!-- Privacy Policy - Legal Page -->
   <url>
-    <loc>https://your-domain.vercel.app/privacy</loc>
+    <loc>https://tik1s.vercel.app/privacy</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -31,7 +31,7 @@
   
   <!-- Terms of Service - Legal Page -->
   <url>
-    <loc>https://your-domain.vercel.app/terms</loc>
+    <loc>https://tik1s.vercel.app/terms</loc>
     <lastmod>2024-01-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

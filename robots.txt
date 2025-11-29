@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://your-domain.vercel.app/sitemap.xml
+Sitemap: https://tik1s.vercel.app/sitemap.xml
 

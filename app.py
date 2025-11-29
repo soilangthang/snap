@@ -311,15 +311,21 @@ def script_js():
 
 @app.route('/favicon.svg')
 def favicon_svg():
-    return send_file('favicon.svg', mimetype='image/svg+xml')
+    response = send_file('favicon.svg', mimetype='image/svg+xml')
+    response.headers['Cache-Control'] = 'public, max-age=31536000'  # Cache for 1 year
+    return response
 
 @app.route('/favicon.ico')
 def favicon_ico():
     # Fallback to SVG if .ico doesn't exist
     try:
-        return send_file('favicon.ico', mimetype='image/x-icon')
+        response = send_file('favicon.ico', mimetype='image/x-icon')
+        response.headers['Cache-Control'] = 'public, max-age=31536000'
+        return response
     except:
-        return send_file('favicon.svg', mimetype='image/svg+xml')
+        response = send_file('favicon.svg', mimetype='image/svg+xml')
+        response.headers['Cache-Control'] = 'public, max-age=31536000'
+        return response
 
 @app.route('/privacy')
 def privacy():

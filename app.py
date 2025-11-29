@@ -328,9 +328,13 @@ def index():
 @app.route('/blog/')
 def blog():
     try:
-        return send_file('blog.html')
-    except FileNotFoundError:
-        return jsonify({'error': 'Blog page not found'}), 404
+        # Đảm bảo file tồn tại và có thể đọc được
+        if not os.path.exists('blog.html'):
+            return jsonify({'error': 'Blog file not found on server'}), 404
+        return send_file('blog.html', mimetype='text/html')
+    except Exception as e:
+        app.logger.error(f"Blog route error: {str(e)}")
+        return jsonify({'error': f'Error loading blog: {str(e)}'}), 500
 
 @app.route('/style.css')
 def style_css():

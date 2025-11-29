@@ -1,5 +1,7 @@
+// DOM Elements
 const videoUrlInput = document.getElementById('videoUrl');
 const downloadBtn = document.getElementById('downloadBtn');
+const downloadMP3 = document.getElementById('downloadMP3');
 const resultSection = document.getElementById('resultSection');
 const errorMessage = document.getElementById('errorMessage');
 const videoTitle = document.getElementById('videoTitle');
@@ -8,7 +10,6 @@ const videoThumbnail = document.getElementById('videoThumbnail');
 const authorAvatar = document.getElementById('authorAvatar');
 const downloadSD = document.getElementById('downloadSD');
 const downloadHD = document.getElementById('downloadHD');
-const downloadOther = document.getElementById('downloadOther');
 const progressContainer = document.getElementById('progressContainer');
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressText');
@@ -72,6 +73,8 @@ videoUrlInput.addEventListener('keypress', (e) => {
 
 // Setup download buttons
 function setupDownloadButtons() {
+    if (!downloadSD || !downloadHD) return;
+    
     // Download SD
     downloadSD.onclick = () => {
         if (currentVideoData.video_url) {
@@ -87,14 +90,6 @@ function setupDownloadButtons() {
             downloadVideoAsBlob(hdUrl, hdFilename);
         }
     };
-    
-    // Download other video (reset form)
-    downloadOther.onclick = () => {
-        videoUrlInput.value = '';
-        resultSection.style.display = 'none';
-        errorMessage.style.display = 'none';
-        videoUrlInput.focus();
-    };
 }
 
 async function handleDownload() {
@@ -102,13 +97,25 @@ async function handleDownload() {
     
     // Validate URL
     if (!url) {
-        showError('Please enter a TikTok URL');
+        const errorMsgs = {
+            en: 'Please enter a TikTok URL',
+            hi: 'कृपया एक TikTok URL दर्ज करें',
+            vi: 'Vui lòng nhập URL TikTok',
+            id: 'Silakan masukkan URL TikTok'
+        };
+        showError(errorMsgs[currentLang] || errorMsgs.en);
         return;
     }
     
     // Validate TikTok URL
     if (!url.includes('tiktok.com') && !url.includes('vm.tiktok.com')) {
-        showError('Invalid URL. Please enter a valid TikTok link');
+        const errorMsgs = {
+            en: 'Invalid URL. Please enter a valid TikTok link',
+            hi: 'अमान्य URL. कृपया एक वैध TikTok लिंक दर्ज करें',
+            vi: 'URL không hợp lệ. Vui lòng nhập link TikTok hợp lệ',
+            id: 'URL tidak valid. Silakan masukkan tautan TikTok yang valid'
+        };
+        showError(errorMsgs[currentLang] || errorMsgs.en);
         return;
     }
     
@@ -189,16 +196,15 @@ async function handleDownload() {
 }
 
 function setLoading(loading) {
+    if (!downloadBtn) return;
+    
     downloadBtn.disabled = loading;
-    const btnText = downloadBtn.querySelector('.btn-text');
-    const btnLoader = downloadBtn.querySelector('.btn-loader');
+    downloadBtn.classList.toggle('loading', loading);
     
     if (loading) {
-        btnText.style.display = 'none';
-        btnLoader.style.display = 'flex';
+        downloadBtn.setAttribute('disabled', 'true');
     } else {
-        btnText.style.display = 'inline';
-        btnLoader.style.display = 'none';
+        downloadBtn.removeAttribute('disabled');
     }
 }
 
@@ -444,5 +450,293 @@ async function updateVisitorCount() {
 // Update visitor count on page load
 document.addEventListener('DOMContentLoaded', function() {
     updateVisitorCount();
+    initLanguageSwitcher();
+    initFAQ();
+    initPasteButton();
 });
+
+// ============================================
+// MULTILINGUAL SUPPORT (i18n)
+// ============================================
+
+const translations = {
+    en: {
+        title: "TikTok Video Downloader",
+        subtitle: "Download high-quality TikTok videos without watermark",
+        inputPlaceholder: "Paste TikTok video URL here...",
+        pasteBtn: "Paste",
+        downloadVideo: "Download MP4",
+        downloadAudio: "Download MP3",
+        downloadSD: "Download SD",
+        downloadHD: "Download HD",
+        downloading: "Downloading...",
+        popularFeatures: "Popular Features",
+        featureHD: "HD Quality",
+        featureHDDesc: "Download videos in original quality",
+        featureNoWatermark: "No Watermark",
+        featureNoWatermarkDesc: "Clean videos without TikTok logo",
+        featureFast: "Fast Download",
+        featureFastDesc: "Quick and simple process",
+        featureSecure: "Secure & Private",
+        featureSecureDesc: "No data storage, completely safe",
+        howToUse: "How to Use",
+        step1Title: "Copy Link",
+        step1Desc: "Copy the TikTok video URL from the app",
+        step2Title: "Paste & Download",
+        step2Desc: "Paste the link and click download button",
+        step3Title: "Choose Quality",
+        step3Desc: "Select SD or HD quality and save",
+        faqTitle: "Frequently Asked Questions",
+        faq1Question: "Is this service free?",
+        faq1Answer: "Yes, our TikTok downloader is completely free to use. No registration or payment required.",
+        faq2Question: "Will downloaded videos have watermark?",
+        faq2Answer: "No, all downloaded videos are watermark-free. Enjoy clean videos without TikTok branding.",
+        faq3Question: "What video formats are supported?",
+        faq3Answer: "We support MP4 format for videos and MP3 for audio extraction. Both SD and HD qualities are available.",
+        faq4Question: "Is my data safe?",
+        faq4Answer: "Yes, we don't store any of your data. All downloads are processed securely and privately.",
+        allRightsReserved: "All rights reserved.",
+        privacy: "Privacy Policy",
+        terms: "Terms of Service"
+    },
+    hi: {
+        title: "TikTok वीडियो डाउनलोडर",
+        subtitle: "वॉटरमार्क के बिना उच्च गुणवत्ता वाले TikTok वीडियो डाउनलोड करें",
+        inputPlaceholder: "TikTok वीडियो URL यहाँ पेस्ट करें...",
+        pasteBtn: "पेस्ट करें",
+        downloadVideo: "MP4 डाउनलोड",
+        downloadAudio: "MP3 डाउनलोड",
+        downloadSD: "SD डाउनलोड",
+        downloadHD: "HD डाउनलोड",
+        downloading: "डाउनलोड हो रहा है...",
+        popularFeatures: "लोकप्रिय सुविधाएं",
+        featureHD: "HD गुणवत्ता",
+        featureHDDesc: "मूल गुणवत्ता में वीडियो डाउनलोड करें",
+        featureNoWatermark: "कोई वॉटरमार्क नहीं",
+        featureNoWatermarkDesc: "TikTok लोगो के बिना साफ वीडियो",
+        featureFast: "तेज़ डाउनलोड",
+        featureFastDesc: "त्वरित और सरल प्रक्रिया",
+        featureSecure: "सुरक्षित और निजी",
+        featureSecureDesc: "कोई डेटा संग्रहण नहीं, पूरी तरह से सुरक्षित",
+        howToUse: "उपयोग कैसे करें",
+        step1Title: "लिंक कॉपी करें",
+        step1Desc: "ऐप से TikTok वीडियो URL कॉपी करें",
+        step2Title: "पेस्ट करें और डाउनलोड करें",
+        step2Desc: "लिंक पेस्ट करें और डाउनलोड बटन पर क्लिक करें",
+        step3Title: "गुणवत्ता चुनें",
+        step3Desc: "SD या HD गुणवत्ता चुनें और सेव करें",
+        faqTitle: "अक्सर पूछे जाने वाले प्रश्न",
+        faq1Question: "क्या यह सेवा मुफ्त है?",
+        faq1Answer: "हाँ, हमारा TikTok डाउनलोडर पूरी तरह से मुफ्त है। कोई पंजीकरण या भुगतान आवश्यक नहीं है।",
+        faq2Question: "क्या डाउनलोड किए गए वीडियो में वॉटरमार्क होगा?",
+        faq2Answer: "नहीं, सभी डाउनलोड किए गए वीडियो वॉटरमार्क-मुक्त हैं। TikTok ब्रांडिंग के बिना साफ वीडियो का आनंद लें।",
+        faq3Question: "कौन से वीडियो प्रारूप समर्थित हैं?",
+        faq3Answer: "हम वीडियो के लिए MP4 प्रारूप और ऑडियो निष्कर्षण के लिए MP3 का समर्थन करते हैं। SD और HD दोनों गुणवत्ता उपलब्ध हैं।",
+        faq4Question: "क्या मेरा डेटा सुरक्षित है?",
+        faq4Answer: "हाँ, हम आपका कोई डेटा संग्रहीत नहीं करते हैं। सभी डाउनलोड सुरक्षित और निजी तौर पर संसाधित किए जाते हैं।",
+        allRightsReserved: "सभी अधिकार सुरक्षित।",
+        privacy: "गोपनीयता नीति",
+        terms: "सेवा की शर्तें"
+    },
+    vi: {
+        title: "Trình Tải Video TikTok",
+        subtitle: "Tải video TikTok chất lượng cao không watermark",
+        inputPlaceholder: "Dán link video TikTok vào đây...",
+        pasteBtn: "Dán",
+        downloadVideo: "Tải MP4",
+        downloadAudio: "Tải MP3",
+        downloadSD: "Tải SD",
+        downloadHD: "Tải HD",
+        downloading: "Đang tải...",
+        popularFeatures: "Tính Năng Phổ Biến",
+        featureHD: "Chất Lượng HD",
+        featureHDDesc: "Tải video chất lượng gốc",
+        featureNoWatermark: "Không Watermark",
+        featureNoWatermarkDesc: "Video sạch không logo TikTok",
+        featureFast: "Tải Nhanh",
+        featureFastDesc: "Quá trình nhanh và đơn giản",
+        featureSecure: "An Toàn & Riêng Tư",
+        featureSecureDesc: "Không lưu trữ dữ liệu, hoàn toàn an toàn",
+        howToUse: "Cách Sử Dụng",
+        step1Title: "Sao Chép Link",
+        step1Desc: "Sao chép URL video TikTok từ ứng dụng",
+        step2Title: "Dán & Tải",
+        step2Desc: "Dán link và nhấn nút tải",
+        step3Title: "Chọn Chất Lượng",
+        step3Desc: "Chọn chất lượng SD hoặc HD và lưu",
+        faqTitle: "Câu Hỏi Thường Gặp",
+        faq1Question: "Dịch vụ này có miễn phí không?",
+        faq1Answer: "Có, trình tải TikTok của chúng tôi hoàn toàn miễn phí. Không cần đăng ký hay thanh toán.",
+        faq2Question: "Video tải về có watermark không?",
+        faq2Answer: "Không, tất cả video tải về đều không có watermark. Thưởng thức video sạch không logo TikTok.",
+        faq3Question: "Hỗ trợ định dạng video nào?",
+        faq3Answer: "Chúng tôi hỗ trợ định dạng MP4 cho video và MP3 cho trích xuất âm thanh. Có cả chất lượng SD và HD.",
+        faq4Question: "Dữ liệu của tôi có an toàn không?",
+        faq4Answer: "Có, chúng tôi không lưu trữ dữ liệu của bạn. Tất cả tải xuống được xử lý an toàn và riêng tư.",
+        allRightsReserved: "Bảo lưu mọi quyền.",
+        privacy: "Chính Sách Bảo Mật",
+        terms: "Điều Khoản Sử Dụng"
+    },
+    id: {
+        title: "Pengunduh Video TikTok",
+        subtitle: "Unduh video TikTok berkualitas tinggi tanpa watermark",
+        inputPlaceholder: "Tempel URL video TikTok di sini...",
+        pasteBtn: "Tempel",
+        downloadVideo: "Unduh MP4",
+        downloadAudio: "Unduh MP3",
+        downloadSD: "Unduh SD",
+        downloadHD: "Unduh HD",
+        downloading: "Mengunduh...",
+        popularFeatures: "Fitur Populer",
+        featureHD: "Kualitas HD",
+        featureHDDesc: "Unduh video dalam kualitas asli",
+        featureNoWatermark: "Tanpa Watermark",
+        featureNoWatermarkDesc: "Video bersih tanpa logo TikTok",
+        featureFast: "Unduh Cepat",
+        featureFastDesc: "Proses cepat dan sederhana",
+        featureSecure: "Aman & Privat",
+        featureSecureDesc: "Tidak menyimpan data, sepenuhnya aman",
+        howToUse: "Cara Menggunakan",
+        step1Title: "Salin Tautan",
+        step1Desc: "Salin URL video TikTok dari aplikasi",
+        step2Title: "Tempel & Unduh",
+        step2Desc: "Tempel tautan dan klik tombol unduh",
+        step3Title: "Pilih Kualitas",
+        step3Desc: "Pilih kualitas SD atau HD dan simpan",
+        faqTitle: "Pertanyaan yang Sering Diajukan",
+        faq1Question: "Apakah layanan ini gratis?",
+        faq1Answer: "Ya, pengunduh TikTok kami sepenuhnya gratis. Tidak perlu registrasi atau pembayaran.",
+        faq2Question: "Apakah video yang diunduh memiliki watermark?",
+        faq2Answer: "Tidak, semua video yang diunduh bebas watermark. Nikmati video bersih tanpa branding TikTok.",
+        faq3Question: "Format video apa yang didukung?",
+        faq3Answer: "Kami mendukung format MP4 untuk video dan MP3 untuk ekstraksi audio. Kedua kualitas SD dan HD tersedia.",
+        faq4Question: "Apakah data saya aman?",
+        faq4Answer: "Ya, kami tidak menyimpan data Anda. Semua unduhan diproses dengan aman dan privat.",
+        allRightsReserved: "Hak cipta dilindungi.",
+        privacy: "Kebijakan Privasi",
+        terms: "Ketentuan Layanan"
+    }
+};
+
+let currentLang = localStorage.getItem('language') || 'en';
+
+function changeLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('language', lang);
+    
+    // Update all elements with data-i18n attribute
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+            el.textContent = translations[lang][key];
+        }
+    });
+    
+    // Update placeholders
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+            el.placeholder = translations[lang][key];
+        }
+    });
+    
+    // Update HTML lang attribute
+    document.documentElement.lang = lang;
+    
+    // Update language button text
+    const langCodes = { en: 'EN', hi: 'HI', vi: 'VI', id: 'ID' };
+    const langBtn = document.getElementById('currentLang');
+    if (langBtn) {
+        langBtn.textContent = langCodes[lang] || 'EN';
+    }
+}
+
+function initLanguageSwitcher() {
+    const langBtn = document.getElementById('langBtn');
+    const langSwitcher = document.querySelector('.lang-switcher');
+    const langOptions = document.querySelectorAll('.lang-option');
+    
+    if (!langBtn || !langSwitcher) return;
+    
+    // Set initial language
+    changeLanguage(currentLang);
+    
+    // Toggle dropdown
+    langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langSwitcher.classList.toggle('active');
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!langSwitcher.contains(e.target)) {
+            langSwitcher.classList.remove('active');
+        }
+    });
+    
+    // Handle language selection
+    langOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const lang = option.getAttribute('data-lang');
+            changeLanguage(lang);
+            langSwitcher.classList.remove('active');
+        });
+    });
+}
+
+// FAQ Toggle Functionality
+function initFAQ() {
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    
+    faqQuestions.forEach(question => {
+        question.addEventListener('click', () => {
+            const faqItem = question.closest('.faq-item');
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        });
+    });
+}
+
+// Paste Button Functionality
+function initPasteButton() {
+    const pasteBtn = document.getElementById('pasteBtn');
+    const urlInput = document.getElementById('videoUrl');
+    
+    if (!pasteBtn || !urlInput) return;
+    
+    pasteBtn.addEventListener('click', async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            if (text) {
+                urlInput.value = text;
+                urlInput.focus();
+                
+                // Visual feedback
+                pasteBtn.textContent = '✓ Pasted!';
+                setTimeout(() => {
+                    const translations = {
+                        en: 'Paste',
+                        hi: 'पेस्ट करें',
+                        vi: 'Dán',
+                        id: 'Tempel'
+                    };
+                    pasteBtn.textContent = translations[currentLang] || 'Paste';
+                }, 2000);
+            }
+        } catch (err) {
+            console.error('Failed to read clipboard:', err);
+            // Fallback: focus input
+            urlInput.focus();
+        }
+    });
+}
 

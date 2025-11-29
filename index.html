@@ -4,52 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Favicon - Place early for better loading -->
+    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2">
-    <link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon.ico?v=2">
-    <link rel="icon" type="image/x-icon" sizes="16x16" href="/favicon.ico?v=2">
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico?v=2">
-    
-    <!-- Force reload favicon -->
-    <script>
-        (function() {
-            var link = document.querySelector("link[rel*='icon']");
-            if (!link) {
-                link = document.createElement('link');
-                link.rel = 'icon';
-                document.head.appendChild(link);
-            }
-            link.href = '/favicon.ico?v=2&t=' + new Date().getTime();
-        })();
-    </script>
     
     <!-- Primary Meta Tags -->
-    <title>TikTok Downloader - Free High Quality TikTok Video Downloader Without Watermark</title>
+    <title>TikTok Downloader - Free High Quality TikTok Video Downloader</title>
     <meta name="title" content="TikTok Downloader - Free High Quality TikTok Video Downloader Without Watermark">
     <meta name="description" content="Download high-quality TikTok videos without watermark completely free. Fast, simple, and secure TikTok video downloading tool.">
-    <meta name="keywords" content="download tiktok video, tiktok downloader, tiktok no watermark, download tiktok video, tiktok video downloader, free tiktok downloader">
-    <meta name="author" content="TikTok Downloader">
+    <meta name="keywords" content="download tiktok video, tiktok downloader, tiktok no watermark, download tiktok video">
     <meta name="robots" content="index, follow">
-    <meta name="language" content="English">
-    <meta name="revisit-after" content="7 days">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://your-domain.vercel.app/">
-    <meta property="og:title" content="TikTok Downloader - Free TikTok Video Downloader Without Watermark">
+    <meta property="og:title" content="TikTok Downloader - Free TikTok Video Downloader">
     <meta property="og:description" content="Download high-quality TikTok videos without watermark completely free.">
-    <meta property="og:image" content="https://your-domain.vercel.app/og-image.jpg">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://your-domain.vercel.app/">
-    <meta property="twitter:title" content="TikTok Downloader - Free TikTok Video Downloader Without Watermark">
+    <meta property="twitter:title" content="TikTok Downloader - Free TikTok Video Downloader">
     <meta property="twitter:description" content="Download high-quality TikTok videos without watermark completely free.">
-    <meta property="twitter:image" content="https://your-domain.vercel.app/og-image.jpg">
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://your-domain.vercel.app/">
     
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6084835264788220"
@@ -59,204 +35,249 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "TikTok Downloader",
-      "description": "Download high-quality TikTok videos without watermark for free",
-      "url": "https://your-domain.vercel.app/",
-      "applicationCategory": "UtilityApplication",
-      "operatingSystem": "Any",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-      }
-    }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo-wrapper">
-                <div class="logo">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.33a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.33z" fill="currentColor"/>
-                    </svg>
-                </div>
-                <div class="logo-glow"></div>
-            </div>
-            <h1 class="main-title">
-                <span class="title-highlight">TikTok</span> Downloader
-            </h1>
-            <p class="subtitle">Download high-quality TikTok videos without watermark - Fast, free, and easy to use</p>
-            <div class="badge-container">
-                <span class="badge">✨ 100% Free</span>
-                <span class="badge">🚀 Lightning Fast</span>
-                <span class="badge">🎬 HD Quality</span>
-                <span class="badge">🔒 Secure & Private</span>
-            </div>
+    <!-- Language Switcher -->
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change Language">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLang">EN</span>
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="hi">हिन्दी</button>
+            <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+            <button class="lang-option" data-lang="id">Bahasa Indonesia</button>
         </div>
-
-        <div class="main-content">
-            <div class="input-section">
-                <div class="input-label">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-                    </svg>
-                    <span>Paste your TikTok video URL here</span>
-                </div>
-                <div class="input-wrapper">
-                    <input 
-                        type="text" 
-                        id="videoUrl" 
-                        placeholder="Paste TikTok video URL here..." 
-                        autocomplete="off"
-                    >
-                    <button id="downloadBtn" class="download-btn">
-                        <span class="btn-text">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                            Download Video
-                        </span>
-                        <span class="btn-loader" style="display: none;">
-                            <svg class="spinner" viewBox="0 0 50 50">
-                                <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-                            </svg>
-                        </span>
-                    </button>
-                </div>
-                <div class="examples">
-                    <p class="examples-title">💡 How to use:</p>
-                    <ol class="usage-steps">
-                        <li>Copy the TikTok video URL from the app or website</li>
-                        <li>Paste it in the input field above</li>
-                        <li>Click "Download Video" button</li>
-                        <li>Choose your preferred quality (SD or HD)</li>
-                    </ol>
-                    <p class="examples-title">📋 Example TikTok URLs:</p>
-                    <div class="example-links">
-                        <code class="example-link">https://www.tiktok.com/@username/video/1234567890</code>
-                        <code class="example-link">https://vm.tiktok.com/xxxxx</code>
-                    </div>
-                </div>
-            </div>
-
-            <div id="resultSection" class="result-section" style="display: none;">
-                <div class="video-preview">
-                    <div class="video-info-card">
-                        <div class="video-thumbnail-wrapper">
-                            <img id="videoThumbnail" src="" alt="Video thumbnail" class="video-thumbnail">
-                            <div class="play-overlay">
-                                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="video-details">
-                            <h3 id="videoTitle" class="video-title"></h3>
-                            <div class="video-author-info">
-                                <img id="authorAvatar" src="" alt="Author" class="author-avatar">
-                                <span class="video-author">@<span id="videoAuthor"></span></span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Progress Bar -->
-                    <div id="progressContainer" class="progress-container" style="display: none;">
-                        <div class="progress-info">
-                            <span id="progressText">Downloading video...</span>
-                            <span id="progressPercent">0%</span>
-                        </div>
-                        <div class="progress-bar-wrapper">
-                            <div id="progressBar" class="progress-bar"></div>
-                        </div>
-                        <div class="progress-details">
-                            <span id="progressSize">0 MB</span>
-                            <span id="progressSpeed">0 MB/s</span>
-                        </div>
-                    </div>
-                    
-                    <div class="video-actions">
-                        <button id="downloadSD" class="download-quality-btn primary">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                            Download Video
-                        </button>
-                        <button id="downloadHD" class="download-quality-btn primary hd">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                <polyline points="7 10 12 15 17 10"></polyline>
-                                <line x1="12" y1="15" x2="12" y2="3"></line>
-                            </svg>
-                            Download Video HD
-                            <span class="hd-badge">HD</span>
-                        </button>
-                        <button id="downloadOther" class="download-quality-btn secondary">
-                            Download other video
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="errorMessage" class="error-message" style="display: none;"></div>
-        </div>
-
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon">🎬</div>
-                <h3>High Quality</h3>
-                <p>Videos are downloaded in original quality, no compression</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">✨</div>
-                <h3>No Watermark</h3>
-                <p>Clean videos without TikTok logo</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">⚡</div>
-                <h3>Fast Download</h3>
-                <p>Quick and simple downloading process</p>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon">🔒</div>
-                <h3>Secure & Private</h3>
-                <p>No data storage, completely secure</p>
-            </div>
-        </div>
-        
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <p>&copy; 2024 TikTok Downloader. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="/privacy">Privacy Policy</a>
-                    <span>|</span>
-                    <a href="/terms">Terms of Service</a>
-                </div>
-                <div class="visitor-counter">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                    </svg>
-                    <span>Total visitors: <strong id="visitorCount">0</strong></span>
-                </div>
-            </div>
-        </footer>
     </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <h1 class="main-title" data-i18n="title">TikTok Video Downloader</h1>
+            <p class="subtitle" data-i18n="subtitle">Download high-quality TikTok videos without watermark</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Download Section -->
+            <section class="download-section">
+                <div class="input-card">
+                    <div class="input-wrapper">
+                        <div class="input-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            type="text" 
+                            id="videoUrl" 
+                            class="url-input"
+                            placeholder="Paste TikTok video URL here..."
+                            autocomplete="off"
+                            data-i18n-placeholder="inputPlaceholder"
+                        >
+                        <button class="paste-btn" id="pasteBtn" data-i18n="pasteBtn">Paste</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="downloadBtn" data-i18n="downloadVideo">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span>Download MP4</span>
+                        </button>
+                        <button class="btn btn-secondary" id="downloadMP3" style="display: none;" data-i18n="downloadAudio">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 18V5l12-2v13"></path>
+                                <circle cx="6" cy="18" r="3"></circle>
+                                <circle cx="18" cy="16" r="3"></circle>
+                            </svg>
+                            <span>Download MP3</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Result Section -->
+            <section id="resultSection" class="result-section" style="display: none;">
+                <div class="video-preview-card">
+                    <div class="video-thumbnail-container">
+                        <img id="videoThumbnail" src="" alt="Video thumbnail" class="video-thumbnail">
+                        <div class="play-overlay">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h3 id="videoTitle" class="video-title"></h3>
+                        <div class="video-author-info">
+                            <img id="authorAvatar" src="" alt="Author" class="author-avatar">
+                            <span class="video-author">@<span id="videoAuthor"></span></span>
+                        </div>
+                    </div>
+                    <div class="download-options">
+                        <button id="downloadSD" class="btn btn-download" data-i18n="downloadSD">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download SD
+                        </button>
+                        <button id="downloadHD" class="btn btn-download btn-hd" data-i18n="downloadHD">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            Download HD
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Progress Bar -->
+            <div id="progressContainer" class="progress-container" style="display: none;">
+                <div class="progress-info">
+                    <span id="progressText" data-i18n="downloading">Downloading...</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+                <div class="progress-details">
+                    <span id="progressSize">0 MB</span>
+                    <span id="progressSpeed">0 MB/s</span>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <h2 class="section-title" data-i18n="popularFeatures">Popular Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎬</div>
+                        <h3 data-i18n="featureHD">HD Quality</h3>
+                        <p data-i18n="featureHDDesc">Download videos in original quality</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">✨</div>
+                        <h3 data-i18n="featureNoWatermark">No Watermark</h3>
+                        <p data-i18n="featureNoWatermarkDesc">Clean videos without TikTok logo</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 data-i18n="featureFast">Fast Download</h3>
+                        <p data-i18n="featureFastDesc">Quick and simple process</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h3 data-i18n="featureSecure">Secure & Private</h3>
+                        <p data-i18n="featureSecureDesc">No data storage, completely safe</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How to Use Section -->
+            <section class="how-to-section">
+                <h2 class="section-title" data-i18n="howToUse">How to Use</h2>
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3 data-i18n="step1Title">Copy Link</h3>
+                        <p data-i18n="step1Desc">Copy the TikTok video URL from the app</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3 data-i18n="step2Title">Paste & Download</h3>
+                        <p data-i18n="step2Desc">Paste the link and click download button</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3 data-i18n="step3Title">Choose Quality</h3>
+                        <p data-i18n="step3Desc">Select SD or HD quality and save</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="faq-section">
+                <h2 class="section-title" data-i18n="faqTitle">Frequently Asked Questions</h2>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question" data-i18n="faq1Question">
+                            <span>Is this service free?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" data-i18n="faq1Answer">
+                            <p>Yes, our TikTok downloader is completely free to use. No registration or payment required.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" data-i18n="faq2Question">
+                            <span>Will downloaded videos have watermark?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" data-i18n="faq2Answer">
+                            <p>No, all downloaded videos are watermark-free. Enjoy clean videos without TikTok branding.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" data-i18n="faq3Question">
+                            <span>What video formats are supported?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" data-i18n="faq3Answer">
+                            <p>We support MP4 format for videos and MP3 for audio extraction. Both SD and HD qualities are available.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" data-i18n="faq4Question">
+                            <span>Is my data safe?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer" data-i18n="faq4Answer">
+                            <p>Yes, we don't store any of your data. All downloads are processed securely and privately.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2024 TikTok Downloader. <span data-i18n="allRightsReserved">All rights reserved.</span></p>
+            <div class="footer-links">
+                <a href="/privacy" data-i18n="privacy">Privacy Policy</a>
+                <span>|</span>
+                <a href="/terms" data-i18n="terms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

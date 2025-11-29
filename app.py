@@ -325,8 +325,12 @@ def index():
     return send_file('index.html')
 
 @app.route('/blog')
+@app.route('/blog/')
 def blog():
-    return send_file('blog.html')
+    try:
+        return send_file('blog.html')
+    except FileNotFoundError:
+        return jsonify({'error': 'Blog page not found'}), 404
 
 @app.route('/style.css')
 def style_css():
@@ -604,6 +608,15 @@ def not_found(error):
     # Nếu là API request, trả về JSON error
     if request.path.startswith('/api/'):
         return jsonify({'success': False, 'error': 'API endpoint not found'}), 404
+    
+    # Kiểm tra các route cụ thể
+    path = request.path
+    if path == '/blog' or path.startswith('/blog'):
+        try:
+            return send_file('blog.html')
+        except:
+            return jsonify({'success': False, 'error': 'Blog page not found'}), 404
+    
     # Nếu không phải API, trả về HTML (cho frontend routing)
     try:
         return send_file('index.html'), 404

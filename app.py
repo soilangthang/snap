@@ -35,34 +35,34 @@ def save_visitor_count():
 # Privacy Policy HTML Template
 PRIVACY_POLICY_HTML = """
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chính Sách Bảo Mật - TikTok Downloader</title>
+    <title>Privacy Policy - TikTok Downloader</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="container" style="max-width: 900px; padding: 40px 20px;">
-        <h1>Chính Sách Bảo Mật</h1>
-        <p><strong>Cập nhật lần cuối:</strong> {{ date }}</p>
+        <h1>Privacy Policy</h1>
+        <p><strong>Last updated:</strong> {{ date }}</p>
         
-        <h2>1. Thông Tin Thu Thập</h2>
-        <p>Chúng tôi không thu thập thông tin cá nhân của người dùng. Dịch vụ của chúng tôi hoạt động hoàn toàn ẩn danh.</p>
+        <h2>1. Information Collection</h2>
+        <p>We do not collect any personal information from users. Our service operates completely anonymously.</p>
         
-        <h2>2. Sử Dụng Thông Tin</h2>
-        <p>Chúng tôi chỉ sử dụng URL TikTok được cung cấp để tải video. Không có thông tin nào được lưu trữ hoặc chia sẻ.</p>
+        <h2>2. Information Usage</h2>
+        <p>We only use the provided TikTok URL to download videos. No information is stored or shared.</p>
         
-        <h2>3. Bảo Mật</h2>
-        <p>Dịch vụ của chúng tôi sử dụng kết nối an toàn và không lưu trữ dữ liệu người dùng.</p>
+        <h2>3. Security</h2>
+        <p>Our service uses secure connections and does not store user data.</p>
         
         <h2>4. Cookies</h2>
-        <p>Chúng tôi không sử dụng cookies để theo dõi người dùng.</p>
+        <p>We do not use cookies to track users.</p>
         
-        <h2>5. Liên Hệ</h2>
-        <p>Nếu bạn có câu hỏi về chính sách bảo mật, vui lòng liên hệ với chúng tôi.</p>
+        <h2>5. Contact</h2>
+        <p>If you have any questions about our privacy policy, please contact us.</p>
         
-        <p><a href="/">← Quay lại trang chủ</a></p>
+        <p><a href="/">← Back to homepage</a></p>
     </div>
 </body>
 </html>
@@ -71,34 +71,34 @@ PRIVACY_POLICY_HTML = """
 # Terms of Service HTML Template
 TERMS_OF_SERVICE_HTML = """
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Điều Khoản Sử Dụng - TikTok Downloader</title>
+    <title>Terms of Service - TikTok Downloader</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="container" style="max-width: 900px; padding: 40px 20px;">
-        <h1>Điều Khoản Sử Dụng</h1>
-        <p><strong>Cập nhật lần cuối:</strong> {{ date }}</p>
+        <h1>Terms of Service</h1>
+        <p><strong>Last updated:</strong> {{ date }}</p>
         
-        <h2>1. Chấp Nhận Điều Khoản</h2>
-        <p>Bằng việc sử dụng dịch vụ này, bạn đồng ý với các điều khoản sử dụng.</p>
+        <h2>1. Acceptance of Terms</h2>
+        <p>By using this service, you agree to these terms of service.</p>
         
-        <h2>2. Sử Dụng Dịch Vụ</h2>
-        <p>Dịch vụ được cung cấp miễn phí để tải video TikTok cho mục đích cá nhân. Bạn không được sử dụng dịch vụ cho mục đích thương mại hoặc vi phạm bản quyền.</p>
+        <h2>2. Service Usage</h2>
+        <p>The service is provided free of charge to download TikTok videos for personal use. You may not use the service for commercial purposes or to violate copyright.</p>
         
-        <h2>3. Bản Quyền</h2>
-        <p>Người dùng chịu trách nhiệm về việc sử dụng video đã tải. Chúng tôi không chịu trách nhiệm về việc vi phạm bản quyền.</p>
+        <h2>3. Copyright</h2>
+        <p>Users are responsible for the use of downloaded videos. We are not responsible for copyright violations.</p>
         
-        <h2>4. Giới Hạn Trách Nhiệm</h2>
-        <p>Dịch vụ được cung cấp "như hiện tại". Chúng tôi không đảm bảo tính khả dụng liên tục của dịch vụ.</p>
+        <h2>4. Limitation of Liability</h2>
+        <p>The service is provided "as is". We do not guarantee continuous availability of the service.</p>
         
-        <h2>5. Thay Đổi Điều Khoản</h2>
-        <p>Chúng tôi có quyền thay đổi điều khoản này bất cứ lúc nào.</p>
+        <h2>5. Changes to Terms</h2>
+        <p>We reserve the right to change these terms at any time.</p>
         
-        <p><a href="/">← Quay lại trang chủ</a></p>
+        <p><a href="/">← Back to homepage</a></p>
     </div>
 </body>
 </html>
@@ -115,7 +115,7 @@ def rate_limit(max_per_minute=10):
             if ip in calls:
                 calls[ip] = [t for t in calls[ip] if now - t < 60]
                 if len(calls[ip]) >= max_per_minute:
-                    return jsonify({'success': False, 'error': 'Quá nhiều yêu cầu. Vui lòng thử lại sau.'}), 429
+                    return jsonify({'success': False, 'error': 'Too many requests. Please try again later.'}), 429
             else:
                 calls[ip] = []
             calls[ip].append(now)
@@ -269,7 +269,7 @@ def get_tiktok_video_alternative(url):
         
     except Exception as e:
         print(f"Alternative method error: {str(e)}")
-        return {'success': False, 'error': 'Không thể tải video. Vui lòng kiểm tra lại URL.'}
+        return {'success': False, 'error': 'Unable to download video. Please check the URL.'}
 
 def get_tiktok_direct(url):
     """Lấy video trực tiếp từ TikTok bằng web scraping"""
@@ -293,9 +293,9 @@ def get_tiktok_direct(url):
                 # This is a simplified approach - in production, you'd want more robust parsing
                 pass
         
-        return {'success': False, 'error': 'Không thể tải video'}
+        return {'success': False, 'error': 'Unable to download video'}
     except:
-        return {'success': False, 'error': 'Không thể tải video'}
+        return {'success': False, 'error': 'Unable to download video'}
 
 @app.route('/')
 def index():
@@ -337,21 +337,21 @@ def download_video():
     try:
         data = request.get_json()
         if not data:
-            return jsonify({'success': False, 'error': 'Dữ liệu không hợp lệ'}), 400
+            return jsonify({'success': False, 'error': 'Invalid data'}), 400
             
         url = data.get('url', '').strip()
         platform = data.get('platform', '').strip().lower()
         
         if not url:
-            return jsonify({'success': False, 'error': 'Vui lòng nhập URL'}), 400
+            return jsonify({'success': False, 'error': 'Please enter a URL'}), 400
         
         # Validate URL format
         if not (url.startswith('http://') or url.startswith('https://')):
-            return jsonify({'success': False, 'error': 'URL phải bắt đầu bằng http:// hoặc https://'}), 400
+            return jsonify({'success': False, 'error': 'URL must start with http:// or https://'}), 400
         
         # Validate TikTok URL
         if 'tiktok.com' not in url and 'vm.tiktok.com' not in url:
-            return jsonify({'success': False, 'error': 'URL không hợp lệ. Vui lòng nhập link TikTok'}), 400
+            return jsonify({'success': False, 'error': 'Invalid URL. Please enter a TikTok link'}), 400
         
         # Lấy thông tin video TikTok
         video_info = get_tiktok_video_info(url)
@@ -363,7 +363,7 @@ def download_video():
         
     except Exception as e:
         app.logger.error(f"Download error: {str(e)}")
-        return jsonify({'success': False, 'error': 'Đã xảy ra lỗi. Vui lòng thử lại sau.'}), 500
+        return jsonify({'success': False, 'error': 'An error occurred. Please try again later.'}), 500
 
 @app.route('/api/visitor', methods=['GET', 'POST'])
 def visitor_counter():
@@ -460,7 +460,7 @@ def not_found(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    return jsonify({'success': False, 'error': 'Lỗi máy chủ. Vui lòng thử lại sau.'}), 500
+    return jsonify({'success': False, 'error': 'Server error. Please try again later.'}), 500
 
 if __name__ == '__main__':
     # Production mode

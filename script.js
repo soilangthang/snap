@@ -102,13 +102,13 @@ async function handleDownload() {
     
     // Validate URL
     if (!url) {
-        showError('Vui lòng nhập URL TikTok');
+        showError('Please enter a TikTok URL');
         return;
     }
     
     // Validate TikTok URL
     if (!url.includes('tiktok.com') && !url.includes('vm.tiktok.com')) {
-        showError('URL không hợp lệ. Vui lòng nhập link TikTok');
+        showError('Invalid URL. Please enter a valid TikTok link');
         return;
     }
     
@@ -173,18 +173,18 @@ async function handleDownload() {
             // Setup download buttons
             setupDownloadButtons();
             
-            // Hiển thị kết quả
+            // Show results
             resultSection.style.display = 'block';
         } else {
-            showError(data.error || 'Không thể tải video. Vui lòng thử lại.');
+            showError(data.error || 'Unable to download video. Please try again.');
             showProgress(false);
         }
     } catch (error) {
         console.error('Error:', error);
-        showError('Đã xảy ra lỗi. Vui lòng thử lại sau.');
+        showError('An error occurred. Please try again later.');
         showProgress(false);
     } finally {
-        // Không set loading false ở đây vì downloadVideoAsBlob sẽ xử lý
+        // Don't set loading false here as downloadVideoAsBlob will handle it
     }
 }
 
@@ -214,7 +214,7 @@ async function downloadVideoAsBlob(videoUrl, filename) {
     try {
         setLoading(true);
         showProgress(true);
-        updateProgress(0, 'Đang kết nối...', 0, 0);
+        updateProgress(0, 'Connecting...', 0, 0);
         
         downloadStartTime = Date.now();
         lastLoaded = 0;
@@ -235,9 +235,9 @@ async function downloadVideoAsBlob(videoUrl, filename) {
             }
         } catch (error) {
             console.error('Proxy error:', error);
-            // Fallback: tải trực tiếp từ URL gốc
+            // Fallback: download directly from original URL
             showProgress(false);
-            updateProgress(0, 'Đang mở link tải trực tiếp...', 0, 0);
+            updateProgress(0, 'Opening direct download link...', 0, 0);
             
             // Tạo link download trực tiếp
             const a = document.createElement('a');
@@ -267,7 +267,7 @@ async function downloadVideoAsBlob(videoUrl, filename) {
         let loaded = 0;
         let estimatedPercent = 0;
         
-        updateProgress(0, 'Đang tải video...', 0, 0);
+        updateProgress(0, 'Downloading video...', 0, 0);
         
         while (true) {
             const { done, value } = await reader.read();
@@ -299,25 +299,21 @@ async function downloadVideoAsBlob(videoUrl, filename) {
                 speed = loadedDiff / timeDiff; // bytes per second
             }
             
-            // Cập nhật UI
-            const statusText = total > 0 ? 'Đang tải video...' : 'Đang tải video...';
+            // Update UI
+            const statusText = 'Downloading video...';
             updateProgress(percent, statusText, loaded, speed);
             
             lastLoaded = loaded;
             lastTime = now;
         }
         
-        // Đảm bảo hiển thị 100% khi hoàn thành
-        if (total > 0) {
-            updateProgress(100, 'Hoàn thành!', loaded, 0);
-        } else {
-            updateProgress(100, 'Hoàn thành!', loaded, 0);
-        }
+        // Ensure 100% is displayed when complete
+        updateProgress(100, 'Completed!', loaded, 0);
         
-        // Tạo blob từ chunks
+        // Create blob from chunks
         const blob = new Blob(chunks, { type: 'video/mp4' });
         
-        updateProgress(100, 'Đang lưu file...', loaded, 0);
+        updateProgress(100, 'Saving file...', loaded, 0);
         
         // Tạo URL từ blob
         const blobUrl = window.URL.createObjectURL(blob);
@@ -344,13 +340,13 @@ async function downloadVideoAsBlob(videoUrl, filename) {
         showProgress(false);
         
         // Better error messages
-        let errorMsg = 'Lỗi khi tải video';
+        let errorMsg = 'Error downloading video';
         if (error.message.includes('network') || error.message.includes('Network')) {
-            errorMsg = 'Lỗi kết nối mạng. Vui lòng kiểm tra kết nối và thử lại.';
+            errorMsg = 'Network connection error. Please check your connection and try again.';
         } else if (error.message.includes('server')) {
-            errorMsg = 'Lỗi server. Vui lòng thử lại sau.';
+            errorMsg = 'Server error. Please try again later.';
         } else if (error.message) {
-            errorMsg = 'Lỗi: ' + error.message;
+            errorMsg = 'Error: ' + error.message;
         }
         
         showError(errorMsg);
@@ -370,7 +366,7 @@ function updateProgress(percent, text, loaded, speed) {
     }
     
     if (progressText) {
-        progressText.textContent = text || 'Đang tải video...';
+        progressText.textContent = text || 'Downloading video...';
     }
     
     if (progressPercent) {
@@ -399,7 +395,7 @@ videoUrlInput.addEventListener('focus', function() {
 
 videoUrlInput.addEventListener('blur', function() {
     if (!this.value) {
-        this.placeholder = 'https://www.tiktok.com/@username/video/1234567890';
+        this.placeholder = 'Paste TikTok video URL here...';
     }
 });
 
@@ -436,7 +432,7 @@ async function updateVisitorCount() {
             const data = await countResponse.json();
             if (data.success && data.count !== undefined) {
                 // Format number with thousand separators
-                const formattedCount = data.count.toLocaleString('vi-VN');
+                const formattedCount = data.count.toLocaleString('en-US');
                 visitorCountEl.textContent = formattedCount;
             }
         }

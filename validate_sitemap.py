@@ -10,9 +10,9 @@ try:
     ns = {'sm': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
     
     urls = root.findall('.//sm:url', ns)
-    print(f"✅ Sitemap.xml is valid!")
-    print(f"📊 Total URLs: {len(urls)}")
-    print("\n📋 URLs in sitemap:")
+    print("Sitemap.xml is valid!")
+    print(f"Total URLs: {len(urls)}")
+    print("\nURLs in sitemap:")
     
     for i, url in enumerate(urls, 1):
         loc = url.find('sm:loc', ns).text if url.find('sm:loc', ns) is not None else 'N/A'
@@ -28,14 +28,14 @@ try:
     # Check if blog route exists
     blog_exists = any('blog' in url.find('sm:loc', ns).text for url in urls)
     if blog_exists:
-        print("\n✅ Blog route (/blog) is included")
+        print("\n[SUCCESS] Blog route (/blog) is included")
     else:
-        print("\n⚠️  Blog route (/blog) is missing")
+        print("\n[WARNING] Blog route (/blog) is missing")
     
-    print("\n✅ Validation complete!")
+    print("\n[SUCCESS] Validation complete!")
     
 except ET.ParseError as e:
-    print(f"❌ XML Parse Error: {e}")
+    print(f"[ERROR] XML Parse Error: {e}")
 except Exception as e:
-    print(f"❌ Error: {e}")
+    print(f"[ERROR] Error: {e}")
 

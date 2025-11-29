@@ -1,39 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- 
-    IMPORTANT: Replace "your-domain.vercel.app" with your actual domain after deployment
-    Example: https://tiktok-downloader.vercel.app or https://yourdomain.com
-  -->
-  
-  <!-- Homepage - Highest Priority -->
+
+  <!-- Homepage -->
   <url>
     <loc>https://tik1s.com/</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2025-11-29</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  
-  <!-- Blog Page - High Priority for SEO -->
+
+  <!-- Blog -->
   <url>
     <loc>https://tik1s.com/blog</loc>
-    <lastmod>2025-01-27</lastmod>
+    <lastmod>2025-11-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-  
-  <!-- Privacy Policy - Legal Page -->
+
+  <!-- Privacy Policy -->
   <url>
     <loc>https://tik1s.com/privacy</loc>
-    <lastmod>2024-01-01</lastmod>
+    <lastmod>2025-11-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
-  
-  <!-- Terms of Service - Legal Page -->
+
+  <!-- Terms of Service -->
   <url>
     <loc>https://tik1s.com/terms</loc>
-    <lastmod>2024-01-01</lastmod>
+    <lastmod>2025-11-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
+
 </urlset>

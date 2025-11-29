@@ -188,6 +188,18 @@ def get_tiktok_video_info(url):
                         avatar = author_info.get('avatar_thumb', {}).get('url_list', [])
                         author_avatar = avatar[0] if avatar else ''
                         
+                        # Lấy audio/music URL nếu có
+                        music_info = video_data.get('music', {})
+                        audio_url = ''
+                        if music_info:
+                            play_url = music_info.get('play_url', {})
+                            if isinstance(play_url, dict):
+                                url_list_audio = play_url.get('url_list', [])
+                                if url_list_audio:
+                                    audio_url = url_list_audio[0]
+                            elif isinstance(play_url, str):
+                                audio_url = play_url
+                        
                         return {
                             'success': True,
                             'video_url': url_list[0],  # SD/Default
@@ -197,6 +209,7 @@ def get_tiktok_video_info(url):
                             'author_avatar': author_avatar,
                             'video_id': video_id,
                             'thumbnail': thumbnail,
+                            'audio_url': audio_url,  # Audio URL for MP3 download
                         }
         
         # Fallback: Sử dụng API khác
@@ -251,6 +264,15 @@ def get_tiktok_video_alternative(url):
                                 author_name = 'Unknown'
                                 author_avatar = ''
                             
+                            # Lấy audio/music URL nếu có
+                            audio_url = ''
+                            music_info = video_data.get('music', {})
+                            if music_info:
+                                if isinstance(music_info, dict):
+                                    audio_url = music_info.get('play_url', '') or music_info.get('playUrl', '') or ''
+                                elif isinstance(music_info, str):
+                                    audio_url = music_info
+                            
                             return {
                                 'success': True,
                                 'video_url': video_url,  # SD/Default
@@ -260,6 +282,7 @@ def get_tiktok_video_alternative(url):
                                 'author_avatar': author_avatar,
                                 'video_id': video_id,
                                 'thumbnail': thumbnail,
+                                'audio_url': audio_url,  # Audio URL for MP3 download
                             }
             except:
                 continue
@@ -461,10 +484,123 @@ def proxy_video():
         print(f"Proxy error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/api/proxy-image', methods=['GET'])
+def proxy_image():
+    """Proxy để tải ảnh (thumbnail) tránh CORS"""
+    try:
+        image_url = request.args.get('url')
+        if not image_url:
+            return jsonify({'error': 'Missing URL'}), 400
+        
+        # Decode URL nếu bị encode
+        from urllib.parse import unquote
+        image_url = unquote(image_url)
+        
+        response = requests.get(image_url, stream=True, timeout=30, headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Referer': 'https://www.tiktok.com/',
+            'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
+        })
+        
+        if response.status_code == 200:
+            from flask import Response
+            
+            # Xác định content type từ response hoặc URL
+            content_type = response.headers.get('Content-Type', 'image/jpeg')
+            if '?' in image_url:
+                url_ext = image_url.split('?')[0].split('.')[-1].lower()
+                if url_ext in ['jpg', 'jpeg']:
+                    content_type = 'image/jpeg'
+                elif url_ext == 'png':
+                    content_type = 'image/png'
+                elif url_ext == 'webp':
+                    content_type = 'image/webp'
+            
+            return Response(
+                response.iter_content(chunk_size=8192),
+                mimetype=content_type,
+                headers={
+                    'Cache-Control': 'public, max-age=3600',
+                    'Access-Control-Allow-Origin': '*',
+                }
+            )
+        else:
+            return jsonify({'error': 'Failed to download image'}), 500
+            
+    except Exception as e:
+        print(f"Proxy image error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/extract-audio', methods=['POST'])
+@rate_limit(max_per_minute=5)
+def extract_audio():
+    """Extract audio (MP3) từ video TikTok"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'error': 'Invalid data'}), 400
+        
+        video_url = data.get('video_url', '').strip()
+        video_id = data.get('video_id', '').strip()
+        
+        if not video_url:
+            return jsonify({'success': False, 'error': 'Missing video URL'}), 400
+        
+        # Sử dụng API công khai để extract audio
+        # Thử các API endpoints khác nhau
+        api_endpoints = [
+            f"https://api.tiklydown.eu.org/api/download?url={video_url}",
+            f"https://tikwm.com/api/?url={video_url}",
+        ]
+        
+        for api_url in api_endpoints:
+            try:
+                response = requests.get(api_url, timeout=15, headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+                })
+                
+                if response.status_code == 200:
+                    data_resp = response.json()
+                    
+                    # Tìm audio URL trong response
+                    audio_url = None
+                    if 'data' in data_resp:
+                        audio_url = data_resp['data'].get('music', {}).get('play_url', '') or \
+                                   data_resp['data'].get('music', {}).get('playUrl', '') or \
+                                   data_resp['data'].get('audio', '')
+                    
+                    if audio_url:
+                        return jsonify({
+                            'success': True,
+                            'audio_url': audio_url,
+                            'video_id': video_id,
+                        })
+            except:
+                continue
+        
+        # Fallback: Trả về video URL để client tự xử lý
+        # Hoặc sử dụng dịch vụ conversion online
+        return jsonify({
+            'success': False,
+            'error': 'Audio extraction service temporarily unavailable. Please try downloading the video and converting it manually.',
+            'video_url': video_url  # Provide video URL as fallback
+        }), 503
+        
+    except Exception as e:
+        app.logger.error(f"Extract audio error: {str(e)}")
+        return jsonify({'success': False, 'error': 'An error occurred while extracting audio.'}), 500
+
 # Error handlers
 @app.errorhandler(404)
 def not_found(error):
-    return send_file('index.html'), 404
+    # Nếu là API request, trả về JSON error
+    if request.path.startswith('/api/'):
+        return jsonify({'success': False, 'error': 'API endpoint not found'}), 404
+    # Nếu không phải API, trả về HTML (cho frontend routing)
+    try:
+        return send_file('index.html'), 404
+    except:
+        return jsonify({'success': False, 'error': 'Not found'}), 404
 
 @app.errorhandler(500)
 def internal_error(error):

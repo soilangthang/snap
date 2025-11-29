@@ -1,7 +1,6 @@
 // DOM Elements
 const videoUrlInput = document.getElementById('videoUrl');
 const downloadBtn = document.getElementById('downloadBtn');
-const downloadMP3 = document.getElementById('downloadMP3');
 const resultSection = document.getElementById('resultSection');
 const errorMessage = document.getElementById('errorMessage');
 const videoTitle = document.getElementById('videoTitle');
@@ -176,7 +175,8 @@ async function handleDownload() {
                 author: data.author || 'Unknown',
                 video_id: data.video_id || '',
                 filename: generateFilename(data.video_id, data.title),
-                thumbnail: data.thumbnail || ''  // Lưu thumbnail URL
+                thumbnail: data.thumbnail || '',  // Lưu thumbnail URL
+                audio_url: data.audio_url || ''  // Lưu audio URL cho MP3 download
             };
             
             // Hiển thị thông tin video
@@ -485,11 +485,27 @@ async function updateVisitorCount() {
 async function downloadImage(imageUrl) {
     try {
         setLoading(true);
+        showProgress(true);
+        updateProgress(0, 'Downloading image...', 0, 0);
         
-        // Fetch image
-        const response = await fetch(imageUrl);
-        if (!response.ok) throw new Error('Failed to fetch image');
+        // Sử dụng proxy để tránh CORS
+        const proxyUrl = `/api/proxy-image?url=${encodeURIComponent(imageUrl)}`;
         
+        let response;
+        try {
+            response = await fetch(proxyUrl);
+            if (!response.ok) throw new Error('Failed to fetch image');
+        } catch (error) {
+            // Fallback: thử fetch trực tiếp
+            console.warn('Proxy failed, trying direct fetch:', error);
+            response = await fetch(imageUrl, {
+                mode: 'cors',
+                credentials: 'omit',
+            });
+            if (!response.ok) throw new Error('Failed to fetch image');
+        }
+        
+        updateProgress(50, 'Processing image...', 0, 0);
         const blob = await response.blob();
         const blobUrl = window.URL.createObjectURL(blob);
         
@@ -497,6 +513,8 @@ async function downloadImage(imageUrl) {
         const filename = currentVideoData.video_id 
             ? `tiktok_${currentVideoData.video_id}_thumbnail.jpg`
             : 'tiktok_thumbnail.jpg';
+        
+        updateProgress(90, 'Saving image...', 0, 0);
         
         // Create download link
         const a = document.createElement('a');
@@ -509,7 +527,9 @@ async function downloadImage(imageUrl) {
         setTimeout(() => {
             window.URL.revokeObjectURL(blobUrl);
             document.body.removeChild(a);
+            showProgress(false);
             setLoading(false);
+            updateProgress(0, '', 0, 0);
         }, 100);
         
     } catch (error) {
@@ -521,6 +541,7 @@ async function downloadImage(imageUrl) {
             id: 'Gagal mengunduh gambar. Silakan coba lagi.'
         };
         showError(errorMsgs[currentLang] || errorMsgs.en);
+        showProgress(false);
         setLoading(false);
     }
 }
@@ -533,50 +554,90 @@ async function downloadAudioFromVideo(videoUrl) {
     try {
         setLoading(true);
         showProgress(true);
-        updateProgress(0, 'Preparing audio extraction...', 0, 0);
+        updateProgress(0, 'Preparing audio download...', 0, 0);
         
-        // Note: Client-side audio extraction requires downloading the video first
-        // For better performance, we'll create an API endpoint for server-side conversion
-        // For now, we'll show a message that MP3 extraction is coming soon
+        // Kiểm tra xem có audio URL từ video data không
+        let audioUrl = currentVideoData.audio_url;
         
-        const infoMsgs = {
-            en: 'MP3 extraction is being processed. Please wait...',
-            hi: 'MP3 निष्कर्षण संसाधित किया जा रहा है। कृपया प्रतीक्षा करें...',
-            vi: 'Đang xử lý trích xuất MP3. Vui lòng đợi...',
-            id: 'Ekstraksi MP3 sedang diproses. Silakan tunggu...'
-        };
+        if (!audioUrl) {
+            // Nếu không có, thử gọi API extract audio
+            updateProgress(10, 'Requesting audio extraction...', 0, 0);
+            
+            const response = await fetch('/api/extract-audio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    video_url: videoUrl,
+                    video_id: currentVideoData.video_id || ''
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success && data.audio_url) {
+                audioUrl = data.audio_url;
+            }
+        }
         
-        updateProgress(10, infoMsgs[currentLang] || infoMsgs.en, 0, 0);
-        
-        // For now, we'll download the video and suggest user to convert manually
-        // In production, you should add a backend API endpoint for audio extraction
-        setTimeout(() => {
+        if (audioUrl) {
+            // Có audio URL, tải về
+            updateProgress(30, 'Downloading audio...', 0, 0);
+            
+            // Tải audio file qua proxy
+            const audioResponse = await fetch(`/api/proxy-image?url=${encodeURIComponent(audioUrl)}`);
+            
+            if (!audioResponse.ok) {
+                throw new Error('Failed to download audio');
+            }
+            
+            const blob = await audioResponse.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            
+            // Tạo tên file MP3
+            const filename = currentVideoData.video_id 
+                ? `tiktok_${currentVideoData.video_id}_audio.mp3`
+                : 'tiktok_audio.mp3';
+            
+            updateProgress(90, 'Saving audio file...', 0, 0);
+            
+            // Tạo link download
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            
+            // Cleanup
+            setTimeout(() => {
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(a);
+                showProgress(false);
+                setLoading(false);
+                updateProgress(0, '', 0, 0);
+            }, 100);
+            
+        } else {
+            // Không có audio URL, hiển thị thông báo
             const errorMsgs = {
-                en: 'MP3 extraction feature is coming soon! For now, you can download the video and convert it using an audio converter.',
-                hi: 'MP3 निष्कर्षण सुविधा जल्द ही आ रही है! अभी के लिए, आप वीडियो डाउनलोड कर सकते हैं और ऑडियो कन्वर्टर का उपयोग करके इसे कन्वर्ट कर सकते हैं।',
-                vi: 'Tính năng trích xuất MP3 sắp ra mắt! Hiện tại bạn có thể tải video và chuyển đổi bằng phần mềm chuyển đổi.',
-                id: 'Fitur ekstraksi MP3 akan segera hadir! Saat ini, Anda dapat mengunduh video dan mengonversinya menggunakan konverter audio.'
+                en: 'Audio URL not available for this video. You can download the video and convert it to MP3 using online converters (e.g., online-audio-converter.com, convertio.co) or apps like Audacity.',
+                hi: 'इस वीडियो के लिए ऑडियो URL उपलब्ध नहीं है। आप वीडियो डाउनलोड कर सकते हैं और इसे ऑनलाइन कन्वर्टर (जैसे online-audio-converter.com, convertio.co) या Audacity जैसे ऐप्स का उपयोग करके MP3 में कन्वर्ट कर सकते हैं।',
+                vi: 'URL audio không khả dụng cho video này. Bạn có thể tải video và chuyển đổi sang MP3 bằng các công cụ online (ví dụ: online-audio-converter.com, convertio.co) hoặc ứng dụng như Audacity.',
+                id: 'URL audio tidak tersedia untuk video ini. Anda dapat mengunduh video dan mengonversinya ke MP3 menggunakan konverter online (mis. online-audio-converter.com, convertio.co) atau aplikasi seperti Audacity.'
             };
+            
             showError(errorMsgs[currentLang] || errorMsgs.en);
             showProgress(false);
             setLoading(false);
-        }, 1000);
-        
-        // TODO: Implement actual MP3 extraction via backend API
-        // Example API call:
-        // const response = await fetch('/api/extract-audio', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ video_url: videoUrl })
-        // });
+        }
         
     } catch (error) {
         console.error('Error extracting audio:', error);
         const errorMsgs = {
-            en: 'Failed to extract audio. Please try again.',
-            hi: 'ऑडियो निकालने में विफल। कृपया पुनः प्रयास करें।',
-            vi: 'Không thể trích xuất âm thanh. Vui lòng thử lại.',
-            id: 'Gagal mengekstrak audio. Silakan coba lagi.'
+            en: 'Failed to extract audio. Please try again or download the video and convert it manually.',
+            hi: 'ऑडियो निकालने में विफल। कृपया पुनः प्रयास करें या वीडियो डाउनलोड करके मैन्युअल रूप से कन्वर्ट करें।',
+            vi: 'Không thể trích xuất âm thanh. Vui lòng thử lại hoặc tải video và chuyển đổi thủ công.',
+            id: 'Gagal mengekstrak audio. Silakan coba lagi atau unduh video dan konversi secara manual.'
         };
         showError(errorMsgs[currentLang] || errorMsgs.en);
         showProgress(false);

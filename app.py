@@ -309,6 +309,18 @@ def style_css():
 def script_js():
     return send_file('script.js', mimetype='application/javascript')
 
+@app.route('/favicon.svg')
+def favicon_svg():
+    return send_file('favicon.svg', mimetype='image/svg+xml')
+
+@app.route('/favicon.ico')
+def favicon_ico():
+    # Fallback to SVG if .ico doesn't exist
+    try:
+        return send_file('favicon.ico', mimetype='image/x-icon')
+    except:
+        return send_file('favicon.svg', mimetype='image/svg+xml')
+
 @app.route('/privacy')
 def privacy():
     return render_template_string(PRIVACY_POLICY_HTML)

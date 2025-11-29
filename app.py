@@ -324,6 +324,10 @@ def get_tiktok_direct(url):
 def index():
     return send_file('index.html')
 
+@app.route('/blog')
+def blog():
+    return send_file('blog.html')
+
 @app.route('/style.css')
 def style_css():
     return send_file('style.css', mimetype='text/css')
@@ -331,6 +335,10 @@ def style_css():
 @app.route('/script.js')
 def script_js():
     return send_file('script.js', mimetype='application/javascript')
+
+@app.route('/blog-i18n.js')
+def blog_i18n():
+    return send_file('blog-i18n.js', mimetype='application/javascript')
 
 @app.route('/favicon.ico')
 def favicon_ico():

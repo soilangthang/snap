@@ -309,23 +309,11 @@ def style_css():
 def script_js():
     return send_file('script.js', mimetype='application/javascript')
 
-@app.route('/favicon.svg')
-def favicon_svg():
-    response = send_file('favicon.svg', mimetype='image/svg+xml')
-    response.headers['Cache-Control'] = 'public, max-age=31536000'  # Cache for 1 year
-    return response
-
 @app.route('/favicon.ico')
 def favicon_ico():
-    # Fallback to SVG if .ico doesn't exist
-    try:
-        response = send_file('favicon.ico', mimetype='image/x-icon')
-        response.headers['Cache-Control'] = 'public, max-age=31536000'
-        return response
-    except:
-        response = send_file('favicon.svg', mimetype='image/svg+xml')
-        response.headers['Cache-Control'] = 'public, max-age=31536000'
-        return response
+    response = send_file('favicon.ico', mimetype='image/x-icon')
+    response.headers['Cache-Control'] = 'public, max-age=31536000'  # Cache for 1 year
+    return response
 
 @app.route('/privacy')
 def privacy():

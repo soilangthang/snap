@@ -23,7 +23,8 @@ let currentVideoData = {
     title: '',
     author: '',
     video_id: '',
-    filename: ''
+    filename: '',
+    thumbnail: ''  // Thêm thumbnail URL
 };
 let currentVideoUrl = ''; // For copy link functionality
 let downloadStartTime = 0;
@@ -75,14 +76,14 @@ videoUrlInput.addEventListener('keypress', (e) => {
 function setupDownloadButtons() {
     if (!downloadSD || !downloadHD) return;
     
-    // Download SD
+    // Download SD - Standard Definition (lower quality, smaller file)
     downloadSD.onclick = () => {
         if (currentVideoData.video_url) {
             downloadVideoAsBlob(currentVideoData.video_url, currentVideoData.filename);
         }
     };
     
-    // Download HD
+    // Download HD - High Definition (better quality, larger file)
     downloadHD.onclick = () => {
         const hdUrl = currentVideoData.video_url_hd || currentVideoData.video_url;
         const hdFilename = currentVideoData.filename.replace('.mp4', '_HD.mp4');
@@ -90,6 +91,35 @@ function setupDownloadButtons() {
             downloadVideoAsBlob(hdUrl, hdFilename);
         }
     };
+    
+    // Download MP3 - Extract audio from video
+    const downloadMP3Btn = document.getElementById('downloadMP3');
+    if (downloadMP3Btn) {
+        downloadMP3Btn.onclick = () => {
+            const videoUrl = currentVideoData.video_url_hd || currentVideoData.video_url;
+            if (videoUrl) {
+                downloadAudioFromVideo(videoUrl);
+            }
+        };
+    }
+    
+    // Download Image - Download thumbnail/cover image
+    const downloadImageBtn = document.getElementById('downloadImage');
+    if (downloadImageBtn) {
+        downloadImageBtn.onclick = () => {
+            if (currentVideoData.thumbnail) {
+                downloadImage(currentVideoData.thumbnail);
+            } else {
+                const errorMsgs = {
+                    en: 'Thumbnail not available',
+                    hi: 'थंबनेल उपलब्ध नहीं है',
+                    vi: 'Không có ảnh thumbnail',
+                    id: 'Thumbnail tidak tersedia'
+                };
+                showError(errorMsgs[currentLang] || errorMsgs.en);
+            }
+        };
+    }
 }
 
 async function handleDownload() {
@@ -145,7 +175,8 @@ async function handleDownload() {
                 title: data.title || 'TikTok Video',
                 author: data.author || 'Unknown',
                 video_id: data.video_id || '',
-                filename: generateFilename(data.video_id, data.title)
+                filename: generateFilename(data.video_id, data.title),
+                thumbnail: data.thumbnail || ''  // Lưu thumbnail URL
             };
             
             // Hiển thị thông tin video
@@ -447,6 +478,112 @@ async function updateVisitorCount() {
     }
 }
 
+// ============================================
+// DOWNLOAD IMAGE (Thumbnail)
+// ============================================
+
+async function downloadImage(imageUrl) {
+    try {
+        setLoading(true);
+        
+        // Fetch image
+        const response = await fetch(imageUrl);
+        if (!response.ok) throw new Error('Failed to fetch image');
+        
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        
+        // Get filename from video data
+        const filename = currentVideoData.video_id 
+            ? `tiktok_${currentVideoData.video_id}_thumbnail.jpg`
+            : 'tiktok_thumbnail.jpg';
+        
+        // Create download link
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        
+        // Cleanup
+        setTimeout(() => {
+            window.URL.revokeObjectURL(blobUrl);
+            document.body.removeChild(a);
+            setLoading(false);
+        }, 100);
+        
+    } catch (error) {
+        console.error('Error downloading image:', error);
+        const errorMsgs = {
+            en: 'Failed to download image. Please try again.',
+            hi: 'छवि डाउनलोड करने में विफल। कृपया पुनः प्रयास करें।',
+            vi: 'Không thể tải ảnh. Vui lòng thử lại.',
+            id: 'Gagal mengunduh gambar. Silakan coba lagi.'
+        };
+        showError(errorMsgs[currentLang] || errorMsgs.en);
+        setLoading(false);
+    }
+}
+
+// ============================================
+// DOWNLOAD MP3 (Extract Audio from Video)
+// ============================================
+
+async function downloadAudioFromVideo(videoUrl) {
+    try {
+        setLoading(true);
+        showProgress(true);
+        updateProgress(0, 'Preparing audio extraction...', 0, 0);
+        
+        // Note: Client-side audio extraction requires downloading the video first
+        // For better performance, we'll create an API endpoint for server-side conversion
+        // For now, we'll show a message that MP3 extraction is coming soon
+        
+        const infoMsgs = {
+            en: 'MP3 extraction is being processed. Please wait...',
+            hi: 'MP3 निष्कर्षण संसाधित किया जा रहा है। कृपया प्रतीक्षा करें...',
+            vi: 'Đang xử lý trích xuất MP3. Vui lòng đợi...',
+            id: 'Ekstraksi MP3 sedang diproses. Silakan tunggu...'
+        };
+        
+        updateProgress(10, infoMsgs[currentLang] || infoMsgs.en, 0, 0);
+        
+        // For now, we'll download the video and suggest user to convert manually
+        // In production, you should add a backend API endpoint for audio extraction
+        setTimeout(() => {
+            const errorMsgs = {
+                en: 'MP3 extraction feature is coming soon! For now, you can download the video and convert it using an audio converter.',
+                hi: 'MP3 निष्कर्षण सुविधा जल्द ही आ रही है! अभी के लिए, आप वीडियो डाउनलोड कर सकते हैं और ऑडियो कन्वर्टर का उपयोग करके इसे कन्वर्ट कर सकते हैं।',
+                vi: 'Tính năng trích xuất MP3 sắp ra mắt! Hiện tại bạn có thể tải video và chuyển đổi bằng phần mềm chuyển đổi.',
+                id: 'Fitur ekstraksi MP3 akan segera hadir! Saat ini, Anda dapat mengunduh video dan mengonversinya menggunakan konverter audio.'
+            };
+            showError(errorMsgs[currentLang] || errorMsgs.en);
+            showProgress(false);
+            setLoading(false);
+        }, 1000);
+        
+        // TODO: Implement actual MP3 extraction via backend API
+        // Example API call:
+        // const response = await fetch('/api/extract-audio', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ video_url: videoUrl })
+        // });
+        
+    } catch (error) {
+        console.error('Error extracting audio:', error);
+        const errorMsgs = {
+            en: 'Failed to extract audio. Please try again.',
+            hi: 'ऑडियो निकालने में विफल। कृपया पुनः प्रयास करें।',
+            vi: 'Không thể trích xuất âm thanh. Vui lòng thử lại.',
+            id: 'Gagal mengekstrak audio. Silakan coba lagi.'
+        };
+        showError(errorMsgs[currentLang] || errorMsgs.en);
+        showProgress(false);
+        setLoading(false);
+    }
+}
+
 // Update visitor count on page load
 document.addEventListener('DOMContentLoaded', function() {
     updateVisitorCount();
@@ -467,8 +604,10 @@ const translations = {
         pasteBtn: "Paste",
         downloadVideo: "Download MP4",
         downloadAudio: "Download MP3",
+        downloadImage: "Download Image",
         downloadSD: "Download SD",
         downloadHD: "Download HD",
+        downloadImage: "Download Image",
         downloading: "Downloading...",
         popularFeatures: "Popular Features",
         featureHD: "HD Quality",
@@ -508,6 +647,7 @@ const translations = {
         downloadAudio: "MP3 डाउनलोड",
         downloadSD: "SD डाउनलोड",
         downloadHD: "HD डाउनलोड",
+        downloadImage: "छवि डाउनलोड",
         downloading: "डाउनलोड हो रहा है...",
         popularFeatures: "लोकप्रिय सुविधाएं",
         featureHD: "HD गुणवत्ता",
@@ -547,6 +687,7 @@ const translations = {
         downloadAudio: "Tải MP3",
         downloadSD: "Tải SD",
         downloadHD: "Tải HD",
+        downloadImage: "Tải Ảnh",
         downloading: "Đang tải...",
         popularFeatures: "Tính Năng Phổ Biến",
         featureHD: "Chất Lượng HD",
@@ -586,6 +727,7 @@ const translations = {
         downloadAudio: "Unduh MP3",
         downloadSD: "Unduh SD",
         downloadHD: "Unduh HD",
+        downloadImage: "Unduh Gambar",
         downloading: "Mengunduh...",
         popularFeatures: "Fitur Populer",
         featureHD: "Kualitas HD",

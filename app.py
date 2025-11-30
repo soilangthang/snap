@@ -322,7 +322,10 @@ def get_tiktok_direct(url):
 
 @app.route('/')
 def index():
-    return send_file('index.html')
+    response = send_file('index.html')
+    # Ensure canonical URL is set correctly
+    response.headers['Link'] = '<https://tik1s.com/>; rel="canonical"'
+    return response
 
 @app.route('/blog')
 @app.route('/blog/')
@@ -331,7 +334,10 @@ def blog():
         # Đảm bảo file tồn tại và có thể đọc được
         if not os.path.exists('blog.html'):
             return jsonify({'error': 'Blog file not found on server'}), 404
-        return send_file('blog.html', mimetype='text/html')
+        response = send_file('blog.html', mimetype='text/html')
+        # Ensure canonical URL is set correctly
+        response.headers['Link'] = '<https://tik1s.com/blog>; rel="canonical"'
+        return response
     except Exception as e:
         app.logger.error(f"Blog route error: {str(e)}")
         return jsonify({'error': f'Error loading blog: {str(e)}'}), 500

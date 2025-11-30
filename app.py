@@ -378,6 +378,13 @@ def sitemap():
     except:
         return '<?xml version="1.0" encoding="UTF-8"?><urlset></urlset>', 200, {'Content-Type': 'application/xml'}
 
+@app.route('/ads.txt')
+def ads_txt():
+    try:
+        return send_file('ads.txt', mimetype='text/plain')
+    except:
+        return 'google.com, pub-6084835264788220, DIRECT, f08c47fec0942fa0', 200, {'Content-Type': 'text/plain'}
+
 @app.route('/api/download', methods=['POST'])
 @rate_limit(max_per_minute=10)
 def download_video():

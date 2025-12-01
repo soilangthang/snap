@@ -368,14 +368,14 @@ class CaroGame {
         for (const move of candidateMoves) {
             let score = 0;
             
-            // Đánh giá nếu AI đánh ở đây
+            // Đánh giá nếu AI đánh ở đây (tấn công)
             this.board[move.row][move.col] = 'O';
             score += this.evaluatePositionGomoku('O') * 0.1; // Tấn công
             this.board[move.row][move.col] = null;
             
-            // Đánh giá nếu người chơi đánh ở đây (phòng thủ)
+            // Đánh giá nếu người chơi đánh ở đây (phòng thủ) - ưu tiên mạnh hơn
             this.board[move.row][move.col] = 'X';
-            score += this.evaluatePositionGomoku('X') * 0.15; // Phòng thủ quan trọng hơn
+            score += this.evaluatePositionGomoku('X') * 0.25; // Phòng thủ quan trọng hơn rất nhiều
             this.board[move.row][move.col] = null;
             
             // Ưu tiên vị trí trung tâm
@@ -476,8 +476,9 @@ class CaroGame {
         const aiScore = this.evaluatePositionGomoku('O');
         const playerScore = this.evaluatePositionGomoku('X');
         
-        // Ưu tiên phòng thủ: chặn người chơi quan trọng hơn tấn công
-        return aiScore - playerScore * 1.3;
+        // Ưu tiên phòng thủ mạnh hơn: chặn người chơi quan trọng hơn tấn công
+        // Hệ số 1.6 làm cho AI rất nhạy với các nước nguy hiểm của người chơi
+        return aiScore - playerScore * 1.6;
     }
     
     findDoubleThreat(player) {
@@ -612,7 +613,8 @@ class CaroGame {
     
     getCandidateMovesOptimized() {
         const candidates = new Set();
-        const radius = 2; // Giảm bán kính để tối ưu tốc độ
+        // Với mức khó, AI nhìn rộng hơn (bán kính lớn hơn) để khó đoán và khó thắng hơn
+        const radius = this.difficulty === 'hard' ? 3 : 2;
         
         // Tìm tất cả các quân đã đánh
         const occupiedCells = [];

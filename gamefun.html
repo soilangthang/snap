@@ -161,7 +161,8 @@
         
         .board-cell:hover:not(.occupied) {
             background: linear-gradient(145deg, #f0f4ff 0%, #e0e7ff 100%);
-            transform: scale(1.08) translateY(-2px);
+            /* Giữ ô cờ ở đúng vị trí, chỉ phóng to nhẹ để không bị tách hàng */
+            transform: scale(1.05);
             box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
             border-color: var(--primary);
             z-index: 10;

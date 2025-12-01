@@ -430,15 +430,17 @@ function updateProgress(percent, text, loaded, speed) {
 }
 
 // Xóa placeholder khi focus
-videoUrlInput.addEventListener('focus', function() {
-    this.placeholder = '';
-});
+if (videoUrlInput) {
+    videoUrlInput.addEventListener('focus', function() {
+        this.placeholder = '';
+    });
 
-videoUrlInput.addEventListener('blur', function() {
-    if (!this.value) {
-        this.placeholder = 'Paste TikTok video URL here...';
-    }
-});
+    videoUrlInput.addEventListener('blur', function() {
+        if (!this.value) {
+            this.placeholder = 'Paste TikTok video URL here...';
+        }
+    });
+}
 
 // Visitor Counter
 async function updateVisitorCount() {

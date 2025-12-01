@@ -433,11 +433,12 @@ class CaroGame {
         
         // Get translations if available
         const t = (key) => {
-            const currentLang = window.currentLang || (typeof currentLang !== 'undefined' ? currentLang : 'en');
-            const translations = window.translations || (typeof translations !== 'undefined' ? translations : null);
+            // Access from window object first, fallback to 'en'
+            const lang = window.currentLang || 'en';
+            const translations = window.translations || null;
             
-            if (translations && translations[currentLang] && translations[currentLang][key]) {
-                return translations[currentLang][key];
+            if (translations && translations[lang] && translations[lang][key]) {
+                return translations[lang][key];
             }
             // Fallback to English
             if (translations && translations.en && translations.en[key]) {
@@ -472,11 +473,12 @@ class CaroGame {
         
         // Get translations if available
         const t = (key) => {
-            const currentLang = window.currentLang || (typeof currentLang !== 'undefined' ? currentLang : 'en');
-            const translations = window.translations || (typeof translations !== 'undefined' ? translations : null);
+            // Access from window object first, fallback to 'en'
+            const lang = window.currentLang || 'en';
+            const translations = window.translations || null;
             
-            if (translations && translations[currentLang] && translations[currentLang][key]) {
-                return translations[currentLang][key];
+            if (translations && translations[lang] && translations[lang][key]) {
+                return translations[lang][key];
             }
             // Fallback to English
             if (translations && translations.en && translations.en[key]) {
@@ -521,10 +523,10 @@ class CaroGame {
         if (gameResult) {
             // Get translation for "playing"
             const t = (key) => {
-                const currentLang = window.currentLang || 'en';
+                const lang = window.currentLang || 'en';
                 const translations = window.translations;
-                if (translations && translations[currentLang] && translations[currentLang][key]) {
-                    return translations[currentLang][key];
+                if (translations && translations[lang] && translations[lang][key]) {
+                    return translations[lang][key];
                 }
                 if (translations && translations.en && translations.en[key]) {
                     return translations.en[key];

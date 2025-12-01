@@ -646,11 +646,46 @@ async function downloadAudioFromVideo(videoUrl) {
 }
 
 // Update visitor count on page load
+// Sidebar Toggle Functionality
+function initSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarClose = document.getElementById('sidebarClose');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+    if (!sidebar || !sidebarToggle) return;
+    
+    function openSidebar() {
+        if (sidebar) sidebar.classList.add('active');
+        if (sidebarOverlay) sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeSidebar() {
+        if (sidebar) sidebar.classList.remove('active');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', openSidebar);
+    }
+    
+    if (sidebarClose) {
+        sidebarClose.addEventListener('click', closeSidebar);
+    }
+    
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     updateVisitorCount();
     initLanguageSwitcher();
     initFAQ();
     initPasteButton();
+    initSidebar();
 });
 
 // ============================================
@@ -697,7 +732,31 @@ const translations = {
         faq4Answer: "Yes, we don't store any of your data. All downloads are processed securely and privately.",
         allRightsReserved: "All rights reserved.",
         privacy: "Privacy Policy",
-        terms: "Terms of Service"
+        terms: "Terms of Service",
+        // GameFun translations
+        gamefunTitle: "GameFun",
+        gamefunSubtitle: "Choose a game to play",
+        caroGame: "Tic Tac Toe",
+        caroGameDesc: "Play tic tac toe with intelligent AI. Challenge your intelligence!",
+        difficulty: "AI Difficulty:",
+        easy: "Easy",
+        medium: "Medium",
+        hard: "Hard",
+        currentTurn: "Current Turn",
+        gameResult: "Game Result",
+        playing: "Playing",
+        yourTurn: "You (X)",
+        aiTurn: "AI (O)",
+        gameOver: "Game Over",
+        youWin: "🎉 You win! Congratulations!",
+        aiWins: "🤖 AI wins! Try again!",
+        draw: "🤝 Draw! Play again!",
+        newGame: "New Game",
+        reset: "Reset",
+        backToList: "← Back to list",
+        youWinResult: "You win",
+        aiWinsResult: "AI wins",
+        drawResult: "Draw"
     },
     hi: {
         title: "TikTok वीडियो डाउनलोडर",
@@ -737,7 +796,31 @@ const translations = {
         faq4Answer: "हाँ, हम आपका कोई डेटा संग्रहीत नहीं करते हैं। सभी डाउनलोड सुरक्षित और निजी तौर पर संसाधित किए जाते हैं।",
         allRightsReserved: "सभी अधिकार सुरक्षित।",
         privacy: "गोपनीयता नीति",
-        terms: "सेवा की शर्तें"
+        terms: "सेवा की शर्तें",
+        // GameFun translations
+        gamefunTitle: "GameFun",
+        gamefunSubtitle: "खेलने के लिए एक गेम चुनें",
+        caroGame: "टिक टैक टो",
+        caroGameDesc: "बुद्धिमान AI के साथ टिक टैक टो खेलें। अपनी बुद्धिमत्ता को चुनौती दें!",
+        difficulty: "AI कठिनाई:",
+        easy: "आसान",
+        medium: "मध्यम",
+        hard: "कठिन",
+        currentTurn: "वर्तमान मोड़",
+        gameResult: "गेम परिणाम",
+        playing: "खेल रहे हैं",
+        yourTurn: "आप (X)",
+        aiTurn: "AI (O)",
+        gameOver: "गेम समाप्त",
+        youWin: "🎉 आप जीत गए! बधाई हो!",
+        aiWins: "🤖 AI जीत गया! फिर से कोशिश करें!",
+        draw: "🤝 ड्रॉ! फिर से खेलें!",
+        newGame: "नया गेम",
+        reset: "रीसेट",
+        backToList: "← सूची में वापस",
+        youWinResult: "आप जीते",
+        aiWinsResult: "AI जीता",
+        drawResult: "ड्रॉ"
     },
     vi: {
         title: "Trình Tải Video TikTok",
@@ -777,7 +860,31 @@ const translations = {
         faq4Answer: "Có, chúng tôi không lưu trữ dữ liệu của bạn. Tất cả tải xuống được xử lý an toàn và riêng tư.",
         allRightsReserved: "Bảo lưu mọi quyền.",
         privacy: "Chính Sách Bảo Mật",
-        terms: "Điều Khoản Sử Dụng"
+        terms: "Điều Khoản Sử Dụng",
+        // GameFun translations
+        gamefunTitle: "GameFun",
+        gamefunSubtitle: "Chọn game để chơi",
+        caroGame: "Cờ Caro",
+        caroGameDesc: "Chơi cờ caro với AI thông minh. Thử thách trí tuệ của bạn!",
+        difficulty: "Độ khó AI:",
+        easy: "Dễ",
+        medium: "Trung bình",
+        hard: "Khó",
+        currentTurn: "Lượt chơi",
+        gameResult: "Kết quả",
+        playing: "Đang chơi",
+        yourTurn: "Bạn (X)",
+        aiTurn: "AI (O)",
+        gameOver: "Kết thúc",
+        youWin: "🎉 Bạn thắng! Chúc mừng!",
+        aiWins: "🤖 AI thắng! Thử lại nhé!",
+        draw: "🤝 Hòa! Chơi lại nhé!",
+        newGame: "Game mới",
+        reset: "Reset",
+        backToList: "← Về danh sách",
+        youWinResult: "Bạn thắng",
+        aiWinsResult: "AI thắng",
+        drawResult: "Hòa"
     },
     id: {
         title: "Pengunduh Video TikTok",
@@ -817,7 +924,31 @@ const translations = {
         faq4Answer: "Ya, kami tidak menyimpan data Anda. Semua unduhan diproses dengan aman dan privat.",
         allRightsReserved: "Hak cipta dilindungi.",
         privacy: "Kebijakan Privasi",
-        terms: "Ketentuan Layanan"
+        terms: "Ketentuan Layanan",
+        // GameFun translations
+        gamefunTitle: "GameFun",
+        gamefunSubtitle: "Pilih game untuk dimainkan",
+        caroGame: "Tic Tac Toe",
+        caroGameDesc: "Bermain tic tac toe dengan AI yang cerdas. Tantang kecerdasan Anda!",
+        difficulty: "Tingkat Kesulitan AI:",
+        easy: "Mudah",
+        medium: "Sedang",
+        hard: "Sulit",
+        currentTurn: "Giliran Saat Ini",
+        gameResult: "Hasil Permainan",
+        playing: "Bermain",
+        yourTurn: "Anda (X)",
+        aiTurn: "AI (O)",
+        gameOver: "Permainan Selesai",
+        youWin: "🎉 Anda menang! Selamat!",
+        aiWins: "🤖 AI menang! Coba lagi!",
+        draw: "🤝 Seri! Main lagi!",
+        newGame: "Game Baru",
+        reset: "Reset",
+        backToList: "← Kembali ke daftar",
+        youWinResult: "Anda menang",
+        aiWinsResult: "AI menang",
+        drawResult: "Seri"
     }
 };
 

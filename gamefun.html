@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6084835264788220"
+     crossorigin="anonymous"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2">
+    
+    <!-- Primary Meta Tags -->
+    <title>GameFun - Cờ Caro với AI</title>
+    <meta name="title" content="GameFun - Cờ Caro với AI Thông Minh">
+    <meta name="description" content="Chơi cờ caro với AI thông minh. Game vui nhộn và thử thách trí tuệ.">
+    <meta name="keywords" content="cờ caro, game, trò chơi, AI, game online">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://tik1s.com/gamefun">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: var(--spacing-lg);
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .game-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .game-info {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .game-status {
+            text-align: center;
+        }
+        
+        .game-status-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .game-status-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .game-status-value.player-turn {
+            color: var(--primary);
+        }
+        
+        .game-status-value.ai-turn {
+            color: var(--accent);
+        }
+        
+        .game-board {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--border);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(15, 1fr);
+            gap: 2px;
+            background: var(--border);
+            padding: 2px;
+            border-radius: var(--radius-md);
+        }
+        
+        .board-cell {
+            aspect-ratio: 1;
+            background: var(--bg-card);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .board-cell:hover:not(.occupied) {
+            background: var(--bg-main);
+            transform: scale(1.05);
+        }
+        
+        .board-cell.occupied {
+            cursor: not-allowed;
+        }
+        
+        .board-cell.player {
+            color: var(--primary);
+        }
+        
+        .board-cell.ai {
+            color: var(--accent);
+        }
+        
+        .board-cell.winning {
+            background: var(--success);
+            animation: pulse 0.5s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .game-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        
+        .game-controls {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-game {
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: 1rem;
+            min-width: 150px;
+        }
+        
+        .difficulty-selector {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--border);
+        }
+        
+        .difficulty-selector h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .difficulty-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--bg-main);
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all var(--transition-fast);
+            min-width: 100px;
+        }
+        
+        .difficulty-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .difficulty-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .win-message {
+            text-align: center;
+            padding: var(--spacing-md);
+            background: var(--success);
+            color: white;
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-md);
+            font-weight: 600;
+            font-size: 1.125rem;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        @media (max-width: 640px) {
+            .board-grid {
+                grid-template-columns: repeat(15, 1fr);
+            }
+            
+            .board-cell {
+                font-size: 1rem;
+            }
+            
+            .game-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Menu -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h2 class="sidebar-title">Menu</h2>
+            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="/" class="sidebar-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Home</span>
+            </a>
+            <a href="/gamefun" class="sidebar-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+                <span>GameFun</span>
+            </a>
+        </nav>
+    </aside>
+    
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="game-container">
+            <div class="game-header">
+                <h1 class="game-title" data-i18n="gamefunTitle">🎮 GameFun</h1>
+                <p style="color: var(--text-secondary);" data-i18n="gamefunSubtitle">Chọn game để chơi</p>
+            </div>
+            
+            <div class="games-list" id="gamesList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md); margin-bottom: var(--spacing-lg);">
+                <div class="game-card" style="background: var(--bg-card); border-radius: var(--radius-lg); padding: var(--spacing-lg); box-shadow: var(--shadow-md); border: 2px solid var(--border); cursor: pointer; transition: all var(--transition-base);" onclick="loadGame('caro')">
+                    <div style="font-size: 3rem; margin-bottom: var(--spacing-sm); text-align: center;">🎯</div>
+                    <h3 style="font-size: 1.25rem; font-weight: 600; color: var(--text-primary); margin-bottom: var(--spacing-xs); text-align: center;" data-i18n="caroGame">Cờ Caro</h3>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); text-align: center; line-height: 1.5;" data-i18n="caroGameDesc">Chơi cờ caro với AI thông minh. Thử thách trí tuệ của bạn!</p>
+                </div>
+            </div>
+            
+            <div id="gameContainer" style="display: none;">
+            
+            <div class="difficulty-selector" id="difficultySelector" style="display: none;">
+                <h3 data-i18n="difficulty">Độ khó AI:</h3>
+                <div class="difficulty-buttons">
+                    <button class="difficulty-btn" data-difficulty="easy" data-i18n="easy">Dễ</button>
+                    <button class="difficulty-btn active" data-difficulty="medium" data-i18n="medium">Trung bình</button>
+                    <button class="difficulty-btn" data-difficulty="hard" data-i18n="hard">Khó</button>
+                </div>
+            </div>
+            
+            <div class="game-info" id="gameInfo" style="display: none;">
+                <div class="game-status">
+                    <div class="game-status-label" data-i18n="currentTurn">Lượt chơi</div>
+                    <div class="game-status-value" id="currentTurn">Bạn (X)</div>
+                </div>
+                <div class="game-status">
+                    <div class="game-status-label" data-i18n="gameResult">Kết quả</div>
+                    <div class="game-status-value" id="gameResult">Đang chơi</div>
+                </div>
+            </div>
+            
+            <div id="winMessage" class="win-message" style="display: none;"></div>
+            
+            <div class="game-board" id="gameBoard" style="display: none;">
+                <div class="board-grid" id="boardGrid"></div>
+            </div>
+            
+            <div class="game-controls" id="gameControls" style="display: none;">
+                <button class="btn btn-primary btn-game" id="newGameBtn" data-i18n="newGame">Game mới</button>
+                <button class="btn btn-secondary btn-game" id="resetBtn" data-i18n="reset">Reset</button>
+                <button class="btn btn-secondary btn-game" id="backToListBtn" data-i18n="backToList">← Về danh sách</button>
+            </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <p>&copy; 2024 GameFun. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <span>|</span>
+                <a href="/gamefun">GameFun</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/script.js"></script>
+    <script src="/gamefun.js"></script>
+    <script>
+        // Wait for script.js to load
+        function initGameFun() {
+            // Sidebar toggle functionality
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarClose = document.getElementById('sidebarClose');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            
+            function openSidebar() {
+                if (sidebar) sidebar.classList.add('active');
+                if (sidebarOverlay) sidebarOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeSidebar() {
+                if (sidebar) sidebar.classList.remove('active');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+            
+            if (sidebarToggle) sidebarToggle.addEventListener('click', openSidebar);
+            if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
+            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+            
+            // Initialize language switcher if available
+            if (typeof initLanguageSwitcher === 'function') {
+                initLanguageSwitcher();
+            }
+            
+            // Apply translations on language change
+            if (typeof changeLanguage === 'function') {
+                // Listen for language changes
+                const langOptions = document.querySelectorAll('.lang-option');
+                langOptions.forEach(option => {
+                    option.addEventListener('click', () => {
+                        const lang = option.getAttribute('data-lang');
+                        if (lang && typeof changeLanguage === 'function') {
+                            changeLanguage(lang);
+                            updateGameTranslations();
+                        }
+                    });
+                });
+            }
+            
+            // Apply initial translations
+            updateGameTranslations();
+            
+            // Re-apply translations when language changes
+            const originalChangeLanguage = window.changeLanguage;
+            if (originalChangeLanguage) {
+                window.changeLanguage = function(lang) {
+                    originalChangeLanguage(lang);
+                    updateGameTranslations();
+                    // Update game status if game is running
+                    if (window.game && typeof window.game.updateStatus === 'function') {
+                        window.game.updateStatus();
+                    }
+                };
+            }
+        }
+        
+        function updateGameTranslations() {
+            if (typeof currentLang === 'undefined' || typeof translations === 'undefined') return;
+            
+            const lang = currentLang;
+            const t = (key) => translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+            
+            // Update game status texts
+            const currentTurnEl = document.getElementById('currentTurn');
+            const gameResultEl = document.getElementById('gameResult');
+            
+            if (currentTurnEl && window.game) {
+                // Update based on current game state
+                if (window.game.gameOver) {
+                    currentTurnEl.textContent = t('gameOver');
+                } else if (window.game.currentPlayer === 'X') {
+                    currentTurnEl.textContent = t('yourTurn');
+                } else {
+                    currentTurnEl.textContent = t('aiTurn');
+                }
+            }
+            
+            if (gameResultEl && window.game) {
+                if (!window.game.gameOver) {
+                    gameResultEl.textContent = t('playing');
+                }
+            }
+        }
+        
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGameFun);
+        } else {
+            initGameFun();
+        }
+        
+        // Game loading functionality
+        function loadGame(gameName) {
+            if (gameName === 'caro') {
+                document.getElementById('gamesList').style.display = 'none';
+                document.getElementById('gameContainer').style.display = 'block';
+                document.getElementById('difficultySelector').style.display = 'block';
+                document.getElementById('gameInfo').style.display = 'flex';
+                document.getElementById('gameBoard').style.display = 'block';
+                document.getElementById('gameControls').style.display = 'flex';
+                
+                // Initialize game if not already initialized
+                if (!window.game) {
+                    window.game = new CaroGame();
+                } else {
+                    window.game.newGame();
+                }
+            }
+        }
+        
+        // Back to list functionality
+        document.getElementById('backToListBtn').addEventListener('click', () => {
+            document.getElementById('gamesList').style.display = 'grid';
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('difficultySelector').style.display = 'none';
+            document.getElementById('gameInfo').style.display = 'none';
+            document.getElementById('gameBoard').style.display = 'none';
+            document.getElementById('gameControls').style.display = 'none';
+        });
+        
+        // Initialize game on page load if URL has game parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameParam = urlParams.get('game');
+        if (gameParam === 'caro') {
+            loadGame('caro');
+        }
+    </script>
+</body>
+</html>
+

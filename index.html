@@ -55,11 +55,35 @@
     <!-- Google AdSense Auto Ads - Regular HTML (Non-AMP) -->
     <!-- Auto Ads will automatically place ads on your website -->
     <script>
-        // Only initialize AdSense once
-        if (typeof window.adsbygoogleInitialized === 'undefined') {
+        // Only initialize AdSense once, after script is loaded
+        (function() {
+            if (typeof window.adsbygoogleInitialized !== 'undefined') {
+                return; // Already initialized
+            }
+            
             window.adsbygoogleInitialized = true;
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        }
+            
+            // Wait for adsbygoogle script to be ready
+            function initAdSense() {
+                if (typeof adsbygoogle !== 'undefined' && adsbygoogle.loaded !== true) {
+                    try {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    } catch (e) {
+                        console.warn('AdSense initialization error:', e);
+                    }
+                } else if (typeof adsbygoogle === 'undefined') {
+                    // Script not loaded yet, try again
+                    setTimeout(initAdSense, 100);
+                }
+            }
+            
+            // Try to initialize after a short delay to ensure script is loaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAdSense);
+            } else {
+                setTimeout(initAdSense, 100);
+            }
+        })();
     </script>
     
     <!-- AMP Auto Ads Tag (for AMP pages only - currently commented out) -->

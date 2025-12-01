@@ -115,8 +115,16 @@ class CaroGame {
     
     updateCell(row, col, player) {
         const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-        cell.textContent = player;
-        cell.classList.add('occupied', player === 'X' ? 'player' : 'ai');
+        if (!cell) return;
+        
+        // Add animation class before updating
+        cell.style.animation = 'none';
+        setTimeout(() => {
+            cell.textContent = player;
+            cell.classList.add('occupied', player === 'X' ? 'player' : 'ai');
+            // Trigger animation
+            cell.style.animation = null;
+        }, 10);
     }
     
     checkWinner(row, col, player) {

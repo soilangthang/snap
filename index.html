@@ -95,10 +95,16 @@
     </amp-auto-ads>
     -->
     
-    <!-- Sidebar Menu - Always Visible -->
+    <!-- Sidebar Menu - Always Visible on Desktop, Overlay on Mobile -->
     <aside class="sidebar sidebar-visible" id="sidebar">
         <div class="sidebar-header">
             <h2 class="sidebar-title">Menu</h2>
+            <button class="sidebar-close-mobile" id="sidebarCloseMobile" aria-label="Close sidebar" style="display: none;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
         </div>
         <nav class="sidebar-nav">
             <a href="/" class="sidebar-item">
@@ -118,6 +124,18 @@
             </a>
         </nav>
     </aside>
+    
+    <!-- Mobile Sidebar Toggle Button -->
+    <button class="sidebar-toggle-mobile" id="sidebarToggleMobile" aria-label="Toggle sidebar" style="display: none;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+    
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Language Switcher -->
     <div class="lang-switcher">

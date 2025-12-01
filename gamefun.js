@@ -881,3 +881,673 @@ class CaroGame {
 // Khởi tạo game khi được gọi
 // Game sẽ được khởi tạo bởi hàm loadGame() trong gamefun.html
 
+// ============================================
+// SNAKE GAME
+// ============================================
+class SnakeGame {
+    constructor() {
+        this.canvas = document.getElementById('snakeCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.gridSize = 20;
+        this.tileCount = 25;
+        this.canvas.width = this.tileCount * this.gridSize;
+        this.canvas.height = this.tileCount * this.gridSize;
+        
+        this.snake = [{ x: 10, y: 10 }];
+        this.food = { x: 15, y: 15 };
+        this.dx = 0;
+        this.dy = 0;
+        this.score = 0;
+        this.highScore = parseInt(localStorage.getItem('snakeHighScore') || '0');
+        this.gameRunning = false;
+        this.gamePaused = false;
+        this.gameLoop = null;
+        this.speed = 150;
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.updateDisplay();
+        this.generateFood();
+    }
+    
+    setupEventListeners() {
+        document.getElementById('snakeStartBtn').addEventListener('click', () => this.start());
+        document.getElementById('snakePauseBtn').addEventListener('click', () => this.togglePause());
+        document.getElementById('snakeRestartBtn').addEventListener('click', () => this.restart());
+        
+        document.addEventListener('keydown', (e) => {
+            if (!this.gameRunning || this.gamePaused) return;
+            
+            if (e.key === 'ArrowUp' && this.dy !== 1) {
+                this.dx = 0;
+                this.dy = -1;
+            } else if (e.key === 'ArrowDown' && this.dy !== -1) {
+                this.dx = 0;
+                this.dy = 1;
+            } else if (e.key === 'ArrowLeft' && this.dx !== 1) {
+                this.dx = -1;
+                this.dy = 0;
+            } else if (e.key === 'ArrowRight' && this.dx !== -1) {
+                this.dx = 1;
+                this.dy = 0;
+            }
+        });
+    }
+    
+    start() {
+        if (this.gameRunning) return;
+        this.gameRunning = true;
+        this.gamePaused = false;
+        this.dx = 1;
+        this.dy = 0;
+        document.getElementById('snakeStartBtn').style.display = 'none';
+        document.getElementById('snakePauseBtn').style.display = 'inline-block';
+        this.update();
+    }
+    
+    togglePause() {
+        this.gamePaused = !this.gamePaused;
+        if (!this.gamePaused) {
+            this.update();
+        }
+    }
+    
+    restart() {
+        this.stop();
+        this.snake = [{ x: 10, y: 10 }];
+        this.dx = 0;
+        this.dy = 0;
+        this.score = 0;
+        this.gameRunning = false;
+        this.gamePaused = false;
+        this.generateFood();
+        this.updateDisplay();
+        document.getElementById('snakeStartBtn').style.display = 'inline-block';
+        document.getElementById('snakePauseBtn').style.display = 'none';
+    }
+    
+    stop() {
+        this.gameRunning = false;
+        this.gamePaused = false;
+        if (this.gameLoop) {
+            clearTimeout(this.gameLoop);
+            this.gameLoop = null;
+        }
+    }
+    
+    update() {
+        if (!this.gameRunning || this.gamePaused) return;
+        
+        const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
+        
+        // Check wall collision
+        if (head.x < 0 || head.x >= this.tileCount || head.y < 0 || head.y >= this.tileCount) {
+            this.gameOver();
+            return;
+        }
+        
+        // Check self collision
+        if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+            this.gameOver();
+            return;
+        }
+        
+        this.snake.unshift(head);
+        
+        // Check food collision
+        if (head.x === this.food.x && head.y === this.food.y) {
+            this.score += 10;
+            if (this.score > this.highScore) {
+                this.highScore = this.score;
+                localStorage.setItem('snakeHighScore', this.highScore.toString());
+            }
+            this.generateFood();
+            this.updateDisplay();
+        } else {
+            this.snake.pop();
+        }
+        
+        this.draw();
+        this.gameLoop = setTimeout(() => this.update(), this.speed);
+    }
+    
+    generateFood() {
+        do {
+            this.food = {
+                x: Math.floor(Math.random() * this.tileCount),
+                y: Math.floor(Math.random() * this.tileCount)
+            };
+        } while (this.snake.some(segment => segment.x === this.food.x && segment.y === this.food.y));
+    }
+    
+    draw() {
+        // Clear canvas
+        this.ctx.fillStyle = '#f8f9fa';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Draw grid
+        this.ctx.strokeStyle = '#e2e8f0';
+        this.ctx.lineWidth = 1;
+        for (let i = 0; i <= this.tileCount; i++) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(i * this.gridSize, 0);
+            this.ctx.lineTo(i * this.gridSize, this.canvas.height);
+            this.ctx.stroke();
+            
+            this.ctx.beginPath();
+            this.ctx.moveTo(0, i * this.gridSize);
+            this.ctx.lineTo(this.canvas.width, i * this.gridSize);
+            this.ctx.stroke();
+        }
+        
+        // Draw snake
+        this.ctx.fillStyle = '#667eea';
+        this.snake.forEach((segment, index) => {
+            if (index === 0) {
+                this.ctx.fillStyle = '#764ba2';
+            } else {
+                this.ctx.fillStyle = '#667eea';
+            }
+            this.ctx.fillRect(segment.x * this.gridSize + 1, segment.y * this.gridSize + 1, this.gridSize - 2, this.gridSize - 2);
+        });
+        
+        // Draw food
+        this.ctx.fillStyle = '#10b981';
+        this.ctx.fillRect(this.food.x * this.gridSize + 2, this.food.y * this.gridSize + 2, this.gridSize - 4, this.gridSize - 4);
+    }
+    
+    updateDisplay() {
+        document.getElementById('snakeScore').textContent = this.score;
+        document.getElementById('snakeHighScore').textContent = this.highScore;
+    }
+    
+    gameOver() {
+        this.stop();
+        const t = (key) => {
+            const lang = window.currentLang || 'en';
+            const translations = window.translations;
+            if (translations && translations[lang] && translations[lang][key]) {
+                return translations[lang][key];
+            }
+            return translations?.en?.[key] || key;
+        };
+        alert(t('gameOverSnake') + ' ' + t('score') + ': ' + this.score);
+        document.getElementById('snakeStartBtn').style.display = 'inline-block';
+        document.getElementById('snakePauseBtn').style.display = 'none';
+    }
+}
+
+// ============================================
+// MEMORY GAME
+// ============================================
+class MemoryGame {
+    constructor() {
+        this.grid = document.getElementById('memoryGrid');
+        this.cards = [];
+        this.flippedCards = [];
+        this.matchedPairs = 0;
+        this.moves = 0;
+        this.startTime = null;
+        this.timer = null;
+        this.gameStarted = false;
+        this.totalPairs = 8;
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.createCards();
+    }
+    
+    setupEventListeners() {
+        document.getElementById('memoryStartBtn').addEventListener('click', () => this.start());
+        document.getElementById('memoryRestartBtn').addEventListener('click', () => this.restart());
+    }
+    
+    createCards() {
+        const symbols = ['🎯', '🎮', '🎨', '🎵', '🎪', '🎭', '🎬', '🎤'];
+        const cardValues = [...symbols, ...symbols];
+        
+        // Shuffle
+        for (let i = cardValues.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cardValues[i], cardValues[j]] = [cardValues[j], cardValues[i]];
+        }
+        
+        this.grid.innerHTML = '';
+        this.cards = [];
+        
+        cardValues.forEach((value, index) => {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            card.dataset.index = index;
+            card.dataset.value = value;
+            card.style.cssText = `
+                aspect-ratio: 1;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: var(--radius-md);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 2rem;
+                color: white;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                position: relative;
+                overflow: hidden;
+            `;
+            card.innerHTML = '<div class="memory-card-back">?</div>';
+            
+            card.addEventListener('click', () => this.flipCard(index));
+            this.grid.appendChild(card);
+            this.cards.push({
+                element: card,
+                value: value,
+                flipped: false,
+                matched: false
+            });
+        });
+    }
+    
+    start() {
+        if (this.gameStarted) return;
+        this.gameStarted = true;
+        this.startTime = Date.now();
+        this.startTimer();
+        document.getElementById('memoryStartBtn').style.display = 'none';
+    }
+    
+    restart() {
+        this.stop();
+        this.flippedCards = [];
+        this.matchedPairs = 0;
+        this.moves = 0;
+        this.gameStarted = false;
+        this.startTime = null;
+        this.updateDisplay();
+        this.createCards();
+        document.getElementById('memoryStartBtn').style.display = 'inline-block';
+    }
+    
+    stop() {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+    }
+    
+    startTimer() {
+        this.timer = setInterval(() => {
+            if (this.startTime) {
+                const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                document.getElementById('memoryTime').textContent = elapsed + 's';
+            }
+        }, 1000);
+    }
+    
+    flipCard(index) {
+        if (!this.gameStarted) {
+            this.start();
+        }
+        
+        const card = this.cards[index];
+        if (card.flipped || card.matched || this.flippedCards.length >= 2) return;
+        
+        card.flipped = true;
+        this.flippedCards.push(index);
+        
+        card.element.style.background = 'white';
+        card.element.innerHTML = `<div style="font-size: 2rem;">${card.value}</div>`;
+        card.element.style.transform = 'rotateY(180deg)';
+        
+        if (this.flippedCards.length === 2) {
+            this.moves++;
+            this.updateDisplay();
+            
+            setTimeout(() => {
+                this.checkMatch();
+            }, 1000);
+        }
+    }
+    
+    checkMatch() {
+        const [index1, index2] = this.flippedCards;
+        const card1 = this.cards[index1];
+        const card2 = this.cards[index2];
+        
+        if (card1.value === card2.value) {
+            card1.matched = true;
+            card2.matched = true;
+            this.matchedPairs++;
+            
+            card1.element.style.opacity = '0.6';
+            card2.element.style.opacity = '0.6';
+            
+            if (this.matchedPairs === this.totalPairs) {
+                this.gameWon();
+            }
+        } else {
+            card1.flipped = false;
+            card2.flipped = false;
+            
+            card1.element.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            card1.element.innerHTML = '<div class="memory-card-back">?</div>';
+            card1.element.style.transform = 'rotateY(0deg)';
+            
+            card2.element.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            card2.element.innerHTML = '<div class="memory-card-back">?</div>';
+            card2.element.style.transform = 'rotateY(0deg)';
+        }
+        
+        this.flippedCards = [];
+    }
+    
+    updateDisplay() {
+        document.getElementById('memoryMoves').textContent = this.moves;
+    }
+    
+    gameWon() {
+        this.stop();
+        const t = (key) => {
+            const lang = window.currentLang || 'en';
+            const translations = window.translations;
+            if (translations && translations[lang] && translations[lang][key]) {
+                return translations[lang][key];
+            }
+            return translations?.en?.[key] || key;
+        };
+        const time = Math.floor((Date.now() - this.startTime) / 1000);
+        alert(t('gameOverMemory') + '\n' + t('moves') + ': ' + this.moves + '\n' + t('time') + ': ' + time + 's');
+    }
+}
+
+// ============================================
+// 2048 GAME
+// ============================================
+class Game2048 {
+    constructor() {
+        this.grid = document.getElementById('game2048Grid');
+        this.size = 4;
+        this.board = [];
+        this.score = 0;
+        this.highScore = parseInt(localStorage.getItem('game2048HighScore') || '0');
+        this.gameOver = false;
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.newGame();
+    }
+    
+    setupEventListeners() {
+        document.getElementById('game2048NewBtn').addEventListener('click', () => this.newGame());
+        document.getElementById('game2048RestartBtn').addEventListener('click', () => this.newGame());
+        
+        document.addEventListener('keydown', (e) => {
+            if (this.gameOver) return;
+            
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                this.move('up');
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                this.move('down');
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                this.move('left');
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                this.move('right');
+            }
+        });
+    }
+    
+    newGame() {
+        this.board = Array(this.size).fill(null).map(() => Array(this.size).fill(0));
+        this.score = 0;
+        this.gameOver = false;
+        this.addRandomTile();
+        this.addRandomTile();
+        this.updateDisplay();
+        this.render();
+    }
+    
+    addRandomTile() {
+        const emptyCells = [];
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.board[i][j] === 0) {
+                    emptyCells.push({ row: i, col: j });
+                }
+            }
+        }
+        
+        if (emptyCells.length > 0) {
+            const cell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            this.board[cell.row][cell.col] = Math.random() < 0.9 ? 2 : 4;
+        }
+    }
+    
+    move(direction) {
+        const prevBoard = this.board.map(row => [...row]);
+        
+        if (direction === 'left') {
+            this.moveLeft();
+        } else if (direction === 'right') {
+            this.moveRight();
+        } else if (direction === 'up') {
+            this.moveUp();
+        } else if (direction === 'down') {
+            this.moveDown();
+        }
+        
+        // Check if board changed
+        const changed = JSON.stringify(prevBoard) !== JSON.stringify(this.board);
+        if (changed) {
+            this.addRandomTile();
+            this.updateDisplay();
+            this.render();
+            this.checkGameOver();
+        }
+    }
+    
+    moveLeft() {
+        for (let i = 0; i < this.size; i++) {
+            const row = this.board[i].filter(val => val !== 0);
+            for (let j = 0; j < row.length - 1; j++) {
+                if (row[j] === row[j + 1]) {
+                    row[j] *= 2;
+                    this.score += row[j];
+                    row[j + 1] = 0;
+                }
+            }
+            const newRow = row.filter(val => val !== 0);
+            while (newRow.length < this.size) {
+                newRow.push(0);
+            }
+            this.board[i] = newRow;
+        }
+    }
+    
+    moveRight() {
+        for (let i = 0; i < this.size; i++) {
+            const row = this.board[i].filter(val => val !== 0);
+            for (let j = row.length - 1; j > 0; j--) {
+                if (row[j] === row[j - 1]) {
+                    row[j] *= 2;
+                    this.score += row[j];
+                    row[j - 1] = 0;
+                }
+            }
+            const newRow = row.filter(val => val !== 0);
+            while (newRow.length < this.size) {
+                newRow.unshift(0);
+            }
+            this.board[i] = newRow;
+        }
+    }
+    
+    moveUp() {
+        for (let j = 0; j < this.size; j++) {
+            const column = [];
+            for (let i = 0; i < this.size; i++) {
+                if (this.board[i][j] !== 0) {
+                    column.push(this.board[i][j]);
+                }
+            }
+            for (let i = 0; i < column.length - 1; i++) {
+                if (column[i] === column[i + 1]) {
+                    column[i] *= 2;
+                    this.score += column[i];
+                    column[i + 1] = 0;
+                }
+            }
+            const newColumn = column.filter(val => val !== 0);
+            while (newColumn.length < this.size) {
+                newColumn.push(0);
+            }
+            for (let i = 0; i < this.size; i++) {
+                this.board[i][j] = newColumn[i];
+            }
+        }
+    }
+    
+    moveDown() {
+        for (let j = 0; j < this.size; j++) {
+            const column = [];
+            for (let i = 0; i < this.size; i++) {
+                if (this.board[i][j] !== 0) {
+                    column.push(this.board[i][j]);
+                }
+            }
+            for (let i = column.length - 1; i > 0; i--) {
+                if (column[i] === column[i - 1]) {
+                    column[i] *= 2;
+                    this.score += column[i];
+                    column[i - 1] = 0;
+                }
+            }
+            const newColumn = column.filter(val => val !== 0);
+            while (newColumn.length < this.size) {
+                newColumn.unshift(0);
+            }
+            for (let i = 0; i < this.size; i++) {
+                this.board[i][j] = newColumn[i];
+            }
+        }
+    }
+    
+    checkGameOver() {
+        // Check for empty cells
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.board[i][j] === 0) {
+                    return;
+                }
+            }
+        }
+        
+        // Check for possible merges
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const current = this.board[i][j];
+                if (
+                    (i < this.size - 1 && this.board[i + 1][j] === current) ||
+                    (j < this.size - 1 && this.board[i][j + 1] === current)
+                ) {
+                    return;
+                }
+            }
+        }
+        
+        this.gameOver = true;
+        const t = (key) => {
+            const lang = window.currentLang || 'en';
+            const translations = window.translations;
+            if (translations && translations[lang] && translations[lang][key]) {
+                return translations[lang][key];
+            }
+            return translations?.en?.[key] || key;
+        };
+        alert(t('gameOver2048') + ' ' + t('score') + ': ' + this.score);
+    }
+    
+    render() {
+        this.grid.innerHTML = '';
+        
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                const tile = document.createElement('div');
+                const value = this.board[i][j];
+                
+                tile.className = 'tile-2048';
+                tile.style.cssText = `
+                    aspect-ratio: 1;
+                    background: ${value === 0 ? '#cdc1b4' : this.getTileColor(value)};
+                    border-radius: var(--radius-sm);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: ${value >= 1000 ? '1.5rem' : '2rem'};
+                    font-weight: 700;
+                    color: ${value >= 8 ? 'white' : '#776e65'};
+                    transition: all 0.2s ease;
+                `;
+                tile.textContent = value === 0 ? '' : value;
+                
+                this.grid.appendChild(tile);
+            }
+        }
+        
+        // Check for 2048 win
+        for (let i = 0; i < this.size; i++) {
+            for (let j = 0; j < this.size; j++) {
+                if (this.board[i][j] === 2048) {
+                    const t = (key) => {
+                        const lang = window.currentLang || 'en';
+                        const translations = window.translations;
+                        if (translations && translations[lang] && translations[lang][key]) {
+                            return translations[lang][key];
+                        }
+                        return translations?.en?.[key] || key;
+                    };
+                    setTimeout(() => alert(t('youWon2048')), 100);
+                }
+            }
+        }
+    }
+    
+    getTileColor(value) {
+        const colors = {
+            2: '#eee4da',
+            4: '#ede0c8',
+            8: '#f2b179',
+            16: '#f59563',
+            32: '#f67c5f',
+            64: '#f65e3b',
+            128: '#edcf72',
+            256: '#edcc61',
+            512: '#edc850',
+            1024: '#edc53f',
+            2048: '#edc22e'
+        };
+        return colors[value] || '#3c3a32';
+    }
+    
+    updateDisplay() {
+        document.getElementById('game2048Score').textContent = this.score;
+        if (this.score > this.highScore) {
+            this.highScore = this.score;
+            localStorage.setItem('game2048HighScore', this.highScore.toString());
+        }
+        document.getElementById('game2048HighScore').textContent = this.highScore;
+    }
+}
+

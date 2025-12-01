@@ -54,10 +54,12 @@
 <body>
     <!-- Google AdSense Auto Ads - Regular HTML (Non-AMP) -->
     <!-- Auto Ads will automatically place ads on your website -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6084835264788220"
-     crossorigin="anonymous"></script>
     <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
+        // Only initialize AdSense once
+        if (typeof window.adsbygoogleInitialized === 'undefined') {
+            window.adsbygoogleInitialized = true;
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
     </script>
     
     <!-- AMP Auto Ads Tag (for AMP pages only - currently commented out) -->

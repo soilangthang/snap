@@ -636,20 +636,10 @@
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="caroGame">Cờ Caro</h3>
                     <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="caroGameDesc">Chơi cờ caro với AI thông minh. Thử thách trí tuệ của bạn!</p>
                 </div>
-                <div class="game-card" onclick="loadGame('snake')">
-                    <div class="game-card-icon" style="font-size: 4rem; margin-bottom: var(--spacing-md); text-align: center; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));">🐍</div>
-                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="snakeGame">Rắn Săn Mồi</h3>
-                    <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="snakeGameDesc">Game rắn cổ điển. Ăn thức ăn và lớn lên!</p>
-                </div>
                 <div class="game-card" onclick="loadGame('memory')">
                     <div class="game-card-icon" style="font-size: 4rem; margin-bottom: var(--spacing-md); text-align: center; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));">🧠</div>
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="memoryGame">Trò Chơi Trí Nhớ</h3>
                     <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="memoryGameDesc">Ghép các cặp thẻ. Thử thách trí nhớ của bạn!</p>
-                </div>
-                <div class="game-card" onclick="loadGame('2048')">
-                    <div class="game-card-icon" style="font-size: 4rem; margin-bottom: var(--spacing-md); text-align: center; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));">🔢</div>
-                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="game2048">2048</h3>
-                    <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="game2048Desc">Trượt các ô để kết hợp số. Đạt 2048!</p>
                 </div>
             </div>
             
@@ -681,29 +671,6 @@
                 <div class="board-grid" id="boardGrid"></div>
             </div>
             
-            <!-- Snake Game Container -->
-            <div id="snakeContainer" style="display: none;">
-                <div class="game-board" style="display: block;">
-                    <canvas id="snakeCanvas" style="width: 100%; max-width: 500px; margin: 0 auto; display: block; border-radius: var(--radius-lg); background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);"></canvas>
-                </div>
-                <div class="game-info" style="display: flex; margin-top: var(--spacing-md);">
-                    <div class="game-status">
-                        <div class="game-status-label" data-i18n="score">Điểm</div>
-                        <div class="game-status-value" id="snakeScore">0</div>
-                    </div>
-                    <div class="game-status">
-                        <div class="game-status-label" data-i18n="highScore">Điểm cao</div>
-                        <div class="game-status-value" id="snakeHighScore">0</div>
-                    </div>
-                </div>
-                <div class="game-controls" style="display: flex; margin-top: var(--spacing-md);">
-                    <button class="btn btn-primary btn-game" id="snakeStartBtn" data-i18n="start">Bắt đầu</button>
-                    <button class="btn btn-secondary btn-game" id="snakePauseBtn" data-i18n="pause" style="display: none;">Tạm dừng</button>
-                    <button class="btn btn-secondary btn-game" id="snakeRestartBtn" data-i18n="restart">Chơi lại</button>
-                </div>
-                <div style="text-align: center; margin-top: var(--spacing-md); color: var(--text-secondary); font-size: 0.875rem;" data-i18n="snakeControls">Sử dụng phím mũi tên để điều khiển</div>
-            </div>
-            
             <!-- Memory Game Container -->
             <div id="memoryContainer" style="display: none;">
                 <div class="game-info" style="display: flex; margin-bottom: var(--spacing-md);">
@@ -723,28 +690,6 @@
                     <button class="btn btn-primary btn-game" id="memoryStartBtn" data-i18n="start">Bắt đầu</button>
                     <button class="btn btn-secondary btn-game" id="memoryRestartBtn" data-i18n="restart">Chơi lại</button>
                 </div>
-            </div>
-            
-            <!-- 2048 Game Container -->
-            <div id="game2048Container" style="display: none;">
-                <div class="game-info" style="display: flex; margin-bottom: var(--spacing-md);">
-                    <div class="game-status">
-                        <div class="game-status-label" data-i18n="score">Điểm</div>
-                        <div class="game-status-value" id="game2048Score">0</div>
-                    </div>
-                    <div class="game-status">
-                        <div class="game-status-label" data-i18n="highScore">Điểm cao</div>
-                        <div class="game-status-value" id="game2048HighScore">0</div>
-                    </div>
-                </div>
-                <div class="game-board" style="display: block;">
-                    <div id="game2048Grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-sm); max-width: 400px; margin: 0 auto; background: #bbada0; padding: var(--spacing-sm); border-radius: var(--radius-lg);"></div>
-                </div>
-                <div class="game-controls" style="display: flex; margin-top: var(--spacing-md);">
-                    <button class="btn btn-primary btn-game" id="game2048NewBtn" data-i18n="newGame">Game mới</button>
-                    <button class="btn btn-secondary btn-game" id="game2048RestartBtn" data-i18n="restart">Chơi lại</button>
-                </div>
-                <div style="text-align: center; margin-top: var(--spacing-md); color: var(--text-secondary); font-size: 0.875rem;" data-i18n="game2048Controls">Sử dụng phím mũi tên để di chuyển</div>
             </div>
             
             <div class="game-controls" id="gameControls" style="display: none;">
@@ -927,12 +872,8 @@
             document.getElementById('gameBoard').style.display = 'none';
             
             // Hide other game containers
-            const snakeContainer = document.getElementById('snakeContainer');
             const memoryContainer = document.getElementById('memoryContainer');
-            const game2048Container = document.getElementById('game2048Container');
-            if (snakeContainer) snakeContainer.style.display = 'none';
             if (memoryContainer) memoryContainer.style.display = 'none';
-            if (game2048Container) game2048Container.style.display = 'none';
 
             // Mặc định ẩn các nút điều khiển chung, sẽ bật lại cho Cờ Caro
             const gameControls = document.getElementById('gameControls');
@@ -962,17 +903,6 @@
                         window.game.newGame();
                     }
                 }, 50);
-            } else if (gameName === 'snake') {
-                const container = document.getElementById('snakeContainer');
-                if (container) container.style.display = 'block';
-                
-                setTimeout(() => {
-                    if (!window.game || !(window.game instanceof SnakeGame)) {
-                        window.game = new SnakeGame();
-                    } else {
-                        window.game.init();
-                    }
-                }, 50);
             } else if (gameName === 'memory') {
                 const container = document.getElementById('memoryContainer');
                 if (container) container.style.display = 'block';
@@ -980,17 +910,6 @@
                 setTimeout(() => {
                     if (!window.game || !(window.game instanceof MemoryGame)) {
                         window.game = new MemoryGame();
-                    } else {
-                        window.game.init();
-                    }
-                }, 50);
-            } else if (gameName === '2048') {
-                const container = document.getElementById('game2048Container');
-                if (container) container.style.display = 'block';
-                
-                setTimeout(() => {
-                    if (!window.game || !(window.game instanceof Game2048)) {
-                        window.game = new Game2048();
                     } else {
                         window.game.init();
                     }
@@ -1008,12 +927,8 @@
             document.getElementById('gameControls').style.display = 'none';
             
             // Hide all game containers
-            const snakeContainer = document.getElementById('snakeContainer');
             const memoryContainer = document.getElementById('memoryContainer');
-            const game2048Container = document.getElementById('game2048Container');
-            if (snakeContainer) snakeContainer.style.display = 'none';
             if (memoryContainer) memoryContainer.style.display = 'none';
-            if (game2048Container) game2048Container.style.display = 'none';
             
             // Stop any running games
             if (window.game && typeof window.game.stop === 'function') {

@@ -19,6 +19,11 @@ class CaroGame {
     
     createBoard() {
         const boardGrid = document.getElementById('boardGrid');
+        if (!boardGrid) {
+            console.error('Board grid element not found!');
+            return;
+        }
+        
         boardGrid.innerHTML = '';
         
         for (let i = 0; i < this.boardSize; i++) {
@@ -27,7 +32,11 @@ class CaroGame {
                 cell.className = 'board-cell';
                 cell.dataset.row = i;
                 cell.dataset.col = j;
-                cell.addEventListener('click', () => this.handleCellClick(i, j));
+                // Use arrow function to preserve 'this' context
+                cell.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.handleCellClick(i, j);
+                });
                 boardGrid.appendChild(cell);
             }
         }
@@ -52,12 +61,15 @@ class CaroGame {
             return;
         }
         
-        this.makeMove(row, col, 'X');
+        const moveSuccess = this.makeMove(row, col, 'X');
         
-        if (!this.gameOver) {
+        if (moveSuccess && !this.gameOver && this.currentPlayer === 'O') {
             // AI chơi sau một chút để tạo cảm giác tự nhiên
+            const self = this;
             setTimeout(() => {
-                this.aiMove();
+                if (!self.gameOver && self.currentPlayer === 'O') {
+                    self.aiMove();
+                }
             }, 300);
         }
     }
@@ -151,7 +163,10 @@ class CaroGame {
     }
     
     aiMove() {
-        if (this.gameOver) return;
+        // Kiểm tra điều kiện trước khi AI chơi
+        if (this.gameOver || this.currentPlayer !== 'O') {
+            return;
+        }
         
         let move;
         
@@ -169,8 +184,18 @@ class CaroGame {
                 move = this.getMediumMove();
         }
         
-        if (move) {
-            this.makeMove(move.row, move.col, 'O');
+        if (move && move.row !== undefined && move.col !== undefined) {
+            const success = this.makeMove(move.row, move.col, 'O');
+            if (!success) {
+                console.warn('AI move failed, trying random move');
+                // Fallback to random move if the calculated move failed
+                const randomMove = this.getRandomMove();
+                if (randomMove) {
+                    this.makeMove(randomMove.row, randomMove.col, 'O');
+                }
+            }
+        } else {
+            console.warn('AI could not find a valid move');
         }
     }
     
@@ -408,8 +433,15 @@ class CaroGame {
         
         // Get translations if available
         const t = (key) => {
-            if (typeof translations !== 'undefined' && typeof currentLang !== 'undefined' && translations[currentLang]) {
-                return translations[currentLang][key] || key;
+            const currentLang = window.currentLang || (typeof currentLang !== 'undefined' ? currentLang : 'en');
+            const translations = window.translations || (typeof translations !== 'undefined' ? translations : null);
+            
+            if (translations && translations[currentLang] && translations[currentLang][key]) {
+                return translations[currentLang][key];
+            }
+            // Fallback to English
+            if (translations && translations.en && translations.en[key]) {
+                return translations.en[key];
             }
             return key;
         };
@@ -440,8 +472,15 @@ class CaroGame {
         
         // Get translations if available
         const t = (key) => {
-            if (typeof translations !== 'undefined' && typeof currentLang !== 'undefined' && translations[currentLang]) {
-                return translations[currentLang][key] || key;
+            const currentLang = window.currentLang || (typeof currentLang !== 'undefined' ? currentLang : 'en');
+            const translations = window.translations || (typeof translations !== 'undefined' ? translations : null);
+            
+            if (translations && translations[currentLang] && translations[currentLang][key]) {
+                return translations[currentLang][key];
+            }
+            // Fallback to English
+            if (translations && translations.en && translations.en[key]) {
+                return translations.en[key];
             }
             return key;
         };
@@ -472,11 +511,43 @@ class CaroGame {
         this.gameOver = false;
         this.winningCells = [];
         
-        document.getElementById('winMessage').style.display = 'none';
-        document.getElementById('gameResult').textContent = 'Đang chơi';
-        document.getElementById('gameResult').style.color = '';
+        const winMessage = document.getElementById('winMessage');
+        const gameResult = document.getElementById('gameResult');
         
-        this.createBoard();
+        if (winMessage) {
+            winMessage.style.display = 'none';
+        }
+        
+        if (gameResult) {
+            // Get translation for "playing"
+            const t = (key) => {
+                const currentLang = window.currentLang || 'en';
+                const translations = window.translations;
+                if (translations && translations[currentLang] && translations[currentLang][key]) {
+                    return translations[currentLang][key];
+                }
+                if (translations && translations.en && translations.en[key]) {
+                    return translations.en[key];
+                }
+                return key;
+            };
+            gameResult.textContent = t('playing');
+            gameResult.style.color = '';
+        }
+        
+        // Ensure board grid is visible before creating board
+        const boardGrid = document.getElementById('boardGrid');
+        if (boardGrid) {
+            this.createBoard();
+        } else {
+            console.error('Board grid not found, retrying...');
+            setTimeout(() => {
+                if (document.getElementById('boardGrid')) {
+                    this.createBoard();
+                }
+            }, 100);
+        }
+        
         this.updateStatus();
     }
     

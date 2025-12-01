@@ -62,14 +62,18 @@ function generateFilename(videoId, title) {
 }
 
 // Xử lý khi nhấn nút tải
-downloadBtn.addEventListener('click', handleDownload);
+if (downloadBtn) {
+    downloadBtn.addEventListener('click', handleDownload);
+}
 
 // Xử lý khi nhấn Enter
-videoUrlInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        handleDownload();
-    }
-});
+if (videoUrlInput) {
+    videoUrlInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleDownload();
+        }
+    });
+}
 
 // Setup download buttons
 function setupDownloadButtons() {
@@ -733,6 +737,8 @@ const translations = {
         allRightsReserved: "All rights reserved.",
         privacy: "Privacy Policy",
         terms: "Terms of Service",
+        home: "Home",
+        blog: "Blog",
         // GameFun translations
         gamefunTitle: "GameFun",
         gamefunSubtitle: "Choose a game to play",
@@ -797,6 +803,8 @@ const translations = {
         allRightsReserved: "सभी अधिकार सुरक्षित।",
         privacy: "गोपनीयता नीति",
         terms: "सेवा की शर्तें",
+        home: "होम",
+        blog: "ब्लॉग",
         // GameFun translations
         gamefunTitle: "GameFun",
         gamefunSubtitle: "खेलने के लिए एक गेम चुनें",
@@ -861,6 +869,8 @@ const translations = {
         allRightsReserved: "Bảo lưu mọi quyền.",
         privacy: "Chính Sách Bảo Mật",
         terms: "Điều Khoản Sử Dụng",
+        home: "Trang chủ",
+        blog: "Blog",
         // GameFun translations
         gamefunTitle: "GameFun",
         gamefunSubtitle: "Chọn game để chơi",
@@ -925,6 +935,8 @@ const translations = {
         allRightsReserved: "Hak cipta dilindungi.",
         privacy: "Kebijakan Privasi",
         terms: "Ketentuan Layanan",
+        home: "Beranda",
+        blog: "Blog",
         // GameFun translations
         gamefunTitle: "GameFun",
         gamefunSubtitle: "Pilih game untuk dimainkan",
@@ -953,9 +965,13 @@ const translations = {
 };
 
 let currentLang = localStorage.getItem('language') || 'en';
+// Expose to window for use in other scripts
+window.currentLang = currentLang;
+window.translations = translations;
 
 function changeLanguage(lang) {
     currentLang = lang;
+    window.currentLang = lang; // Update window object
     localStorage.setItem('language', lang);
     
     // Update all elements with data-i18n attribute

@@ -348,11 +348,11 @@
     <!-- Footer -->
     <footer class="main-footer">
         <div class="container">
-            <p>&copy; 2024 GameFun. All rights reserved.</p>
+            <p>&copy; 2024 GameFun. <span data-i18n="allRightsReserved">All rights reserved.</span></p>
             <div class="footer-links">
-                <a href="/">Home</a>
+                <a href="/" data-i18n="home">Home</a>
                 <span>|</span>
-                <a href="/gamefun">GameFun</a>
+                <a href="/gamefun" data-i18n="gamefunTitle">GameFun</a>
             </div>
         </div>
     </footer>
@@ -404,8 +404,25 @@
                 });
             }
             
-            // Apply initial translations
-            updateGameTranslations();
+            // Wait for script.js to fully load, then apply translations
+            function waitForTranslations() {
+                if (window.translations && window.currentLang) {
+                    // Apply translations to all elements with data-i18n
+                    document.querySelectorAll('[data-i18n]').forEach(el => {
+                        const key = el.getAttribute('data-i18n');
+                        if (window.translations[window.currentLang] && window.translations[window.currentLang][key]) {
+                            el.textContent = window.translations[window.currentLang][key];
+                        }
+                    });
+                    
+                    // Apply initial game translations
+                    updateGameTranslations();
+                } else {
+                    setTimeout(waitForTranslations, 50);
+                }
+            }
+            
+            waitForTranslations();
             
             // Re-apply translations when language changes
             const originalChangeLanguage = window.changeLanguage;
@@ -422,10 +439,27 @@
         }
         
         function updateGameTranslations() {
-            if (typeof currentLang === 'undefined' || typeof translations === 'undefined') return;
+            // Access currentLang and translations from window object
+            const currentLang = window.currentLang || 'en';
+            const translations = window.translations;
+            
+            if (!translations || !translations[currentLang]) {
+                // Wait a bit for script.js to load
+                setTimeout(updateGameTranslations, 100);
+                return;
+            }
             
             const lang = currentLang;
-            const t = (key) => translations[lang] && translations[lang][key] ? translations[lang][key] : key;
+            const t = (key) => {
+                if (translations[lang] && translations[lang][key]) {
+                    return translations[lang][key];
+                }
+                // Fallback to English
+                if (translations.en && translations.en[key]) {
+                    return translations.en[key];
+                }
+                return key;
+            };
             
             // Update game status texts
             const currentTurnEl = document.getElementById('currentTurn');
@@ -466,12 +500,15 @@
                 document.getElementById('gameBoard').style.display = 'block';
                 document.getElementById('gameControls').style.display = 'flex';
                 
-                // Initialize game if not already initialized
-                if (!window.game) {
-                    window.game = new CaroGame();
-                } else {
-                    window.game.newGame();
-                }
+                // Wait a bit for DOM to update, then initialize game
+                setTimeout(() => {
+                    // Initialize game if not already initialized
+                    if (!window.game) {
+                        window.game = new CaroGame();
+                    } else {
+                        window.game.newGame();
+                    }
+                }, 50);
             }
         }
         

@@ -250,16 +250,10 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar Menu -->
-    <aside class="sidebar" id="sidebar">
+    <!-- Sidebar Menu - Always Visible -->
+    <aside class="sidebar sidebar-visible" id="sidebar">
         <div class="sidebar-header">
             <h2 class="sidebar-title">Menu</h2>
-            <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
         </div>
         <nav class="sidebar-nav">
             <a href="/" class="sidebar-item">
@@ -279,18 +273,6 @@
             </a>
         </nav>
     </aside>
-    
-    <!-- Sidebar Toggle Button -->
-    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-    </button>
-    
-    <!-- Sidebar Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -362,27 +344,7 @@
     <script>
         // Wait for script.js to load
         function initGameFun() {
-            // Sidebar toggle functionality
-            const sidebar = document.getElementById('sidebar');
-            const sidebarToggle = document.getElementById('sidebarToggle');
-            const sidebarClose = document.getElementById('sidebarClose');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
-            
-            function openSidebar() {
-                if (sidebar) sidebar.classList.add('active');
-                if (sidebarOverlay) sidebarOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
-            
-            function closeSidebar() {
-                if (sidebar) sidebar.classList.remove('active');
-                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-            
-            if (sidebarToggle) sidebarToggle.addEventListener('click', openSidebar);
-            if (sidebarClose) sidebarClose.addEventListener('click', closeSidebar);
-            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+            // Sidebar is always visible, no toggle needed
             
             // Initialize language switcher if available
             if (typeof initLanguageSwitcher === 'function') {

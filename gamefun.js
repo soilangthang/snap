@@ -8,6 +8,17 @@ class CaroGame {
         this.difficulty = 'medium';
         this.winningCells = [];
         
+        // Cache cho transposition table
+        this.transpositionTable = new Map();
+        this.maxCacheSize = 10000;
+        
+        // Time limit cho AI (milliseconds)
+        this.thinkTimeLimit = {
+            easy: 100,
+            medium: 300,
+            hard: 700
+        };
+        
         this.init();
     }
     
@@ -218,9 +229,21 @@ class CaroGame {
         const winMove = this.findWinningMove('O');
         if (winMove) return winMove;
         
-        // Chặn người chơi (ngăn họ thắng)
+        // Chặn người chơi (ngăn họ thắng) - QUAN TRỌNG
         const blockMove = this.findWinningMove('X');
         if (blockMove) return blockMove;
+        
+        // Tấn công chủ động: Tạo pattern nguy hiểm cho AI trước
+        const createDangerous = this.findDangerousPattern('O');
+        if (createDangerous) return createDangerous;
+        
+        // Chặn pattern nguy hiểm của người chơi (3-3, 4-4)
+        const blockDangerous = this.findDangerousPattern('X');
+        if (blockDangerous) return blockDangerous;
+        
+        // Tấn công: Tạo 4 mở hoặc 3 mở 2 đầu
+        const attackMove = this.findBestAttackMove('O');
+        if (attackMove) return attackMove;
         
         // Chơi ở vị trí tốt gần các quân cờ hiện có
         const strategicMove = this.findStrategicMove();
@@ -230,21 +253,85 @@ class CaroGame {
         return this.getRandomMove();
     }
     
+    findBestAttackMove(player) {
+        // Tìm nước tạo ra pattern tấn công tốt nhất (4 mở, 3 mở 2 đầu)
+        const candidateMoves = this.getCandidateMovesOptimized();
+        let bestMove = null;
+        let bestScore = -1;
+        
+        for (const move of candidateMoves) {
+            this.board[move.row][move.col] = player;
+            
+            // Đánh giá pattern sau nước này
+            const score = this.evaluatePositionGomoku(player);
+            
+            // Ưu tiên các pattern tấn công
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = move;
+            }
+            
+            this.board[move.row][move.col] = null;
+        }
+        
+        // Chỉ trả về nếu có pattern tốt (score > threshold)
+        return bestScore > 200 ? bestMove : null;
+    }
+    
     getBestMove() {
-        // Ưu tiên tấn công
+        const startTime = Date.now();
+        const timeLimit = this.thinkTimeLimit[this.difficulty] || 700;
+        
+        // Ưu tiên tấn công (thắng ngay nếu có thể)
         const winMove = this.findWinningMove('O');
         if (winMove) return winMove;
         
-        // Chặn người chơi
+        // Chặn người chơi (ngăn họ thắng ngay) - QUAN TRỌNG NHẤT
         const blockMove = this.findWinningMove('X');
         if (blockMove) return blockMove;
         
-        // Tìm nước tốt nhất bằng minimax (đơn giản hóa)
-        const bestMove = this.findBestMoveWithMinimax();
+        // Phát hiện double threat (2 đường tấn công cùng lúc - không thể chặn)
+        const doubleThreat = this.findDoubleThreat('O');
+        if (doubleThreat) return doubleThreat;
+        
+        // Chặn double threat của người chơi
+        const blockDoubleThreat = this.findDoubleThreat('X');
+        if (blockDoubleThreat) return blockDoubleThreat;
+        
+        // Phát hiện pattern nguy hiểm (3-3, 4-4)
+        const dangerousPattern = this.findDangerousPattern('O');
+        if (dangerousPattern) return dangerousPattern;
+        
+        // Chặn pattern nguy hiểm của người chơi
+        const blockDangerous = this.findDangerousPattern('X');
+        if (blockDangerous) return blockDangerous;
+        
+        // Sử dụng iterative deepening với minimax + alpha-beta
+        let bestMove = null;
+        let bestScore = -Infinity;
+        const maxDepth = 4;
+        
+        for (let depth = 2; depth <= maxDepth; depth++) {
+            const elapsed = Date.now() - startTime;
+            if (elapsed >= timeLimit * 0.8) break; // Dừng sớm nếu gần hết thời gian
+            
+            const result = this.minimaxWithAlphaBeta(depth, -Infinity, Infinity, true, startTime, timeLimit);
+            if (result && result.move) {
+                bestMove = result.move;
+                bestScore = result.score;
+                
+                // Nếu tìm thấy nước thắng chắc chắn, dừng ngay
+                if (result.score > 50000) break;
+            }
+        }
+        
         if (bestMove) return bestMove;
         
-        // Fallback
-        return this.getMediumMove();
+        // Fallback to strategic move
+        const strategicMove = this.findStrategicMove();
+        if (strategicMove) return strategicMove;
+        
+        return this.getRandomMove();
     }
     
     findWinningMove(player) {
@@ -265,39 +352,28 @@ class CaroGame {
     }
     
     findStrategicMove() {
-        // Tìm các ô gần các quân cờ hiện có
+        // Tìm các ô tốt nhất dựa trên đánh giá heuristic
+        const candidateMoves = this.getCandidateMovesOptimized();
         const scores = [];
         
-        for (let i = 0; i < this.boardSize; i++) {
-            for (let j = 0; j < this.boardSize; j++) {
-                if (this.board[i][j] === null) {
-                    let score = 0;
-                    
-                    // Đếm số quân cờ gần đó
-                    for (let di = -2; di <= 2; di++) {
-                        for (let dj = -2; dj <= 2; dj++) {
-                            if (di === 0 && dj === 0) continue;
-                            
-                            const ni = i + di;
-                            const nj = j + dj;
-                            
-                            if (ni >= 0 && ni < this.boardSize && nj >= 0 && nj < this.boardSize) {
-                                if (this.board[ni][nj] === 'O') {
-                                    score += 3; // Ưu tiên gần quân AI
-                                } else if (this.board[ni][nj] === 'X') {
-                                    score += 2; // Cũng quan tâm đến quân người chơi
-                                }
-                            }
-                        }
-                    }
-                    
-                    // Ưu tiên vị trí trung tâm
-                    const centerDist = Math.abs(i - this.boardSize / 2) + Math.abs(j - this.boardSize / 2);
-                    score += (this.boardSize - centerDist) * 0.5;
-                    
-                    scores.push({ row: i, col: j, score: score });
-                }
-            }
+        for (const move of candidateMoves) {
+            let score = 0;
+            
+            // Đánh giá nếu AI đánh ở đây
+            this.board[move.row][move.col] = 'O';
+            score += this.evaluatePositionGomoku('O') * 0.1; // Tấn công
+            this.board[move.row][move.col] = null;
+            
+            // Đánh giá nếu người chơi đánh ở đây (phòng thủ)
+            this.board[move.row][move.col] = 'X';
+            score += this.evaluatePositionGomoku('X') * 0.15; // Phòng thủ quan trọng hơn
+            this.board[move.row][move.col] = null;
+            
+            // Ưu tiên vị trí trung tâm
+            const centerDist = Math.abs(move.row - this.boardSize / 2) + Math.abs(move.col - this.boardSize / 2);
+            score += (this.boardSize - centerDist) * 0.1;
+            
+            scores.push({ row: move.row, col: move.col, score: score });
         }
         
         if (scores.length === 0) return null;
@@ -306,85 +382,307 @@ class CaroGame {
         return scores[0];
     }
     
-    findBestMoveWithMinimax() {
-        // Đơn giản hóa minimax - chỉ xem xét các nước gần các quân cờ hiện có
-        const candidateMoves = this.getCandidateMoves();
-        
-        if (candidateMoves.length === 0) return this.getRandomMove();
-        
-        let bestMove = null;
-        let bestScore = -Infinity;
-        
-        for (const move of candidateMoves) {
-            this.board[move.row][move.col] = 'O';
-            const score = this.evaluatePosition('O') - this.evaluatePosition('X');
-            this.board[move.row][move.col] = null;
-            
-            if (score > bestScore) {
-                bestScore = score;
-                bestMove = move;
+    minimaxWithAlphaBeta(depth, alpha, beta, maximizingPlayer, startTime = null, timeLimit = null) {
+        // Kiểm tra thời gian
+        if (startTime && timeLimit) {
+            const elapsed = Date.now() - startTime;
+            if (elapsed >= timeLimit) {
+                return { score: 0, move: null }; // Timeout
             }
         }
         
-        return bestMove || candidateMoves[0];
+        // Kiểm tra kết thúc game hoặc đạt độ sâu tối đa
+        if (depth === 0) {
+            return { score: this.evaluateBoardGomoku(), move: null };
+        }
+        
+        // Kiểm tra thắng/thua trước
+        const aiWin = this.findWinningMove('O');
+        const playerWin = this.findWinningMove('X');
+        
+        if (aiWin && maximizingPlayer) {
+            return { score: 1000000 - depth, move: aiWin };
+        }
+        if (playerWin && !maximizingPlayer) {
+            return { score: -1000000 + depth, move: playerWin };
+        }
+        
+        // Lấy candidate moves (chỉ quanh các quân đã đánh)
+        const candidateMoves = this.getCandidateMovesOptimized();
+        if (candidateMoves.length === 0) {
+            return { score: 0, move: null };
+        }
+        
+        // Sắp xếp moves theo điểm số để alpha-beta hiệu quả hơn (move ordering)
+        const scoredMoves = candidateMoves.map(move => {
+            this.board[move.row][move.col] = maximizingPlayer ? 'O' : 'X';
+            const score = this.evaluateBoardGomoku();
+            this.board[move.row][move.col] = null;
+            return { move, score };
+        });
+        
+        scoredMoves.sort((a, b) => maximizingPlayer ? b.score - a.score : a.score - b.score);
+        
+        let bestMove = scoredMoves[0].move;
+        let bestScore = maximizingPlayer ? -Infinity : Infinity;
+        
+        for (const { move } of scoredMoves) {
+            // Kiểm tra thời gian trong loop
+            if (startTime && timeLimit) {
+                const elapsed = Date.now() - startTime;
+                if (elapsed >= timeLimit) break;
+            }
+            
+            this.board[move.row][move.col] = maximizingPlayer ? 'O' : 'X';
+            const result = this.minimaxWithAlphaBeta(depth - 1, alpha, beta, !maximizingPlayer, startTime, timeLimit);
+            this.board[move.row][move.col] = null;
+            
+            if (!result) continue;
+            
+            if (maximizingPlayer) {
+                if (result.score > bestScore) {
+                    bestScore = result.score;
+                    bestMove = move;
+                }
+                alpha = Math.max(alpha, result.score);
+            } else {
+                if (result.score < bestScore) {
+                    bestScore = result.score;
+                    bestMove = move;
+                }
+                beta = Math.min(beta, result.score);
+            }
+            
+            // Alpha-beta pruning
+            if (beta <= alpha) {
+                break;
+            }
+        }
+        
+        return { score: bestScore, move: bestMove };
+    }
+    
+    evaluateBoardGomoku() {
+        // Đánh giá theo chuẩn Gomoku với hệ số ưu tiên phòng thủ
+        const aiScore = this.evaluatePositionGomoku('O');
+        const playerScore = this.evaluatePositionGomoku('X');
+        
+        // Ưu tiên phòng thủ: chặn người chơi quan trọng hơn tấn công
+        return aiScore - playerScore * 1.3;
+    }
+    
+    findDoubleThreat(player) {
+        // Tìm các nước tạo ra 2 đường tấn công cùng lúc (không thể chặn)
+        const candidateMoves = this.getCandidateMoves();
+        
+        for (const move of candidateMoves) {
+            this.board[move.row][move.col] = player;
+            
+            // Đếm số đường tấn công (4 quân liên tiếp, không bị chặn)
+            let threatCount = 0;
+            const directions = [
+                [[0, 1], [0, -1]],   // Ngang
+                [[1, 0], [-1, 0]],   // Dọc
+                [[1, 1], [-1, -1]],  // Chéo chính
+                [[1, -1], [-1, 1]]   // Chéo phụ
+            ];
+            
+            for (const direction of directions) {
+                let count = 1;
+                let blocked = 0;
+                
+                for (const [dx, dy] of direction) {
+                    let newRow = move.row + dx;
+                    let newCol = move.col + dy;
+                    
+                    while (
+                        newRow >= 0 && newRow < this.boardSize &&
+                        newCol >= 0 && newCol < this.boardSize &&
+                        this.board[newRow][newCol] === player
+                    ) {
+                        count++;
+                        newRow += dx;
+                        newCol += dy;
+                    }
+                    
+                    if (
+                        newRow < 0 || newRow >= this.boardSize ||
+                        newCol < 0 || newCol >= this.boardSize ||
+                        this.board[newRow][newCol] !== null
+                    ) {
+                        blocked++;
+                    }
+                }
+                
+                // Nếu có 4 quân liên tiếp và không bị chặn cả 2 đầu, đó là threat
+                if (count >= 4 && blocked === 0) {
+                    threatCount++;
+                }
+            }
+            
+            this.board[move.row][move.col] = null;
+            
+            // Nếu có 2 hoặc nhiều threat, đây là double threat
+            if (threatCount >= 2) {
+                return move;
+            }
+        }
+        
+        return null;
+    }
+    
+    findDangerousPattern(player) {
+        // Tìm các pattern nguy hiểm: 3-3 (2 đường 3 quân), 4-4 (2 đường 4 quân)
+        const candidateMoves = this.getCandidateMoves();
+        
+        for (const move of candidateMoves) {
+            this.board[move.row][move.col] = player;
+            
+            let threeCount = 0;
+            let fourCount = 0;
+            const directions = [
+                [[0, 1], [0, -1]],   // Ngang
+                [[1, 0], [-1, 0]],   // Dọc
+                [[1, 1], [-1, -1]],  // Chéo chính
+                [[1, -1], [-1, 1]]   // Chéo phụ
+            ];
+            
+            for (const direction of directions) {
+                let count = 1;
+                let blocked = 0;
+                
+                for (const [dx, dy] of direction) {
+                    let newRow = move.row + dx;
+                    let newCol = move.col + dy;
+                    
+                    while (
+                        newRow >= 0 && newRow < this.boardSize &&
+                        newCol >= 0 && newCol < this.boardSize &&
+                        this.board[newRow][newCol] === player
+                    ) {
+                        count++;
+                        newRow += dx;
+                        newCol += dy;
+                    }
+                    
+                    if (
+                        newRow < 0 || newRow >= this.boardSize ||
+                        newCol < 0 || newCol >= this.boardSize ||
+                        this.board[newRow][newCol] !== null
+                    ) {
+                        blocked++;
+                    }
+                }
+                
+                if (count === 3 && blocked === 0) {
+                    threeCount++;
+                } else if (count === 4 && blocked === 0) {
+                    fourCount++;
+                }
+            }
+            
+            this.board[move.row][move.col] = null;
+            
+            // 4-4 pattern (rất nguy hiểm)
+            if (fourCount >= 2) {
+                return move;
+            }
+            
+            // 3-3 pattern (nguy hiểm)
+            if (threeCount >= 2) {
+                return move;
+            }
+        }
+        
+        return null;
     }
     
     getCandidateMoves() {
-        const candidates = [];
-        const radius = 3;
+        return this.getCandidateMovesOptimized();
+    }
+    
+    getCandidateMovesOptimized() {
+        const candidates = new Set();
+        const radius = 2; // Giảm bán kính để tối ưu tốc độ
         
+        // Tìm tất cả các quân đã đánh
+        const occupiedCells = [];
         for (let i = 0; i < this.boardSize; i++) {
             for (let j = 0; j < this.boardSize; j++) {
                 if (this.board[i][j] !== null) {
-                    // Thêm các ô xung quanh quân cờ
-                    for (let di = -radius; di <= radius; di++) {
-                        for (let dj = -radius; dj <= radius; dj++) {
-                            const ni = i + di;
-                            const nj = j + dj;
-                            
-                            if (
-                                ni >= 0 && ni < this.boardSize &&
-                                nj >= 0 && nj < this.boardSize &&
-                                this.board[ni][nj] === null &&
-                                !candidates.some(m => m.row === ni && m.col === nj)
-                            ) {
-                                candidates.push({ row: ni, col: nj });
-                            }
-                        }
+                    occupiedCells.push({ row: i, col: j });
+                }
+            }
+        }
+        
+        // Nếu chưa có quân nào, chơi ở giữa
+        if (occupiedCells.length === 0) {
+            const center = Math.floor(this.boardSize / 2);
+            return [{ row: center, col: center }];
+        }
+        
+        // Chỉ xem xét các ô trong bán kính quanh các quân đã đánh
+        for (const cell of occupiedCells) {
+            for (let di = -radius; di <= radius; di++) {
+                for (let dj = -radius; dj <= radius; dj++) {
+                    // Bỏ qua ô chính giữa (đã có quân)
+                    if (di === 0 && dj === 0) continue;
+                    
+                    const ni = cell.row + di;
+                    const nj = cell.col + dj;
+                    
+                    if (
+                        ni >= 0 && ni < this.boardSize &&
+                        nj >= 0 && nj < this.boardSize &&
+                        this.board[ni][nj] === null
+                    ) {
+                        const key = `${ni},${nj}`;
+                        candidates.add(key);
                     }
                 }
             }
         }
         
-        // Nếu không có quân cờ nào, chơi ở giữa
-        if (candidates.length === 0) {
-            const center = Math.floor(this.boardSize / 2);
-            return [{ row: center, col: center }];
-        }
-        
-        return candidates;
+        // Chuyển Set thành Array
+        return Array.from(candidates).map(key => {
+            const [row, col] = key.split(',').map(Number);
+            return { row, col };
+        });
     }
     
     evaluatePosition(player) {
+        return this.evaluatePositionGomoku(player);
+    }
+    
+    evaluatePositionGomoku(player) {
         let score = 0;
         const directions = [
-            [[0, 1]],   // Ngang
-            [[1, 0]],   // Dọc
-            [[1, 1]],   // Chéo chính
-            [[1, -1]]   // Chéo phụ
+            [[0, 1], [0, -1]],   // Ngang
+            [[1, 0], [-1, 0]],   // Dọc
+            [[1, 1], [-1, -1]],  // Chéo chính
+            [[1, -1], [-1, 1]]   // Chéo phụ
         ];
+        
+        // Chỉ đánh giá khu vực có quân (tối ưu tốc độ)
+        const evaluatedCells = new Set();
         
         for (let i = 0; i < this.boardSize; i++) {
             for (let j = 0; j < this.boardSize; j++) {
                 if (this.board[i][j] === player) {
                     for (const direction of directions) {
-                        let count = 1;
-                        let blocked = 0;
+                        const key = `${i},${j},${direction[0][0]},${direction[0][1]}`;
+                        if (evaluatedCells.has(key)) continue;
+                        evaluatedCells.add(key);
                         
+                        let count = 1;
+                        let openEnds = 0;
+                        
+                        // Đếm quân cờ về cả 2 phía
                         for (const [dx, dy] of direction) {
                             let newRow = i + dx;
                             let newCol = j + dy;
                             
+                            // Đếm quân cùng màu
                             while (
                                 newRow >= 0 && newRow < this.boardSize &&
                                 newCol >= 0 && newCol < this.boardSize &&
@@ -395,29 +693,43 @@ class CaroGame {
                                 newCol += dy;
                             }
                             
-                            // Kiểm tra bị chặn
+                            // Kiểm tra đầu mở hay bị chặn
                             if (
-                                newRow < 0 || newRow >= this.boardSize ||
-                                newCol < 0 || newCol >= this.boardSize ||
-                                this.board[newRow][newCol] !== null
+                                newRow >= 0 && newRow < this.boardSize &&
+                                newCol >= 0 && newCol < this.boardSize &&
+                                this.board[newRow][newCol] === null
                             ) {
-                                blocked++;
+                                openEnds++;
                             }
                         }
                         
-                        // Tính điểm dựa trên số quân liên tiếp
+                        // Tính điểm theo chuẩn Gomoku quốc tế
                         if (count >= 5) {
-                            score += 10000;
-                        } else if (count === 4 && blocked === 0) {
-                            score += 1000;
-                        } else if (count === 4 && blocked === 1) {
-                            score += 100;
-                        } else if (count === 3 && blocked === 0) {
-                            score += 50;
-                        } else if (count === 3 && blocked === 1) {
-                            score += 10;
-                        } else if (count === 2 && blocked === 0) {
-                            score += 5;
+                            score += 1000000; // Thắng - điểm cao nhất
+                        } else if (count === 4) {
+                            if (openEnds === 2) {
+                                score += 50000; // 4 mở 2 đầu - rất nguy hiểm, gần như thắng
+                            } else if (openEnds === 1) {
+                                score += 5000; // 4 bị chặn 1 đầu - vẫn rất nguy hiểm
+                            } else {
+                                score += 100; // 4 bị chặn 2 đầu - không nguy hiểm
+                            }
+                        } else if (count === 3) {
+                            if (openEnds === 2) {
+                                score += 3000; // 3 mở 2 đầu (3-3 pattern) - rất nguy hiểm
+                            } else if (openEnds === 1) {
+                                score += 200; // 3 bị chặn 1 đầu - có tiềm năng
+                            } else {
+                                score += 10; // 3 bị chặn 2 đầu - ít nguy hiểm
+                            }
+                        } else if (count === 2) {
+                            if (openEnds === 2) {
+                                score += 50; // 2 mở 2 đầu - có tiềm năng
+                            } else if (openEnds === 1) {
+                                score += 5; // 2 bị chặn 1 đầu - ít giá trị
+                            }
+                        } else if (count === 1 && openEnds === 2) {
+                            score += 1; // 1 quân, 2 đầu mở - tiềm năng nhỏ
                         }
                     }
                 }

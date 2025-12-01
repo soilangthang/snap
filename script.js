@@ -652,38 +652,10 @@ async function downloadAudioFromVideo(videoUrl) {
 }
 
 // Update visitor count on page load
-// Sidebar Toggle Functionality
+// Sidebar is now always visible, no toggle needed
 function initSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarClose = document.getElementById('sidebarClose');
-    const sidebarOverlay = document.getElementById('sidebarOverlay');
-    
-    if (!sidebar || !sidebarToggle) return;
-    
-    function openSidebar() {
-        if (sidebar) sidebar.classList.add('active');
-        if (sidebarOverlay) sidebarOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeSidebar() {
-        if (sidebar) sidebar.classList.remove('active');
-        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-    
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', openSidebar);
-    }
-    
-    if (sidebarClose) {
-        sidebarClose.addEventListener('click', closeSidebar);
-    }
-    
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', closeSidebar);
-    }
+    // Sidebar is always visible, no initialization needed
+    // This function is kept for compatibility but does nothing
 }
 
 document.addEventListener('DOMContentLoaded', function() {

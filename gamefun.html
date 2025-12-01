@@ -534,6 +534,17 @@
             }
         }
         
+        /* Chess Game Styles */
+        .chess-square {
+            user-select: none;
+        }
+        
+        .chess-square:hover {
+            background: rgba(255, 255, 0, 0.3) !important;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        
         @media (max-width: 640px) {
             .board-grid {
                 grid-template-columns: repeat(15, 1fr);
@@ -576,6 +587,11 @@
                 max-width: 100%;
                 gap: var(--spacing-xs);
                 padding: var(--spacing-xs);
+            }
+            
+            #chessBoard {
+                max-width: 100%;
+                font-size: 2rem;
             }
         }
     </style>
@@ -642,6 +658,11 @@
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="memoryGame">Trò Chơi Trí Nhớ</h3>
                     <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="memoryGameDesc">Ghép các cặp thẻ. Thử thách trí nhớ của bạn!</p>
                 </div>
+                <div class="game-card" onclick="loadGame('chess')">
+                    <div class="game-card-icon" style="font-size: 4rem; margin-bottom: var(--spacing-md); text-align: center; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));">♔</div>
+                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="chessGame">Cờ Vua</h3>
+                    <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="chessGameDesc">Chơi cờ vua với AI thông minh. Game chiến thuật cổ điển!</p>
+                </div>
             </div>
             
             <div id="gameContainer" style="display: none;">
@@ -690,6 +711,35 @@
                 <div class="game-controls" style="display: flex; margin-top: var(--spacing-md);">
                     <button class="btn btn-primary btn-game" id="memoryStartBtn" data-i18n="start">Bắt đầu</button>
                     <button class="btn btn-secondary btn-game" id="memoryRestartBtn" data-i18n="restart">Chơi lại</button>
+                </div>
+            </div>
+            
+            <!-- Chess Game Container -->
+            <div id="chessContainer" style="display: none;">
+                <div class="difficulty-selector" style="display: block; margin-bottom: var(--spacing-md);">
+                    <h3 data-i18n="difficulty">Độ khó AI:</h3>
+                    <div class="difficulty-buttons">
+                        <button class="difficulty-btn" data-difficulty="easy" data-i18n="easy">Dễ</button>
+                        <button class="difficulty-btn active" data-difficulty="medium" data-i18n="medium">Trung bình</button>
+                        <button class="difficulty-btn" data-difficulty="hard" data-i18n="hard">Khó</button>
+                    </div>
+                </div>
+                <div class="game-info" style="display: flex; margin-bottom: var(--spacing-md);">
+                    <div class="game-status">
+                        <div class="game-status-label" data-i18n="currentTurn">Lượt chơi</div>
+                        <div class="game-status-value" id="chessTurn" data-i18n="white">Trắng</div>
+                    </div>
+                    <div class="game-status">
+                        <div class="game-status-label" data-i18n="gameResult">Trạng thái</div>
+                        <div class="game-status-value" id="chessStatus" data-i18n="yourMove">Lượt của bạn</div>
+                    </div>
+                </div>
+                <div class="game-board" style="display: block;">
+                    <div id="chessBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 0; max-width: 600px; margin: 0 auto; border: 3px solid #8b7355; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);"></div>
+                </div>
+                <div class="game-controls" style="display: flex; margin-top: var(--spacing-md);">
+                    <button class="btn btn-primary btn-game" id="chessNewBtn" data-i18n="newGame">Game mới</button>
+                    <button class="btn btn-secondary btn-game" id="chessRestartBtn" data-i18n="restart">Chơi lại</button>
                 </div>
             </div>
             
@@ -874,7 +924,9 @@
             
             // Hide other game containers
             const memoryContainer = document.getElementById('memoryContainer');
+            const chessContainer = document.getElementById('chessContainer');
             if (memoryContainer) memoryContainer.style.display = 'none';
+            if (chessContainer) chessContainer.style.display = 'none';
 
             // Mặc định ẩn các nút điều khiển chung, sẽ bật lại cho Cờ Caro
             const gameControls = document.getElementById('gameControls');
@@ -915,6 +967,17 @@
                         window.game.init();
                     }
                 }, 50);
+            } else if (gameName === 'chess') {
+                const container = document.getElementById('chessContainer');
+                if (container) container.style.display = 'block';
+                
+                setTimeout(() => {
+                    if (!window.game || !(window.game instanceof ChessGame)) {
+                        window.game = new ChessGame();
+                    } else {
+                        window.game.newGame();
+                    }
+                }, 50);
             }
         }
         
@@ -929,7 +992,9 @@
             
             // Hide all game containers
             const memoryContainer = document.getElementById('memoryContainer');
+            const chessContainer = document.getElementById('chessContainer');
             if (memoryContainer) memoryContainer.style.display = 'none';
+            if (chessContainer) chessContainer.style.display = 'none';
             
             // Stop any running games
             if (window.game && typeof window.game.stop === 'function') {

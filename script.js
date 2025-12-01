@@ -814,7 +814,22 @@ const translations = {
         youWon2048: "You reached 2048!",
         tryAgain: "Try Again",
         snakeControls: "Use arrow keys to control",
-        game2048Controls: "Use arrow keys to move"
+        game2048Controls: "Use arrow keys to move",
+        // Chess game
+        chessGame: "Chess",
+        chessGameDesc: "Play chess with intelligent AI. Classic strategy game!",
+        white: "White",
+        black: "Black",
+        check: "Check!",
+        checkmate: "Checkmate!",
+        stalemate: "Stalemate",
+        promotion: "Promote to",
+        castling: "Castling",
+        yourMove: "Your Move",
+        aiThinking: "AI Thinking...",
+        selectPiece: "Select a piece",
+        invalidMove: "Invalid move",
+        gameOverChess: "Game Over"
     },
     hi: {
         title: "TikTok वीडियो डाउनलोडर",
@@ -906,7 +921,22 @@ const translations = {
         youWon2048: "आप 2048 तक पहुंच गए!",
         tryAgain: "फिर से कोशिश करें",
         snakeControls: "नियंत्रण के लिए तीर कुंजियों का उपयोग करें",
-        game2048Controls: "चलने के लिए तीर कुंजियों का उपयोग करें"
+        game2048Controls: "चलने के लिए तीर कुंजियों का उपयोग करें",
+        // Chess game
+        chessGame: "शतरंज",
+        chessGameDesc: "बुद्धिमान AI के साथ शतरंज खेलें। क्लासिक रणनीति गेम!",
+        white: "सफेद",
+        black: "काला",
+        check: "चेक!",
+        checkmate: "चेकमेट!",
+        stalemate: "स्टेलमेट",
+        promotion: "पदोन्नति",
+        castling: "कैसलिंग",
+        yourMove: "आपकी चाल",
+        aiThinking: "AI सोच रहा है...",
+        selectPiece: "एक टुकड़ा चुनें",
+        invalidMove: "अमान्य चाल",
+        gameOverChess: "गेम समाप्त"
     },
     vi: {
         title: "Trình Tải Video TikTok",
@@ -998,7 +1028,22 @@ const translations = {
         youWon2048: "Bạn đã đạt 2048!",
         tryAgain: "Thử lại",
         snakeControls: "Sử dụng phím mũi tên để điều khiển",
-        game2048Controls: "Sử dụng phím mũi tên để di chuyển"
+        game2048Controls: "Sử dụng phím mũi tên để di chuyển",
+        // Chess game
+        chessGame: "Cờ Vua",
+        chessGameDesc: "Chơi cờ vua với AI thông minh. Game chiến thuật cổ điển!",
+        white: "Trắng",
+        black: "Đen",
+        check: "Chiếu!",
+        checkmate: "Chiếu hết!",
+        stalemate: "Hòa cờ",
+        promotion: "Phong cấp thành",
+        castling: "Nhập thành",
+        yourMove: "Lượt của bạn",
+        aiThinking: "AI đang suy nghĩ...",
+        selectPiece: "Chọn quân cờ",
+        invalidMove: "Nước đi không hợp lệ",
+        gameOverChess: "Kết thúc"
     },
     id: {
         title: "Pengunduh Video TikTok",
@@ -1090,7 +1135,22 @@ const translations = {
         youWon2048: "Anda mencapai 2048!",
         tryAgain: "Coba Lagi",
         snakeControls: "Gunakan tombol panah untuk mengontrol",
-        game2048Controls: "Gunakan tombol panah untuk bergerak"
+        game2048Controls: "Gunakan tombol panah untuk bergerak",
+        // Chess game
+        chessGame: "Catur",
+        chessGameDesc: "Bermain catur dengan AI yang cerdas. Game strategi klasik!",
+        white: "Putih",
+        black: "Hitam",
+        check: "Skak!",
+        checkmate: "Skakmat!",
+        stalemate: "Stalemate",
+        promotion: "Promosi ke",
+        castling: "Rokade",
+        yourMove: "Giliran Anda",
+        aiThinking: "AI sedang berpikir...",
+        selectPiece: "Pilih bidak",
+        invalidMove: "Langkah tidak valid",
+        gameOverChess: "Permainan Selesai"
     }
 };
 

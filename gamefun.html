@@ -920,7 +920,6 @@
             // Hide games list
             document.getElementById('gamesList').style.display = 'none';
             document.getElementById('gameContainer').style.display = 'block';
-            document.getElementById('gameControls').style.display = 'flex';
             
             // Hide all game-specific containers first
             document.getElementById('difficultySelector').style.display = 'none';
@@ -934,12 +933,27 @@
             if (snakeContainer) snakeContainer.style.display = 'none';
             if (memoryContainer) memoryContainer.style.display = 'none';
             if (game2048Container) game2048Container.style.display = 'none';
+
+            // Mặc định ẩn các nút điều khiển chung, sẽ bật lại cho Cờ Caro
+            const gameControls = document.getElementById('gameControls');
+            const newGameBtn = document.getElementById('newGameBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const backToListBtn = document.getElementById('backToListBtn');
+            if (gameControls) gameControls.style.display = 'none';
+            if (newGameBtn) newGameBtn.style.display = 'none';
+            if (resetBtn) resetBtn.style.display = 'none';
+            if (backToListBtn) backToListBtn.style.display = 'inline-block';
             
             // Show and initialize specific game
             if (gameName === 'caro') {
                 document.getElementById('difficultySelector').style.display = 'block';
                 document.getElementById('gameInfo').style.display = 'flex';
                 document.getElementById('gameBoard').style.display = 'block';
+
+                // Hiện các nút điều khiển chung cho Cờ Caro
+                if (gameControls) gameControls.style.display = 'flex';
+                if (newGameBtn) newGameBtn.style.display = 'inline-block';
+                if (resetBtn) resetBtn.style.display = 'inline-block';
                 
                 setTimeout(() => {
                     if (!window.game || !(window.game instanceof CaroGame)) {

@@ -903,12 +903,16 @@ class SnakeGame {
         this.gamePaused = false;
         this.gameLoop = null;
         this.speed = 150;
+        this.eventsBound = false;
         
         this.init();
     }
     
     init() {
-        this.setupEventListeners();
+        if (!this.eventsBound) {
+            this.setupEventListeners();
+            this.eventsBound = true;
+        }
         this.updateDisplay();
         this.generateFood();
     }
@@ -919,8 +923,34 @@ class SnakeGame {
         document.getElementById('snakeRestartBtn').addEventListener('click', () => this.restart());
         
         document.addEventListener('keydown', (e) => {
-            if (!this.gameRunning || this.gamePaused) return;
+            // Chỉ xử lý các phím mũi tên cho game rắn
+            if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+            e.preventDefault();
+
+            // Nếu game chưa chạy, tự động bắt đầu khi người chơi nhấn phím
+            if (!this.gameRunning) {
+                this.gameRunning = true;
+                this.gamePaused = false;
+                document.getElementById('snakeStartBtn').style.display = 'none';
+                document.getElementById('snakePauseBtn').style.display = 'inline-block';
+                // Khởi tạo hướng ban đầu dựa trên phím
+                if (e.key === 'ArrowUp') {
+                    this.dx = 0; this.dy = -1;
+                } else if (e.key === 'ArrowDown') {
+                    this.dx = 0; this.dy = 1;
+                } else if (e.key === 'ArrowLeft') {
+                    this.dx = -1; this.dy = 0;
+                } else if (e.key === 'ArrowRight') {
+                    this.dx = 1; this.dy = 0;
+                }
+                this.update();
+                return;
+            }
+
+            // Nếu đang tạm dừng thì bỏ qua
+            if (this.gamePaused) return;
             
+            // Đổi hướng, tránh quay đầu 180 độ
             if (e.key === 'ArrowUp' && this.dy !== 1) {
                 this.dx = 0;
                 this.dy = -1;
@@ -1094,12 +1124,16 @@ class MemoryGame {
         this.timer = null;
         this.gameStarted = false;
         this.totalPairs = 8;
+        this.eventsBound = false;
         
         this.init();
     }
     
     init() {
-        this.setupEventListeners();
+        if (!this.eventsBound) {
+            this.setupEventListeners();
+            this.eventsBound = true;
+        }
         this.createCards();
     }
     
@@ -1277,12 +1311,16 @@ class Game2048 {
         this.score = 0;
         this.highScore = parseInt(localStorage.getItem('game2048HighScore') || '0');
         this.gameOver = false;
+        this.eventsBound = false;
         
         this.init();
     }
     
     init() {
-        this.setupEventListeners();
+        if (!this.eventsBound) {
+            this.setupEventListeners();
+            this.eventsBound = true;
+        }
         this.newGame();
     }
     
@@ -1548,6 +1586,11 @@ class Game2048 {
             localStorage.setItem('game2048HighScore', this.highScore.toString());
         }
         document.getElementById('game2048HighScore').textContent = this.highScore;
+    }
+
+    stop() {
+        // Đánh dấu game over để handler phím không xử lý nữa
+        this.gameOver = true;
     }
 }
 

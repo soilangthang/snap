@@ -17,6 +17,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- GameFun -->
+  <url>
+    <loc>https://tik1s.com/gamefun</loc>
+    <lastmod>2025-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Privacy Policy -->
   <url>
     <loc>https://tik1s.com/privacy</loc>

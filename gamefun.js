@@ -1134,10 +1134,10 @@ class ChessGame {
         
         // Đặt quân đen (hàng 0, 1)
         this.board[0] = ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'].map(p => ({ type: p, color: 'black' }));
-        this.board[1] = Array(8).fill({ type: 'p', color: 'black' });
+        this.board[1] = Array(8).fill(null).map(() => ({ type: 'p', color: 'black' }));
         
         // Đặt quân trắng (hàng 6, 7)
-        this.board[6] = Array(8).fill({ type: 'p', color: 'white' });
+        this.board[6] = Array(8).fill(null).map(() => ({ type: 'p', color: 'white' }));
         this.board[7] = ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'].map(p => ({ type: p, color: 'white' }));
         
         // Các hàng giữa để trống
@@ -1201,7 +1201,12 @@ class ChessGame {
                     square.style.textShadow = piece.color === 'white' ? '1px 1px 2px rgba(0,0,0,0.5)' : '1px 1px 2px rgba(255,255,255,0.5)';
                 }
                 
-                square.addEventListener('click', () => this.handleSquareClick(row, col));
+                // Sử dụng arrow function để giữ context
+                square.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.handleSquareClick(row, col);
+                });
                 boardElement.appendChild(square);
             }
         }
@@ -1288,7 +1293,8 @@ class ChessGame {
         
         // Lọc các nước đi không hợp lệ (không để vua bị chiếu)
         return moves.filter(move => {
-            const testBoard = this.makeTestMove(move);
+            const testMove = { from: { row, col }, to: move };
+            const testBoard = this.makeTestMove(testMove);
             return !this.isKingInCheck(color, testBoard);
         });
     }

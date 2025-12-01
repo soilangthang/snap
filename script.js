@@ -652,77 +652,62 @@ async function downloadAudioFromVideo(videoUrl) {
 }
 
 // Update visitor count on page load
-// Sidebar functionality - visible on desktop, toggle on mobile
+// Sidebar functionality - Always hidden by default, shown when toggled
 function initSidebar() {
     const sidebar = document.getElementById('sidebar');
-    const sidebarToggleMobile = document.getElementById('sidebarToggleMobile');
-    const sidebarCloseMobile = document.getElementById('sidebarCloseMobile');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarClose = document.getElementById('sidebarClose');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     
-    if (!sidebar) return;
+    if (!sidebar || !sidebarToggle) return;
     
-    // Chỉ áp dụng trên mobile
-    if (window.innerWidth <= 640) {
-        // Show toggle button on mobile
-        if (sidebarToggleMobile) {
-            sidebarToggleMobile.style.display = 'flex';
-        }
-        if (sidebarCloseMobile) {
-            sidebarCloseMobile.style.display = 'flex';
-        }
-        
-        function openSidebar() {
-            if (sidebar) sidebar.classList.add('sidebar-visible');
-            if (sidebarOverlay) sidebarOverlay.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeSidebar() {
-            if (sidebar) sidebar.classList.remove('sidebar-visible');
-            if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-        
-        if (sidebarToggleMobile) {
-            sidebarToggleMobile.addEventListener('click', openSidebar);
-        }
-        
-        if (sidebarCloseMobile) {
-            sidebarCloseMobile.addEventListener('click', closeSidebar);
-        }
-        
-        if (sidebarOverlay) {
-            sidebarOverlay.addEventListener('click', closeSidebar);
-        }
-        
-        // Close sidebar when clicking menu items on mobile
-        const sidebarItems = sidebar.querySelectorAll('.sidebar-item');
-        sidebarItems.forEach(item => {
-            item.addEventListener('click', () => {
-                setTimeout(closeSidebar, 100); // Delay để cho navigation xảy ra trước
-            });
-        });
-        
-        // Handle window resize
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                if (window.innerWidth > 640) {
-                    // Desktop - hide toggle, show sidebar
-                    if (sidebarToggleMobile) sidebarToggleMobile.style.display = 'none';
-                    if (sidebarCloseMobile) sidebarCloseMobile.style.display = 'none';
-                    if (sidebar) sidebar.classList.add('sidebar-visible');
-                    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
-                } else {
-                    // Mobile - show toggle, hide sidebar initially
-                    if (sidebarToggleMobile) sidebarToggleMobile.style.display = 'flex';
-                    if (sidebarCloseMobile) sidebarCloseMobile.style.display = 'flex';
-                    if (sidebar) sidebar.classList.remove('sidebar-visible');
-                }
-            }, 100);
+    function openSidebar() {
+        if (sidebar) sidebar.classList.add('sidebar-visible');
+        if (sidebarOverlay) sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeSidebar() {
+        if (sidebar) sidebar.classList.remove('sidebar-visible');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    
+    // Toggle sidebar
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            if (sidebar.classList.contains('sidebar-visible')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
         });
     }
+    
+    // Close sidebar
+    if (sidebarClose) {
+        sidebarClose.addEventListener('click', closeSidebar);
+    }
+    
+    // Close sidebar when clicking overlay
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+    
+    // Close sidebar when clicking menu items
+    const sidebarItems = sidebar.querySelectorAll('.sidebar-item');
+    sidebarItems.forEach(item => {
+        item.addEventListener('click', () => {
+            setTimeout(closeSidebar, 100); // Delay để cho navigation xảy ra trước
+        });
+    });
+    
+    // Close sidebar when pressing Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('sidebar-visible')) {
+            closeSidebar();
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {

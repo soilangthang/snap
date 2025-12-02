@@ -1109,6 +1109,21 @@ class ChessGame {
         this.initializeBoard();
         this.renderBoard();
         this.updateStatus();
+        
+        // Add resize handler to update board size
+        this.resizeHandler = () => {
+            if (document.getElementById('chessContainer')?.classList.contains('active')) {
+                this.renderBoard();
+            }
+        };
+        window.addEventListener('resize', this.resizeHandler);
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                if (document.getElementById('chessContainer')?.classList.contains('active')) {
+                    this.renderBoard();
+                }
+            }, 100);
+        });
     }
     
     setupEventListeners() {
@@ -1152,6 +1167,14 @@ class ChessGame {
         
         boardElement.innerHTML = '';
         
+        // Calculate responsive font size based on viewport
+        const isMobile = window.innerWidth <= 640;
+        const isLandscape = window.innerHeight < window.innerWidth;
+        const viewportSize = Math.min(window.innerWidth, window.innerHeight);
+        const baseFontSize = isMobile 
+            ? (isLandscape ? Math.max(viewportSize * 0.08, 1.5) : Math.max(viewportSize * 0.1, 1.5))
+            : 3;
+        
         for (let row = 0; row < 8; row++) {
             for (let col = 0; col < 8; col++) {
                 const square = document.createElement('div');
@@ -1167,7 +1190,7 @@ class ChessGame {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    font-size: 3rem;
+                    font-size: ${baseFontSize}rem;
                     cursor: pointer;
                     position: relative;
                     transition: all 0.2s ease;
@@ -1986,6 +2009,14 @@ class ChessGame {
         this.initializeBoard();
         this.renderBoard();
         this.updateStatus();
+    }
+    
+    // Cleanup method
+    stop() {
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+            window.removeEventListener('orientationchange', this.resizeHandler);
+        }
     }
 }
 

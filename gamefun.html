@@ -534,87 +534,6 @@
             }
         }
         
-        /* Chess Game Styles */
-        .chess-square {
-            user-select: none;
-        }
-        
-        .chess-square:hover {
-            background: rgba(255, 255, 0, 0.3) !important;
-            transform: scale(1.05);
-            z-index: 10;
-        }
-        
-        /* Landscape orientation for chess game */
-        #chessContainer {
-            min-height: 100vh;
-        }
-        
-        #chessContainer.active {
-            /* Force landscape orientation suggestion */
-        }
-        
-        /* Responsive chess board - fit screen properly */
-        #chessBoard {
-            width: 100%;
-            max-width: min(90vw, 90vh, 600px);
-            aspect-ratio: 1;
-            margin: 0 auto;
-        }
-        
-        /* Chess container responsive layout */
-        #chessContainer .game-board {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: var(--spacing-md);
-        }
-        
-        #chessContainer .game-info {
-            flex-wrap: wrap;
-            gap: var(--spacing-sm);
-        }
-        
-        #chessContainer .game-status {
-            flex: 1;
-            min-width: 120px;
-        }
-        
-        /* Landscape orientation message */
-        .orientation-message {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 10000;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            color: white;
-            font-size: 1.5rem;
-            text-align: center;
-            padding: var(--spacing-lg);
-        }
-        
-        .orientation-message.show {
-            display: flex;
-        }
-        
-        .orientation-message svg {
-            width: 80px;
-            height: 80px;
-            margin-bottom: var(--spacing-md);
-            animation: rotate 2s ease-in-out infinite;
-        }
-        
-        @keyframes rotate {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(90deg); }
-        }
-        
         @media (max-width: 640px) {
             .board-grid {
                 grid-template-columns: repeat(15, 1fr);
@@ -659,44 +578,6 @@
                 padding: var(--spacing-xs);
             }
             
-            /* Chess board responsive for mobile */
-            #chessBoard {
-                max-width: min(95vw, 95vh);
-                font-size: clamp(1.5rem, 8vw, 2.5rem);
-            }
-            
-            .chess-square {
-                font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
-            }
-            
-            /* Show orientation message on portrait mobile */
-            @media (orientation: portrait) {
-                #chessContainer.active ~ .orientation-message,
-                body.chess-active .orientation-message {
-                    display: flex;
-                }
-            }
-        }
-        
-        /* Landscape specific styles */
-        @media (orientation: landscape) and (max-height: 600px) {
-            #chessBoard {
-                max-width: min(85vh, 85vw);
-                font-size: clamp(1.2rem, 6vh, 2rem);
-            }
-            
-            .chess-square {
-                font-size: clamp(1.2rem, 6vh, 2rem) !important;
-            }
-            
-            #chessContainer .game-info {
-                padding: var(--spacing-sm);
-            }
-            
-            #chessContainer .difficulty-selector {
-                padding: var(--spacing-sm);
-                margin-bottom: var(--spacing-sm);
-            }
         }
     </style>
 </head>
@@ -743,16 +624,6 @@
     <!-- Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     
-    <!-- Orientation Message for Chess Game -->
-    <div class="orientation-message" id="orientationMessage">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-        </svg>
-        <h2>Vui lòng xoay ngang màn hình</h2>
-        <p>Game cờ vua được tối ưu cho chế độ ngang</p>
-    </div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -772,11 +643,6 @@
                     <div class="game-card-icon" style="font-size: 4rem; margin-bottom: var(--spacing-md); text-align: center; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));">🧠</div>
                     <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="memoryGame">Trò Chơi Trí Nhớ</h3>
                     <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="memoryGameDesc">Ghép các cặp thẻ. Thử thách trí nhớ của bạn!</p>
-                </div>
-                <div class="game-card" onclick="loadGame('chess')">
-                    <div class="game-card-icon" style="font-size: 4rem; margin-bottom: var(--spacing-md); text-align: center; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));">♔</div>
-                    <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--spacing-sm); text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;" data-i18n="chessGame">Cờ Vua</h3>
-                    <p style="font-size: 0.9375rem; color: var(--text-secondary); text-align: center; line-height: 1.6; position: relative; z-index: 1;" data-i18n="chessGameDesc">Chơi cờ vua với AI thông minh. Game chiến thuật cổ điển!</p>
                 </div>
             </div>
             
@@ -826,35 +692,6 @@
                 <div class="game-controls" style="display: flex; margin-top: var(--spacing-md);">
                     <button class="btn btn-primary btn-game" id="memoryStartBtn" data-i18n="start">Bắt đầu</button>
                     <button class="btn btn-secondary btn-game" id="memoryRestartBtn" data-i18n="restart">Chơi lại</button>
-                </div>
-            </div>
-            
-            <!-- Chess Game Container -->
-            <div id="chessContainer" style="display: none;">
-                <div class="difficulty-selector" style="display: block; margin-bottom: var(--spacing-md);">
-                    <h3 data-i18n="difficulty">Độ khó AI:</h3>
-                    <div class="difficulty-buttons">
-                        <button class="difficulty-btn" data-difficulty="easy" data-i18n="easy">Dễ</button>
-                        <button class="difficulty-btn active" data-difficulty="medium" data-i18n="medium">Trung bình</button>
-                        <button class="difficulty-btn" data-difficulty="hard" data-i18n="hard">Khó</button>
-                    </div>
-                </div>
-                <div class="game-info" style="display: flex; margin-bottom: var(--spacing-md);">
-                    <div class="game-status">
-                        <div class="game-status-label" data-i18n="currentTurn">Lượt chơi</div>
-                        <div class="game-status-value" id="chessTurn" data-i18n="white">Trắng</div>
-                    </div>
-                    <div class="game-status">
-                        <div class="game-status-label" data-i18n="gameResult">Trạng thái</div>
-                        <div class="game-status-value" id="chessStatus" data-i18n="yourMove">Lượt của bạn</div>
-                    </div>
-                </div>
-                <div class="game-board" style="display: block;">
-                    <div id="chessBoard" style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 0; max-width: 600px; margin: 0 auto; border: 3px solid #8b7355; border-radius: var(--radius-lg); overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);"></div>
-                </div>
-                <div class="game-controls" style="display: flex; margin-top: var(--spacing-md);">
-                    <button class="btn btn-primary btn-game" id="chessNewBtn" data-i18n="newGame">Game mới</button>
-                    <button class="btn btn-secondary btn-game" id="chessRestartBtn" data-i18n="restart">Chơi lại</button>
                 </div>
             </div>
             
@@ -1039,9 +876,7 @@
             
             // Hide other game containers
             const memoryContainer = document.getElementById('memoryContainer');
-            const chessContainer = document.getElementById('chessContainer');
             if (memoryContainer) memoryContainer.style.display = 'none';
-            if (chessContainer) chessContainer.style.display = 'none';
 
             // Mặc định ẩn các nút điều khiển chung, sẽ bật lại cho Cờ Caro
             const gameControls = document.getElementById('gameControls');
@@ -1082,32 +917,6 @@
                         window.game.init();
                     }
                 }, 50);
-            } else if (gameName === 'chess') {
-                const container = document.getElementById('chessContainer');
-                if (container) {
-                    container.style.display = 'block';
-                    container.classList.add('active');
-                    document.body.classList.add('chess-active');
-                }
-                
-                // Try to lock orientation to landscape (if supported)
-                if (screen.orientation && screen.orientation.lock) {
-                    screen.orientation.lock('landscape').catch(() => {
-                        // Lock failed, show message instead
-                        console.log('Orientation lock not supported or denied');
-                    });
-                }
-                
-                // Check orientation and show message if needed
-                checkChessOrientation();
-                
-                setTimeout(() => {
-                    if (!window.game || !(window.game instanceof ChessGame)) {
-                        window.game = new ChessGame();
-                    } else {
-                        window.game.newGame();
-                    }
-                }, 50);
             }
         }
         
@@ -1122,24 +931,7 @@
             
             // Hide all game containers
             const memoryContainer = document.getElementById('memoryContainer');
-            const chessContainer = document.getElementById('chessContainer');
             if (memoryContainer) memoryContainer.style.display = 'none';
-            if (chessContainer) {
-                chessContainer.style.display = 'none';
-                chessContainer.classList.remove('active');
-                document.body.classList.remove('chess-active');
-            }
-            
-            // Unlock orientation
-            if (screen.orientation && screen.orientation.unlock) {
-                screen.orientation.unlock();
-            }
-            
-            // Hide orientation message
-            const orientationMessage = document.getElementById('orientationMessage');
-            if (orientationMessage) {
-                orientationMessage.classList.remove('show');
-            }
             
             // Stop any running games
             if (window.game && typeof window.game.stop === 'function') {
@@ -1147,38 +939,6 @@
             }
         });
         
-        // Function to check chess orientation
-        function checkChessOrientation() {
-            const chessContainer = document.getElementById('chessContainer');
-            const orientationMessage = document.getElementById('orientationMessage');
-            
-            if (!chessContainer || !orientationMessage) return;
-            
-            const isChessActive = chessContainer.classList.contains('active');
-            if (!isChessActive) {
-                orientationMessage.classList.remove('show');
-                return;
-            }
-            
-            // Check if in portrait mode on mobile
-            const isPortrait = window.innerHeight > window.innerWidth;
-            const isMobile = window.innerWidth <= 640;
-            
-            if (isPortrait && isMobile) {
-                orientationMessage.classList.add('show');
-            } else {
-                orientationMessage.classList.remove('show');
-            }
-        }
-        
-        // Listen for orientation changes
-        window.addEventListener('orientationchange', () => {
-            setTimeout(checkChessOrientation, 100);
-        });
-        
-        window.addEventListener('resize', () => {
-            checkChessOrientation();
-        });
         
         // Initialize game on page load if URL has game parameter
         const urlParams = new URLSearchParams(window.location.search);

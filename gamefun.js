@@ -12,12 +12,11 @@ class CaroGame {
         this.transpositionTable = new Map();
         this.maxCacheSize = 10000;
         
-        // Time limit cho AI (milliseconds)
+        // Time limit cho AI (milliseconds) - Tăng thời gian để AI suy nghĩ sâu hơn
         this.thinkTimeLimit = {
-            // Giữ nhanh cho easy/medium, cho phép hard suy nghĩ lâu hơn một chút
             easy: 120,
-            medium: 350,
-            hard: 900
+            medium: 400,
+            hard: 1500  // Tăng từ 900 lên 1500ms để AI có thời gian suy nghĩ sâu hơn
         };
         
         this.init();
@@ -254,6 +253,10 @@ class CaroGame {
         const attackMove = this.findBestAttackMove('O');
         if (attackMove) return attackMove;
         
+        // Chặn các nước tấn công của người chơi (chặn 3 mở, 4 mở)
+        const blockAttack = this.findBestAttackMove('X');
+        if (blockAttack) return blockAttack;
+        
         // Chơi ở vị trí tốt gần các quân cờ hiện có
         const strategicMove = this.findStrategicMove();
         if (strategicMove) return strategicMove;
@@ -264,6 +267,7 @@ class CaroGame {
     
     findBestAttackMove(player) {
         // Tìm nước tạo ra pattern tấn công tốt nhất (4 mở, 3 mở 2 đầu)
+        // Cải thiện: Giảm threshold và đánh giá tốt hơn
         const candidateMoves = this.getCandidateMovesOptimized();
         let bestMove = null;
         let bestScore = -1;
@@ -283,8 +287,8 @@ class CaroGame {
             this.board[move.row][move.col] = null;
         }
         
-        // Chỉ trả về nếu có pattern tốt (score > threshold)
-        return bestScore > 200 ? bestMove : null;
+        // Giảm threshold từ 200 xuống 150 để AI tấn công tích cực hơn
+        return bestScore > 150 ? bestMove : null;
     }
     
     getBestMove() {
@@ -318,11 +322,11 @@ class CaroGame {
         // Sử dụng iterative deepening với minimax + alpha-beta
         let bestMove = null;
         let bestScore = -Infinity;
-        const maxDepth = this.difficulty === 'hard' ? 5 : 4;
+        const maxDepth = this.difficulty === 'hard' ? 7 : 5; // Tăng độ sâu từ 5 lên 7 cho hard mode
         
         for (let depth = 2; depth <= maxDepth; depth++) {
             const elapsed = Date.now() - startTime;
-            if (elapsed >= timeLimit * 0.8) break; // Dừng sớm nếu gần hết thời gian
+            if (elapsed >= timeLimit * 0.85) break; // Dừng sớm nếu gần hết thời gian
             
             const result = this.minimaxWithAlphaBeta(depth, -Infinity, Infinity, true, startTime, timeLimit);
             if (result && result.move) {
@@ -362,6 +366,7 @@ class CaroGame {
     
     findStrategicMove() {
         // Tìm các ô tốt nhất dựa trên đánh giá heuristic
+        // Cải thiện: Tăng trọng số phòng thủ và đánh giá pattern tốt hơn
         const candidateMoves = this.getCandidateMovesOptimized();
         const scores = [];
         
@@ -370,17 +375,25 @@ class CaroGame {
             
             // Đánh giá nếu AI đánh ở đây (tấn công)
             this.board[move.row][move.col] = 'O';
-            score += this.evaluatePositionGomoku('O') * 0.1; // Tấn công
+            const aiScore = this.evaluatePositionGomoku('O');
+            score += aiScore * 0.12; // Tăng từ 0.1 lên 0.12
             this.board[move.row][move.col] = null;
             
             // Đánh giá nếu người chơi đánh ở đây (phòng thủ) - ưu tiên mạnh hơn
             this.board[move.row][move.col] = 'X';
-            score += this.evaluatePositionGomoku('X') * 0.25; // Phòng thủ quan trọng hơn rất nhiều
+            const playerScore = this.evaluatePositionGomoku('X');
+            score += playerScore * 0.35; // Tăng từ 0.25 lên 0.35 - phòng thủ quan trọng hơn nhiều
             this.board[move.row][move.col] = null;
             
-            // Ưu tiên vị trí trung tâm
+            // Ưu tiên vị trí trung tâm (quan trọng hơn ở đầu game)
             const centerDist = Math.abs(move.row - this.boardSize / 2) + Math.abs(move.col - this.boardSize / 2);
-            score += (this.boardSize - centerDist) * 0.1;
+            score += (this.boardSize - centerDist) * 0.15; // Tăng từ 0.1 lên 0.15
+            
+            // Bonus cho các nước tạo ra nhiều pattern cùng lúc
+            this.board[move.row][move.col] = 'O';
+            const patternCount = this.countActivePatterns('O', move.row, move.col);
+            score += patternCount * 50; // Bonus cho mỗi pattern được tạo
+            this.board[move.row][move.col] = null;
             
             scores.push({ row: move.row, col: move.col, score: score });
         }
@@ -389,6 +402,52 @@ class CaroGame {
         
         scores.sort((a, b) => b.score - a.score);
         return scores[0];
+    }
+    
+    countActivePatterns(player, row, col) {
+        // Đếm số pattern đang hoạt động từ một vị trí
+        let patternCount = 0;
+        const directions = [
+            [[0, 1], [0, -1]],   // Ngang
+            [[1, 0], [-1, 0]],   // Dọc
+            [[1, 1], [-1, -1]],  // Chéo chính
+            [[1, -1], [-1, 1]]   // Chéo phụ
+        ];
+        
+        for (const direction of directions) {
+            let count = 1;
+            let blocked = 0;
+            
+            for (const [dx, dy] of direction) {
+                let newRow = row + dx;
+                let newCol = col + dy;
+                
+                while (
+                    newRow >= 0 && newRow < this.boardSize &&
+                    newCol >= 0 && newCol < this.boardSize &&
+                    this.board[newRow][newCol] === player
+                ) {
+                    count++;
+                    newRow += dx;
+                    newCol += dy;
+                }
+                
+                if (
+                    newRow < 0 || newRow >= this.boardSize ||
+                    newCol < 0 || newCol >= this.boardSize ||
+                    this.board[newRow][newCol] !== null
+                ) {
+                    blocked++;
+                }
+            }
+            
+            // Đếm các pattern có giá trị (ít nhất 2 quân)
+            if (count >= 2 && blocked < 2) {
+                patternCount++;
+            }
+        }
+        
+        return patternCount;
     }
     
     minimaxWithAlphaBeta(depth, alpha, beta, maximizingPlayer, startTime = null, timeLimit = null) {
@@ -423,14 +482,24 @@ class CaroGame {
         }
         
         // Sắp xếp moves theo điểm số để alpha-beta hiệu quả hơn (move ordering)
+        // Cải thiện: Đánh giá chính xác hơn bằng cách kiểm tra cả winning moves và blocking moves
         const scoredMoves = candidateMoves.map(move => {
+            // Kiểm tra nếu đây là winning move
             this.board[move.row][move.col] = maximizingPlayer ? 'O' : 'X';
-            const score = this.evaluateBoardGomoku();
+            const isWinning = this.checkWinner(move.row, move.col, maximizingPlayer ? 'O' : 'X');
+            const score = isWinning 
+                ? (maximizingPlayer ? 1000000 : -1000000)
+                : this.evaluateBoardGomoku();
             this.board[move.row][move.col] = null;
             return { move, score };
         });
         
-        scoredMoves.sort((a, b) => maximizingPlayer ? b.score - a.score : a.score - b.score);
+        // Sắp xếp: winning moves trước, sau đó theo điểm số
+        scoredMoves.sort((a, b) => {
+            if (Math.abs(a.score) > 500000) return maximizingPlayer ? -1 : 1;
+            if (Math.abs(b.score) > 500000) return maximizingPlayer ? 1 : -1;
+            return maximizingPlayer ? b.score - a.score : a.score - b.score;
+        });
         
         let bestMove = scoredMoves[0].move;
         let bestScore = maximizingPlayer ? -Infinity : Infinity;
@@ -472,17 +541,18 @@ class CaroGame {
     }
     
     evaluateBoardGomoku() {
-        // Đánh giá theo chuẩn Gomoku với hệ số ưu tiên phòng thủ
+        // Đánh giá theo chuẩn Gomoku với hệ số ưu tiên phòng thủ mạnh hơn
         const aiScore = this.evaluatePositionGomoku('O');
         const playerScore = this.evaluatePositionGomoku('X');
         
-        // Ưu tiên phòng thủ mạnh hơn: chặn người chơi quan trọng hơn tấn công
-        // Hệ số 1.6 làm cho AI rất nhạy với các nước nguy hiểm của người chơi
-        return aiScore - playerScore * 1.6;
+        // Tăng hệ số phòng thủ từ 1.6 lên 2.0 để AI chặn người chơi mạnh hơn
+        // AI sẽ ưu tiên chặn các nước nguy hiểm của người chơi hơn là tấn công
+        return aiScore - playerScore * 2.0;
     }
     
     findDoubleThreat(player) {
         // Tìm các nước tạo ra 2 đường tấn công cùng lúc (không thể chặn)
+        // Cải thiện: Phát hiện cả 3-3 pattern và 4-4 pattern như double threat
         const candidateMoves = this.getCandidateMoves();
         
         for (const move of candidateMoves) {
@@ -490,6 +560,7 @@ class CaroGame {
             
             // Đếm số đường tấn công (4 quân liên tiếp, không bị chặn)
             let threatCount = 0;
+            let threeCount = 0; // Đếm số đường 3 mở 2 đầu
             const directions = [
                 [[0, 1], [0, -1]],   // Ngang
                 [[1, 0], [-1, 0]],   // Dọc
@@ -528,12 +599,24 @@ class CaroGame {
                 if (count >= 4 && blocked === 0) {
                     threatCount++;
                 }
+                // Nếu có 3 quân liên tiếp và không bị chặn cả 2 đầu, đó là 3-3 pattern
+                else if (count === 3 && blocked === 0) {
+                    threeCount++;
+                }
             }
             
             this.board[move.row][move.col] = null;
             
-            // Nếu có 2 hoặc nhiều threat, đây là double threat
+            // Nếu có 2 hoặc nhiều threat (4-4), đây là double threat
             if (threatCount >= 2) {
+                return move;
+            }
+            // Nếu có 2 hoặc nhiều đường 3 mở 2 đầu (3-3 pattern), cũng là double threat
+            if (threeCount >= 2) {
+                return move;
+            }
+            // Nếu có cả threat và 3-3 pattern, cũng là double threat
+            if (threatCount >= 1 && threeCount >= 1) {
                 return move;
             }
         }
@@ -543,6 +626,7 @@ class CaroGame {
     
     findDangerousPattern(player) {
         // Tìm các pattern nguy hiểm: 3-3 (2 đường 3 quân), 4-4 (2 đường 4 quân)
+        // Cải thiện: Phát hiện cả pattern 3-4 (3 mở + 4 mở) và các pattern phức tạp hơn
         const candidateMoves = this.getCandidateMoves();
         
         for (const move of candidateMoves) {
@@ -550,6 +634,7 @@ class CaroGame {
             
             let threeCount = 0;
             let fourCount = 0;
+            let threeOneEnd = 0; // 3 quân, 1 đầu mở
             const directions = [
                 [[0, 1], [0, -1]],   // Ngang
                 [[1, 0], [-1, 0]],   // Dọc
@@ -586,6 +671,8 @@ class CaroGame {
                 
                 if (count === 3 && blocked === 0) {
                     threeCount++;
+                } else if (count === 3 && blocked === 1) {
+                    threeOneEnd++;
                 } else if (count === 4 && blocked === 0) {
                     fourCount++;
                 }
@@ -593,13 +680,23 @@ class CaroGame {
             
             this.board[move.row][move.col] = null;
             
-            // 4-4 pattern (rất nguy hiểm)
+            // 4-4 pattern (rất nguy hiểm - gần như thắng chắc)
             if (fourCount >= 2) {
                 return move;
             }
             
-            // 3-3 pattern (nguy hiểm)
+            // 3-4 pattern (3 mở + 4 mở) - rất nguy hiểm
+            if (threeCount >= 1 && fourCount >= 1) {
+                return move;
+            }
+            
+            // 3-3 pattern (nguy hiểm - tạo double threat)
             if (threeCount >= 2) {
+                return move;
+            }
+            
+            // 3-3 pattern với 1 đầu mở (vẫn nguy hiểm)
+            if (threeCount >= 1 && threeOneEnd >= 1) {
                 return move;
             }
         }
@@ -614,7 +711,8 @@ class CaroGame {
     getCandidateMovesOptimized() {
         const candidates = new Set();
         // Với mức khó, AI nhìn rộng hơn (bán kính lớn hơn) để khó đoán và khó thắng hơn
-        const radius = this.difficulty === 'hard' ? 3 : 2;
+        // Tăng bán kính từ 3 lên 4 cho hard mode để AI xem xét nhiều nước đi hơn
+        const radius = this.difficulty === 'hard' ? 4 : 2;
         
         // Tìm tất cả các quân đã đánh
         const occupiedCells = [];
@@ -714,33 +812,33 @@ class CaroGame {
                             }
                         }
                         
-                        // Tính điểm theo chuẩn Gomoku quốc tế
+                        // Tính điểm theo chuẩn Gomoku quốc tế - Cải thiện hệ số điểm
                         if (count >= 5) {
                             score += 1000000; // Thắng - điểm cao nhất
                         } else if (count === 4) {
                             if (openEnds === 2) {
-                                score += 50000; // 4 mở 2 đầu - rất nguy hiểm, gần như thắng
+                                score += 60000; // Tăng từ 50000 lên 60000 - 4 mở 2 đầu - rất nguy hiểm, gần như thắng
                             } else if (openEnds === 1) {
-                                score += 5000; // 4 bị chặn 1 đầu - vẫn rất nguy hiểm
+                                score += 6000; // Tăng từ 5000 lên 6000 - 4 bị chặn 1 đầu - vẫn rất nguy hiểm
                             } else {
                                 score += 100; // 4 bị chặn 2 đầu - không nguy hiểm
                             }
                         } else if (count === 3) {
                             if (openEnds === 2) {
-                                score += 3000; // 3 mở 2 đầu (3-3 pattern) - rất nguy hiểm
+                                score += 4000; // Tăng từ 3000 lên 4000 - 3 mở 2 đầu (3-3 pattern) - rất nguy hiểm
                             } else if (openEnds === 1) {
-                                score += 200; // 3 bị chặn 1 đầu - có tiềm năng
+                                score += 300; // Tăng từ 200 lên 300 - 3 bị chặn 1 đầu - có tiềm năng
                             } else {
                                 score += 10; // 3 bị chặn 2 đầu - ít nguy hiểm
                             }
                         } else if (count === 2) {
                             if (openEnds === 2) {
-                                score += 50; // 2 mở 2 đầu - có tiềm năng
+                                score += 80; // Tăng từ 50 lên 80 - 2 mở 2 đầu - có tiềm năng
                             } else if (openEnds === 1) {
-                                score += 5; // 2 bị chặn 1 đầu - ít giá trị
+                                score += 8; // Tăng từ 5 lên 8 - 2 bị chặn 1 đầu - ít giá trị
                             }
                         } else if (count === 1 && openEnds === 2) {
-                            score += 1; // 1 quân, 2 đầu mở - tiềm năng nhỏ
+                            score += 2; // Tăng từ 1 lên 2 - 1 quân, 2 đầu mở - tiềm năng nhỏ
                         }
                     }
                 }

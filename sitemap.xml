@@ -9,6 +9,14 @@
     <priority>1.0</priority>
   </url>
 
+  <!-- About -->
+  <url>
+    <loc>https://tik1s.com/about</loc>
+    <lastmod>2025-03-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Blog -->
   <url>
     <loc>https://tik1s.com/blog</loc>

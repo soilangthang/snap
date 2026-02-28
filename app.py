@@ -32,77 +32,133 @@ def save_visitor_count():
     except:
         pass
 
-# Privacy Policy HTML Template
+# Privacy Policy HTML Template (expanded for AdSense compliance)
 PRIVACY_POLICY_HTML = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Privacy Policy - TikTok Downloader</title>
+    <title>Privacy Policy - Tik1s TikTok Downloader</title>
+    <meta name="description" content="Privacy policy for Tik1s.com: how we handle your data, cookies, and third-party advertising (Google AdSense).">
+    <link rel="canonical" href="https://tik1s.com/privacy">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="container" style="max-width: 900px; padding: 40px 20px;">
         <h1>Privacy Policy</h1>
         <p><strong>Last updated:</strong> {{ date }}</p>
+        <p>Tik1s ("we", "our", or "us") operates tik1s.com and is committed to protecting your privacy. This policy explains how we collect, use, and disclose information when you use our TikTok downloader service.</p>
         
-        <h2>1. Information Collection</h2>
-        <p>We do not collect any personal information from users. Our service operates completely anonymously.</p>
+        <h2>1. Information We Collect</h2>
+        <p>We do not collect personal identification information (such as name, email, or phone). When you use our downloader, we only process the TikTok video URL you paste. We do not store these URLs or link them to you. Our service is designed to work anonymously.</p>
         
-        <h2>2. Information Usage</h2>
-        <p>We only use the provided TikTok URL to download videos. No information is stored or shared.</p>
+        <h2>2. How We Use Information</h2>
+        <p>We use the TikTok URL solely to fetch and deliver the requested video or audio. We do not retain, analyze, or share this data. We may collect non-personal, aggregated data (e.g. visitor counts) to improve the service; this cannot identify you.</p>
         
-        <h2>3. Security</h2>
-        <p>Our service uses secure connections and does not store user data.</p>
+        <h2>3. Third-Party Advertising and Cookies</h2>
+        <p>We use Google AdSense to show advertisements on our website. Google and its partners may use cookies and similar technologies to serve ads based on your visits to our site and other sites. You can learn more at <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google's Advertising Policy</a>. You can opt out of personalized advertising via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ad Settings</a>. We do not control these third-party cookies.</p>
         
-        <h2>4. Cookies</h2>
-        <p>We do not use cookies to track users.</p>
+        <h2>4. Security</h2>
+        <p>We use secure connections (HTTPS) and do not store your usage data. We do not sell or rent your information to third parties.</p>
         
-        <h2>5. Contact</h2>
-        <p>If you have any questions about our privacy policy, please contact us.</p>
+        <h2>5. Children's Privacy</h2>
+        <p>Our service is not directed at children under 13. We do not knowingly collect any personal information from children.</p>
+        
+        <h2>6. Changes to This Policy</h2>
+        <p>We may update this privacy policy from time to time. The "Last updated" date at the top will reflect the latest version. Continued use of the site after changes constitutes acceptance.</p>
+        
+        <h2>7. Contact Us</h2>
+        <p>If you have questions about this privacy policy or our practices, please contact us at <a href="mailto:contact@tik1s.com">contact@tik1s.com</a> or visit our <a href="/about">About</a> page.</p>
         
         <p><a href="/">← Back to homepage</a></p>
     </div>
 </body>
 </html>
-""".replace('{{ date }}', '2024-01-01')
+""".replace('{{ date }}', '2025-03-01')
 
-# Terms of Service HTML Template
+# Terms of Service HTML Template (expanded for AdSense compliance)
 TERMS_OF_SERVICE_HTML = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terms of Service - TikTok Downloader</title>
+    <title>Terms of Service - Tik1s TikTok Downloader</title>
+    <meta name="description" content="Terms of service for Tik1s.com: acceptable use, copyright, and liability.">
+    <link rel="canonical" href="https://tik1s.com/terms">
     <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="container" style="max-width: 900px; padding: 40px 20px;">
         <h1>Terms of Service</h1>
         <p><strong>Last updated:</strong> {{ date }}</p>
+        <p>Welcome to Tik1s. By accessing or using tik1s.com ("the Service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.</p>
         
         <h2>1. Acceptance of Terms</h2>
-        <p>By using this service, you agree to these terms of service.</p>
+        <p>By using the Service, you confirm that you have read, understood, and agree to these terms and to our <a href="/privacy">Privacy Policy</a>. The Service is provided by Tik1s for personal, non-commercial use.</p>
         
-        <h2>2. Service Usage</h2>
-        <p>The service is provided free of charge to download TikTok videos for personal use. You may not use the service for commercial purposes or to violate copyright.</p>
+        <h2>2. Description of Service</h2>
+        <p>Tik1s allows users to download TikTok videos and audio for personal use. We provide the tool "as is" and do not guarantee compatibility with all TikTok content or formats. We may modify or discontinue features without notice.</p>
         
-        <h2>3. Copyright</h2>
-        <p>Users are responsible for the use of downloaded videos. We are not responsible for copyright violations.</p>
+        <h2>3. Acceptable Use</h2>
+        <p>You agree to use the Service only for lawful purposes. You must not use it to download content you do not have the right to use, to infringe copyright or other rights, or to harass or harm others. Commercial use, bulk downloading, or automated scraping may be restricted. We reserve the right to block access for abuse.</p>
         
-        <h2>4. Limitation of Liability</h2>
-        <p>The service is provided "as is". We do not guarantee continuous availability of the service.</p>
+        <h2>4. Copyright and Responsibility</h2>
+        <p>TikTok content is owned by its creators and TikTok. You are solely responsible for ensuring you have the right to download and use any content. Tik1s does not grant you any rights to third-party content. We are not liable for your misuse of downloaded material.</p>
         
-        <h2>5. Changes to Terms</h2>
-        <p>We reserve the right to change these terms at any time.</p>
+        <h2>5. Limitation of Liability</h2>
+        <p>The Service is provided "as is" and "as available". We disclaim all warranties, express or implied. We are not liable for any indirect, incidental, or consequential damages arising from your use of the Service. Our liability is limited to the maximum extent permitted by applicable law.</p>
+        
+        <h2>6. Third-Party Services</h2>
+        <p>Our site may include third-party content or advertising (e.g. Google AdSense). Your interaction with such services is subject to their respective terms and policies. We are not responsible for third-party practices.</p>
+        
+        <h2>7. Changes to Terms</h2>
+        <p>We may update these terms at any time. The "Last updated" date will be revised accordingly. Continued use of the Service after changes constitutes acceptance. We encourage you to review this page periodically.</p>
+        
+        <h2>8. Contact</h2>
+        <p>For questions about these Terms of Service, contact us at <a href="mailto:contact@tik1s.com">contact@tik1s.com</a> or see our <a href="/about">About</a> page.</p>
         
         <p><a href="/">← Back to homepage</a></p>
     </div>
 </body>
 </html>
-""".replace('{{ date }}', '2024-01-01')
+""".replace('{{ date }}', '2025-03-01')
+
+# About page HTML (for AdSense: original content, contact, purpose)
+ABOUT_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Tik1s TikTok Downloader</title>
+    <meta name="description" content="About Tik1s: our mission to provide a fast, free TikTok video downloader without watermark. Contact and team info.">
+    <link rel="canonical" href="https://tik1s.com/about">
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 900px; padding: 40px 20px;">
+        <h1>About Tik1s</h1>
+        <p>Tik1s is a free, fast TikTok video downloader. We help users save TikTok videos in high quality without watermark, and extract MP3 audio when needed.</p>
+        
+        <h2>Our Mission</h2>
+        <p>We built Tik1s to offer a simple, reliable way to download TikTok videos for personal use. We focus on speed, quality (including HD when available), and privacy: we do not store your data or require registration.</p>
+        
+        <h2>What We Offer</h2>
+        <p>Our tool supports standard TikTok videos, long-form videos, and slideshows. You can download in SD or HD (MP4), extract audio as MP3, or save the cover image. Everything runs in your browser with no app install required, and works on desktop and mobile.</p>
+        
+        <h2>Advertising</h2>
+        <p>To keep the service free, we show ads on the site (e.g. via Google AdSense). We follow program policies and aim to keep ads respectful and non-intrusive. For details on data used for ads, see our <a href="/privacy">Privacy Policy</a>.</p>
+        
+        <h2>Contact</h2>
+        <p>If you have feedback, questions, or reports (e.g. copyright or abuse), please contact us at <a href="mailto:contact@tik1s.com">contact@tik1s.com</a>. We do our best to respond in a timely manner.</p>
+        
+        <p><a href="/">← Back to homepage</a> | <a href="/privacy">Privacy</a> | <a href="/terms">Terms</a></p>
+    </div>
+</body>
+</html>
+"""
 
 # Rate limiting decorator
 def rate_limit(max_per_minute=10):
@@ -390,6 +446,11 @@ def privacy():
 def terms():
     return render_template_string(TERMS_OF_SERVICE_HTML)
 
+@app.route('/about')
+@app.route('/about/')
+def about():
+    return render_template_string(ABOUT_HTML)
+
 @app.route('/robots.txt')
 def robots():
     try:
@@ -404,12 +465,16 @@ def sitemap():
     except:
         return '<?xml version="1.0" encoding="UTF-8"?><urlset></urlset>', 200, {'Content-Type': 'application/xml'}
 
+# Nội dung ads.txt (phục vụ trực tiếp để chắc chắn hoạt động trên Vercel/serverless)
+ADS_TXT_CONTENT = """google.com, pub-6084835264788220, DIRECT, f08c47fec0942fa0
+"""
+
 @app.route('/ads.txt')
 def ads_txt():
-    try:
-        return send_file('ads.txt', mimetype='text/plain')
-    except:
-        return 'google.com, pub-6084835264788220, DIRECT, f08c47fec0942fa0', 200, {'Content-Type': 'text/plain'}
+    from flask import Response
+    return Response(ADS_TXT_CONTENT.strip(), mimetype='text/plain', headers={
+        'Cache-Control': 'public, max-age=3600',
+    })
 
 @app.route('/api/download', methods=['POST'])
 @rate_limit(max_per_minute=10)
@@ -647,7 +712,7 @@ def not_found(error):
         return jsonify({'success': False, 'error': 'API endpoint not found'}), 404
     
     # Kiểm tra các route cụ thể
-    path = request.path
+    path = request.path.rstrip('/') or '/'
     if path == '/blog' or path.startswith('/blog'):
         try:
             return send_file('blog.html')

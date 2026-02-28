@@ -89,3 +89,17 @@ Sau khi deploy:
 - Không cần thêm code ad units riêng lẻ (Auto Ads tự động xử lý)
 - Có thể mất đến 24 giờ để quảng cáo bắt đầu hiển thị
 
+## ✅ Cập nhật đáp ứng "Nội dung có giá trị thấp" (Low-value content)
+
+Để tăng cơ hội duyệt AdSense, dự án đã được cập nhật:
+
+- **Chính sách bảo mật:** Mở rộng, thêm mục cookie/quảng cáo bên thứ ba (Google AdSense), thông tin liên hệ (contact@tik1s.com).
+- **Điều khoản dịch vụ:** Mở rộng, thêm liên hệ và mục về dịch vụ bên thứ ba.
+- **Trang About:** Thêm trang `/about` (giới thiệu Tik1s, sứ mệnh, quảng cáo, liên hệ).
+- **FAQ:** Câu trả lời được mở rộng thành đoạn văn có nội dung (4 ngôn ngữ: EN, HI, VI, ID).
+- **GameFun:** Thêm đoạn giới thiệu ngắn liên kết với Tik1s (tránh bị coi là nội dung filler).
+- **JSON-LD:** Thêm schema WebSite/Organization trên trang chủ để SEO và tin cậy.
+- **Sitemap:** Thêm URL `/about`.
+
+Sau khi chỉnh sửa xong, hãy đảm bảo email **contact@tik1s.com** hoạt động (hoặc thay bằng email thật trong `app.py` và `index.html` JSON-LD), rồi gửi **Yêu cầu xem xét** lại trong AdSense.
+

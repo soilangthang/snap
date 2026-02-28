@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, send_from_directory, render_template_string
+from flask import Flask, request, jsonify, send_file, send_from_directory, render_template_string, redirect
 from flask_cors import CORS
 import requests
 import re
@@ -158,6 +158,27 @@ ABOUT_HTML = """
         <p>If you have feedback, questions, or reports (e.g. copyright or abuse), please contact us at <a href="mailto:contact@tik1s.com">contact@tik1s.com</a>. We do our best to respond in a timely manner.</p>
         
         <p><a href="/">← Back to homepage</a> | <a href="/privacy">Privacy</a> | <a href="/terms">Terms</a></p>
+    </div>
+</body>
+</html>
+"""
+
+# 404 page: noindex để Google không lập chỉ mục, tránh trùng lặp với trang chủ
+NOT_FOUND_HTML = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Page Not Found - Tik1s</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 600px; padding: 60px 20px; text-align: center;">
+        <h1>404</h1>
+        <p>Page not found.</p>
+        <p><a href="/">← Back to homepage</a></p>
     </div>
 </body>
 </html>
@@ -386,15 +407,17 @@ def index():
     response.headers['Link'] = '<https://tik1s.com/>; rel="canonical"'
     return response
 
-@app.route('/blog')
 @app.route('/blog/')
+def blog_slash():
+    """Chuyển hướng 301 URL có dấu / về URL chuẩn (không slash) để tránh trùng lặp index."""
+    return redirect('/blog', code=301)
+
+@app.route('/blog')
 def blog():
     try:
-        # Đảm bảo file tồn tại và có thể đọc được
         if not os.path.exists('blog.html'):
             return jsonify({'error': 'Blog file not found on server'}), 404
         response = send_file('blog.html', mimetype='text/html')
-        # Ensure canonical URL is set correctly
         response.headers['Link'] = '<https://tik1s.com/blog>; rel="canonical"'
         return response
     except Exception as e:
@@ -421,16 +444,28 @@ def favicon_ico():
     response.headers['Expires'] = ''
     return response
 
+@app.route('/privacy/')
+def privacy_slash():
+    return redirect('/privacy', code=301)
+
 @app.route('/privacy')
 def privacy():
     return render_template_string(PRIVACY_POLICY_HTML)
+
+@app.route('/terms/')
+def terms_slash():
+    return redirect('/terms', code=301)
 
 @app.route('/terms')
 def terms():
     return render_template_string(TERMS_OF_SERVICE_HTML)
 
-@app.route('/about')
 @app.route('/about/')
+def about_slash():
+    """Chuyển hướng 301 URL có dấu / về URL chuẩn (không slash) để tránh trùng lặp index."""
+    return redirect('/about', code=301)
+
+@app.route('/about')
 def about():
     return render_template_string(ABOUT_HTML)
 
@@ -702,10 +737,11 @@ def not_found(error):
         except:
             return jsonify({'success': False, 'error': 'Blog page not found'}), 404
     
-    # Nếu không phải API, trả về HTML (cho frontend routing)
+    # Trả về trang 404 có noindex (tránh Google lập chỉ mục URL lỗi như trùng lặp)
     try:
-        return send_file('index.html'), 404
-    except:
+        from flask import Response
+        return Response(render_template_string(NOT_FOUND_HTML), status=404, mimetype='text/html')
+    except Exception:
         return jsonify({'success': False, 'error': 'Not found'}), 404
 
 @app.errorhandler(500)

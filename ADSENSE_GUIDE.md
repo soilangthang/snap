@@ -97,7 +97,6 @@ Sau khi deploy:
 - **Điều khoản dịch vụ:** Mở rộng, thêm liên hệ và mục về dịch vụ bên thứ ba.
 - **Trang About:** Thêm trang `/about` (giới thiệu Tik1s, sứ mệnh, quảng cáo, liên hệ).
 - **FAQ:** Câu trả lời được mở rộng thành đoạn văn có nội dung (4 ngôn ngữ: EN, HI, VI, ID).
-- **GameFun:** Thêm đoạn giới thiệu ngắn liên kết với Tik1s (tránh bị coi là nội dung filler).
 - **JSON-LD:** Thêm schema WebSite/Organization trên trang chủ để SEO và tin cậy.
 - **Sitemap:** Thêm URL `/about`.
 

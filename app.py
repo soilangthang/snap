@@ -398,19 +398,6 @@ def blog():
         app.logger.error(f"Blog route error: {str(e)}")
         return jsonify({'error': f'Error loading blog: {str(e)}'}), 500
 
-@app.route('/gamefun')
-@app.route('/gamefun/')
-def gamefun():
-    try:
-        if not os.path.exists('gamefun.html'):
-            return jsonify({'error': 'GameFun page not found on server'}), 404
-        response = send_file('gamefun.html', mimetype='text/html')
-        response.headers['Link'] = '<https://tik1s.com/gamefun>; rel="canonical"'
-        return response
-    except Exception as e:
-        app.logger.error(f"GameFun route error: {str(e)}")
-        return jsonify({'error': f'Error loading GameFun: {str(e)}'}), 500
-
 @app.route('/style.css')
 def style_css():
     return send_file('style.css', mimetype='text/css')
@@ -418,13 +405,6 @@ def style_css():
 @app.route('/script.js')
 def script_js():
     return send_file('script.js', mimetype='application/javascript')
-
-@app.route('/gamefun.js')
-def gamefun_js():
-    try:
-        return send_file('gamefun.js', mimetype='application/javascript')
-    except:
-        return jsonify({'error': 'GameFun JS not found'}), 404
 
 @app.route('/blog-i18n.js')
 def blog_i18n():

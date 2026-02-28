@@ -39,6 +39,7 @@ PRIVACY_POLICY_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6084835264788220" crossorigin="anonymous"></script>
     <title>Privacy Policy - Tik1s TikTok Downloader</title>
     <meta name="description" content="Privacy policy for Tik1s.com: how we handle your data, cookies, and third-party advertising (Google AdSense).">
     <link rel="canonical" href="https://tik1s.com/privacy">
@@ -84,6 +85,7 @@ TERMS_OF_SERVICE_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6084835264788220" crossorigin="anonymous"></script>
     <title>Terms of Service - Tik1s TikTok Downloader</title>
     <meta name="description" content="Terms of service for Tik1s.com: acceptable use, copyright, and liability.">
     <link rel="canonical" href="https://tik1s.com/terms">
@@ -132,6 +134,7 @@ ABOUT_HTML = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6084835264788220" crossorigin="anonymous"></script>
     <title>About Us - Tik1s TikTok Downloader</title>
     <meta name="description" content="About Tik1s: our mission to provide a fast, free TikTok video downloader without watermark. Contact and team info.">
     <link rel="canonical" href="https://tik1s.com/about">

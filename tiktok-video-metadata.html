@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Video Metadata Viewer</title>
+    <meta name="description" content="View public TikTok post metadata including title, author, video ID, thumbnail, and available media assets before downloading.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://tik1s.com/tiktok-video-metadata">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .tool-page { max-width: 980px; margin: 0 auto; padding: 92px 20px 72px; }
+        .tool-card, .tool-panel { background: #fff; border: 1px solid #dde5ef; border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(14, 30, 52, 0.06); }
+        .tool-card { margin: 24px 0; }
+        .tool-form { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+        .tool-input { flex: 1 1 420px; padding: 14px 16px; border: 1px solid #cfd8e3; border-radius: 14px; font-size: 1rem; }
+        .tool-button { border: 0; border-radius: 14px; padding: 14px 20px; background: #0b69ff; color: #fff; font-weight: 700; cursor: pointer; }
+        .tool-layout { display: grid; grid-template-columns: minmax(220px, 320px) 1fr; gap: 20px; margin-top: 20px; }
+        .tool-layout img { width: 100%; border-radius: 18px; border: 1px solid #dde5ef; }
+        .tool-meta { display: grid; gap: 12px; }
+        .tool-meta div { background: #f6f8fb; border: 1px solid #dde5ef; border-radius: 14px; padding: 16px; }
+        .tool-meta span { display: block; color: #6b7280; font-size: 0.875rem; margin-bottom: 6px; }
+        .tool-value { word-break: break-word; color: #1f2937; font-weight: 600; }
+        .tool-error { color: #c62828; margin-top: 16px; display: none; }
+        .tool-result { display: none; }
+        .tool-page p { color: #4b5563; line-height: 1.8; }
+        .tool-links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+        .tool-links a, .back-link { color: #0b69ff; text-decoration: none; font-weight: 600; }
+        @media (max-width: 720px) {
+            .tool-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change language" data-i18n-aria-label="changeLanguage">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLang">EN</span>
+        </button>
+        <div class="lang-dropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="hi">Hindi</button>
+            <button class="lang-option" data-lang="vi">Vietnamese</button>
+            <button class="lang-option" data-lang="id">Indonesian</button>
+        </div>
+    </div>
+
+    <main class="tool-page">
+        <a href="/" class="back-link" data-i18n="backLink">Back to homepage</a>
+        <h1 data-i18n="heading">TikTok Video Metadata Viewer</h1>
+        <p data-i18n="intro">This page shows the core metadata available from a public TikTok link before you download anything. It is useful for support teams, content operators, researchers, and power users who need quick verification.</p>
+
+        <section class="tool-card">
+            <h2 data-i18n="cardTitle">Inspect a public TikTok post</h2>
+            <div class="tool-form">
+                <input id="toolUrl" class="tool-input" type="url" placeholder="Paste TikTok URL" data-i18n-placeholder="inputPlaceholder">
+                <button id="toolButton" class="tool-button" type="button" data-i18n="buttonIdle">View Metadata</button>
+            </div>
+            <div id="toolError" class="tool-error"></div>
+            <div id="toolResult" class="tool-result">
+                <div class="tool-layout">
+                    <img id="metaThumbnail" alt="TikTok thumbnail" data-i18n-alt="thumbAlt">
+                    <div class="tool-meta">
+                        <div><span data-i18n="labelTitle">Title</span><div id="metaTitle" class="tool-value"></div></div>
+                        <div><span data-i18n="labelAuthor">Author</span><div id="metaAuthor" class="tool-value"></div></div>
+                        <div><span data-i18n="labelVideoId">Video ID</span><div id="metaVideoId" class="tool-value"></div></div>
+                        <div><span data-i18n="labelHd">Has HD stream</span><div id="metaHd" class="tool-value"></div></div>
+                        <div><span data-i18n="labelAudio">Has audio stream</span><div id="metaAudio" class="tool-value"></div></div>
+                        <div><span data-i18n="labelCover">Has cover image</span><div id="metaCover" class="tool-value"></div></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tool-panel">
+            <h2 data-i18n="stepsTitle">Useful next steps</h2>
+            <p data-i18n="stepsDesc">After checking metadata, you can decide whether you need the full video, only the cover image, or just a quick resolution check before sending the link to someone else.</p>
+            <div class="tool-links">
+                <a href="/tiktok-cover-downloader" data-i18n="link1">Download only the cover image</a>
+                <a href="/tiktok-link-resolver" data-i18n="link2">Resolve a short link</a>
+                <a href="/" data-i18n="link3">Open the main downloader</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p data-i18n="footerCopy">© 2026 Tik1s. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="/" data-i18n="footerHome">Home</a>
+                <span>|</span>
+                <a href="/blog" data-i18n="footerBlog">Resource Center</a>
+                <span>|</span>
+                <a href="/about" data-i18n="footerAbout">About</a>
+                <span>|</span>
+                <a href="/privacy" data-i18n="footerPrivacy">Privacy Policy</a>
+                <span>|</span>
+                <a href="/terms" data-i18n="footerTerms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.pageTranslations = {
+            en: {
+                changeLanguage: "Change language",
+                pageTitle: "TikTok Video Metadata Viewer",
+                pageDescription: "View public TikTok post metadata including title, author, video ID, thumbnail, and available media assets before downloading.",
+                backLink: "Back to homepage",
+                heading: "TikTok Video Metadata Viewer",
+                intro: "This page shows the core metadata available from a public TikTok link before you download anything. It is useful for support teams, content operators, researchers, and power users who need quick verification.",
+                cardTitle: "Inspect a public TikTok post",
+                inputPlaceholder: "Paste TikTok URL",
+                buttonIdle: "View Metadata",
+                buttonLoading: "Loading...",
+                thumbAlt: "TikTok thumbnail",
+                labelTitle: "Title",
+                labelAuthor: "Author",
+                labelVideoId: "Video ID",
+                labelHd: "Has HD stream",
+                labelAudio: "Has audio stream",
+                labelCover: "Has cover image",
+                stepsTitle: "Useful next steps",
+                stepsDesc: "After checking metadata, you can decide whether you need the full video, only the cover image, or just a quick resolution check before sending the link to someone else.",
+                link1: "Download only the cover image",
+                link2: "Resolve a short link",
+                link3: "Open the main downloader",
+                emptyUrl: "Please paste a TikTok URL.",
+                errorInvalidUrl: "Invalid URL. Please enter a valid TikTok link.",
+                errorRateLimit: "Too many requests. Please try again later.",
+                loadFailed: "Unable to load metadata for this TikTok URL.",
+                unavailableValue: "Unavailable",
+                yesValue: "Yes",
+                noValue: "No",
+                footerCopy: "© 2026 Tik1s. All rights reserved.",
+                footerHome: "Home",
+                footerBlog: "Resource Center",
+                footerAbout: "About",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            hi: {
+                changeLanguage: "भाषा बदलें",
+                pageTitle: "TikTok Video Metadata Viewer",
+                pageDescription: "Download करने से पहले public TikTok post metadata जैसे title, author, video ID, thumbnail और available media assets देखें।",
+                backLink: "होमपेज पर वापस जाएँ",
+                heading: "TikTok Video Metadata Viewer",
+                intro: "यह पेज किसी public TikTok link से उपलब्ध core metadata दिखाता है, ताकि कुछ भी download करने से पहले आप जल्दी verify कर सकें। यह support teams, content operators, researchers और power users के लिए उपयोगी है।",
+                cardTitle: "Public TikTok post inspect करें",
+                inputPlaceholder: "TikTok URL पेस्ट करें",
+                buttonIdle: "Metadata देखें",
+                buttonLoading: "लोड हो रहा है...",
+                thumbAlt: "TikTok thumbnail",
+                labelTitle: "शीर्षक",
+                labelAuthor: "लेखक",
+                labelVideoId: "वीडियो ID",
+                labelHd: "HD stream है",
+                labelAudio: "Audio stream है",
+                labelCover: "Cover image है",
+                stepsTitle: "अगले उपयोगी कदम",
+                stepsDesc: "Metadata देखने के बाद आप तय कर सकते हैं कि आपको full video चाहिए, सिर्फ cover image चाहिए या किसी और को link भेजने से पहले बस quick verification चाहिए।",
+                link1: "सिर्फ cover image डाउनलोड करें",
+                link2: "Short link resolve करें",
+                link3: "Main downloader खोलें",
+                emptyUrl: "कृपया एक TikTok URL पेस्ट करें।",
+                errorInvalidUrl: "अमान्य URL. कृपया एक वैध TikTok लिंक दर्ज करें।",
+                errorRateLimit: "बहुत अधिक अनुरोध हो गए हैं। कृपया बाद में फिर से प्रयास करें।",
+                loadFailed: "इस TikTok URL के लिए metadata लोड नहीं किया जा सका।",
+                unavailableValue: "उपलब्ध नहीं",
+                yesValue: "हाँ",
+                noValue: "नहीं",
+                footerCopy: "© 2026 Tik1s. सर्वाधिकार सुरक्षित।",
+                footerHome: "होम",
+                footerBlog: "रिसोर्स सेंटर",
+                footerAbout: "About",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            vi: {
+                changeLanguage: "Đổi ngôn ngữ",
+                pageTitle: "TikTok Video Metadata Viewer",
+                pageDescription: "Xem metadata của bài TikTok công khai gồm title, author, video ID, thumbnail và các media asset khả dụng trước khi tải.",
+                backLink: "Quay lại trang chủ",
+                heading: "TikTok Video Metadata Viewer",
+                intro: "Trang này hiển thị metadata cốt lõi lấy được từ một link TikTok công khai trước khi bạn tải gì cả. Nó hữu ích cho support, content ops, researcher và những người cần xác minh nhanh.",
+                cardTitle: "Kiểm tra một bài TikTok công khai",
+                inputPlaceholder: "Dán URL TikTok",
+                buttonIdle: "Xem metadata",
+                buttonLoading: "Đang tải...",
+                thumbAlt: "Thumbnail TikTok",
+                labelTitle: "Tiêu đề",
+                labelAuthor: "Tác giả",
+                labelVideoId: "Video ID",
+                labelHd: "Có stream HD",
+                labelAudio: "Có stream audio",
+                labelCover: "Có cover image",
+                stepsTitle: "Bước tiếp theo hữu ích",
+                stepsDesc: "Sau khi xem metadata, bạn có thể quyết định mình cần tải cả video, chỉ lấy cover image hay chỉ cần kiểm tra nhanh trước khi gửi link cho người khác.",
+                link1: "Chỉ tải cover image",
+                link2: "Giải short link",
+                link3: "Mở downloader chính",
+                emptyUrl: "Vui lòng dán URL TikTok.",
+                errorInvalidUrl: "URL không hợp lệ. Vui lòng nhập link TikTok hợp lệ.",
+                errorRateLimit: "Bạn đang thao tác quá nhanh. Vui lòng thử lại sau.",
+                loadFailed: "Không thể tải metadata cho URL TikTok này.",
+                unavailableValue: "Không khả dụng",
+                yesValue: "Có",
+                noValue: "Không",
+                footerCopy: "© 2026 Tik1s. Đã đăng ký mọi quyền.",
+                footerHome: "Trang chủ",
+                footerBlog: "Trung tâm tài nguyên",
+                footerAbout: "Giới thiệu",
+                footerPrivacy: "Chính sách bảo mật",
+                footerTerms: "Điều khoản dịch vụ"
+            },
+            id: {
+                changeLanguage: "Ganti bahasa",
+                pageTitle: "TikTok Video Metadata Viewer",
+                pageDescription: "Lihat metadata posting TikTok publik termasuk title, author, video ID, thumbnail, dan aset media yang tersedia sebelum mengunduh.",
+                backLink: "Kembali ke beranda",
+                heading: "TikTok Video Metadata Viewer",
+                intro: "Halaman ini menampilkan metadata inti yang tersedia dari link TikTok publik sebelum Anda mengunduh apa pun. Ini berguna untuk support, content ops, researcher, dan power user yang membutuhkan verifikasi cepat.",
+                cardTitle: "Periksa posting TikTok publik",
+                inputPlaceholder: "Tempel URL TikTok",
+                buttonIdle: "Lihat Metadata",
+                buttonLoading: "Sedang memuat...",
+                thumbAlt: "Thumbnail TikTok",
+                labelTitle: "Judul",
+                labelAuthor: "Penulis",
+                labelVideoId: "Video ID",
+                labelHd: "Ada stream HD",
+                labelAudio: "Ada stream audio",
+                labelCover: "Ada cover image",
+                stepsTitle: "Langkah berikutnya yang berguna",
+                stepsDesc: "Setelah memeriksa metadata, Anda bisa memutuskan apakah perlu video penuh, hanya cover image, atau sekadar pengecekan cepat sebelum mengirim link ke orang lain.",
+                link1: "Unduh hanya cover image",
+                link2: "Selesaikan short link",
+                link3: "Buka downloader utama",
+                emptyUrl: "Silakan tempel URL TikTok.",
+                errorInvalidUrl: "URL tidak valid. Silakan masukkan tautan TikTok yang valid.",
+                errorRateLimit: "Terlalu banyak permintaan. Silakan coba lagi nanti.",
+                loadFailed: "Tidak dapat memuat metadata untuk URL TikTok ini.",
+                unavailableValue: "Tidak tersedia",
+                yesValue: "Ya",
+                noValue: "Tidak",
+                footerCopy: "© 2026 Tik1s. Seluruh hak cipta dilindungi.",
+                footerHome: "Beranda",
+                footerBlog: "Pusat sumber",
+                footerAbout: "Tentang",
+                footerPrivacy: "Kebijakan Privasi",
+                footerTerms: "Ketentuan Layanan"
+            }
+        };
+    </script>
+    <script src="/page-i18n.js"></script>
+    <script>
+        const input = document.getElementById('toolUrl');
+        const button = document.getElementById('toolButton');
+        const errorBox = document.getElementById('toolError');
+        const result = document.getElementById('toolResult');
+        let lastResultData = null;
+
+        function t(key, fallback = '') {
+            return window.pageI18n ? window.pageI18n.t(key, fallback) : (fallback || key);
+        }
+
+        function track(eventName, params = {}) {
+            if (!window.pageI18n || typeof window.pageI18n.track !== 'function') {
+                return;
+            }
+
+            window.pageI18n.track(eventName, Object.assign({
+                tool: 'tiktok_video_metadata',
+                page_type: 'utility',
+                site_language: window.pageI18n.getCurrentLang ? window.pageI18n.getCurrentLang() : 'en'
+            }, params));
+        }
+
+        function setButtonLoading(loading) {
+            button.disabled = loading;
+            button.textContent = loading ? t('buttonLoading', 'Loading...') : t('buttonIdle', 'View Metadata');
+        }
+
+        function renderResult(data) {
+            lastResultData = data;
+            document.getElementById('metaThumbnail').src = data.thumbnail ? `/api/proxy-image?url=${encodeURIComponent(data.thumbnail)}` : '';
+            document.getElementById('metaTitle').textContent = data.title || t('unavailableValue', 'Unavailable');
+            document.getElementById('metaAuthor').textContent = data.author || t('unavailableValue', 'Unavailable');
+            document.getElementById('metaVideoId').textContent = data.video_id || t('unavailableValue', 'Unavailable');
+            document.getElementById('metaHd').textContent = data.video_url_hd ? t('yesValue', 'Yes') : t('noValue', 'No');
+            document.getElementById('metaAudio').textContent = data.audio_url ? t('yesValue', 'Yes') : t('noValue', 'No');
+            document.getElementById('metaCover').textContent = data.thumbnail ? t('yesValue', 'Yes') : t('noValue', 'No');
+            result.style.display = 'block';
+        }
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.style.display = 'block';
+        }
+
+        function localizeError(message, fallbackKey) {
+            const normalized = String(message || '').trim();
+            const mapping = {
+                'Invalid URL. Please enter a TikTok link': t('errorInvalidUrl', t(fallbackKey)),
+                'URL must start with http:// or https://': t('errorInvalidUrl', t(fallbackKey)),
+                'Too many requests. Please try again later.': t('errorRateLimit', t(fallbackKey))
+            };
+
+            return mapping[normalized] || t(fallbackKey, message || '');
+        }
+
+        async function loadMetadata() {
+            errorBox.style.display = 'none';
+            result.style.display = 'none';
+
+            const url = input.value.trim();
+            if (!url) {
+                track('tool_error', { error_message: 'empty_url' });
+                showError(t('emptyUrl', 'Please paste a TikTok URL.'));
+                return;
+            }
+
+            setButtonLoading(true);
+            track('tool_submit');
+
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(localizeError(data.error, 'loadFailed'));
+                }
+
+                renderResult(data);
+                track('tool_success', {
+                    has_hd: Boolean(data.video_url_hd),
+                    has_audio: Boolean(data.audio_url),
+                    has_thumbnail: Boolean(data.thumbnail)
+                });
+            } catch (error) {
+                track('tool_error', { error_message: error.message || 'load_metadata_failed' });
+                showError(localizeError(error.message, 'loadFailed'));
+            } finally {
+                setButtonLoading(false);
+            }
+        }
+
+        window.afterPageLanguageChange = function () {
+            setButtonLoading(false);
+            if (lastResultData) {
+                renderResult(lastResultData);
+            }
+        };
+
+        button.addEventListener('click', loadMetadata);
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                loadMetadata();
+            }
+        });
+    </script>
+</body>
+</html>

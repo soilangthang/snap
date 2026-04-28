@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6084835264788220" crossorigin="anonymous"></script>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2">
+    <title>TikTok Video Downloader - MP4, MP3, Covers, Metadata</title>
+    <meta name="title" content="TikTok Video Downloader - MP4, MP3, Covers, Metadata">
+    <meta name="description" content="Download TikTok videos, extract MP3 audio, save cover images, resolve short links, and inspect metadata from one clean utility hub.">
+    <meta name="keywords" content="download tiktok video, tiktok downloader, tiktok mp3, tiktok cover downloader, tiktok metadata">
+    <meta name="robots" content="index, follow">
+    <meta name="google-site-verification" content="EvLHOcLqGIlOynYF8pmwcismzeheHFrjOLbXpBWxfhQ" />
+    <link rel="canonical" href="https://tik1s.com/">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Tik1s",
+      "url": "https://tik1s.com",
+      "description": "TikTok utility hub for public video downloads, MP3 extraction, covers, links, and metadata.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Tik1s",
+        "url": "https://tik1s.com",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "email": "contact@tik1s.com",
+          "url": "https://tik1s.com/about"
+        }
+      }
+    }
+    </script>
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://tik1s.com/">
+    <meta property="og:title" content="TikTok Video Downloader - MP4, MP3, Covers, Metadata">
+    <meta property="og:description" content="Clean TikTok utility hub for downloads, MP3 extraction, cover downloads, and metadata checks.">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://tik1s.com/">
+    <meta property="twitter:title" content="TikTok Video Downloader - MP4, MP3, Covers, Metadata">
+    <meta property="twitter:description" content="Clean TikTok utility hub for downloads, MP3 extraction, cover downloads, and metadata checks.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <script>
+        (function() {
+            if (typeof window.adsbygoogleInitialized !== 'undefined') {
+                return;
+            }
+            window.adsbygoogleInitialized = true;
+            function initAdSense() {
+                if (typeof adsbygoogle !== 'undefined' && adsbygoogle.loaded !== true) {
+                    try {
+                        (adsbygoogle = window.adsbygoogle || []).push({});
+                    } catch (e) {
+                        console.warn('AdSense initialization error:', e);
+                    }
+                } else if (typeof adsbygoogle === 'undefined') {
+                    setTimeout(initAdSense, 100);
+                }
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAdSense);
+            } else {
+                setTimeout(initAdSense, 100);
+            }
+        })();
+    </script>
+
+    <div class="site-shell">
+        <div class="lang-switcher">
+            <button class="lang-btn" id="langBtn" aria-label="Change Language">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                <span id="currentLang">EN</span>
+            </button>
+            <div class="lang-dropdown" id="langDropdown">
+                <button class="lang-option" data-lang="en">English</button>
+                <button class="lang-option" data-lang="hi">हिन्दी</button>
+                <button class="lang-option" data-lang="vi">Tiếng Việt</button>
+                <button class="lang-option" data-lang="id">Bahasa Indonesia</button>
+            </div>
+        </div>
+
+        <header class="hero-panel">
+            <div class="hero-copy">
+                <div class="eyebrow" data-i18n="heroEyebrow">Tik1s utility hub</div>
+                <h1 class="main-title" data-i18n="title">TikTok Video Downloader, MP3 Extractor, and Utility Toolkit</h1>
+                <p class="subtitle" data-i18n="subtitle">Paste one public TikTok link and choose what you need: clean video, MP3 audio, cover image, or metadata.</p>
+                <div class="hero-points">
+                    <span data-i18n="heroPoint1">No watermark video</span>
+                    <span data-i18n="heroPoint2">MP3 audio</span>
+                    <span data-i18n="heroPoint3">Cover image</span>
+                    <span data-i18n="heroPoint4">Link resolver</span>
+                    <span data-i18n="heroPoint5">Metadata viewer</span>
+                </div>
+            </div>
+
+            <div class="hero-workspace">
+                <section class="download-section">
+                    <div class="input-card">
+                        <div class="tool-heading">
+                            <div>
+                                <h2 data-i18n="heroPanelTitle">Start with a TikTok URL</h2>
+                                <p data-i18n="heroPanelDesc">Use the main downloader here, then switch to a dedicated utility if you only need one asset.</p>
+                            </div>
+                            <a href="/blog" class="mini-link" data-i18n="heroGuidesLink">Guides</a>
+                        </div>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                </svg>
+                            </div>
+                            <input 
+                                type="text" 
+                                id="videoUrl" 
+                                class="url-input"
+                                placeholder="Paste TikTok video URL here…"
+                                autocomplete="off"
+                                data-i18n-placeholder="inputPlaceholder"
+                            >
+                            <button class="paste-btn" id="pasteBtn" data-i18n="pasteBtn">Paste</button>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" id="downloadBtn" data-i18n="downloadVideo">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                <span data-i18n="openDownloader">Open Downloader</span>
+                            </button>
+                        </div>
+                        <div id="requestStatus" class="request-status is-idle" aria-live="polite">
+                            <div class="request-status-copy">
+                                <span class="request-status-label" data-i18n="statusLabel">Status</span>
+                                <strong id="requestStatusTitle" data-i18n="statusIdleTitle">Paste a TikTok link to load the preview</strong>
+                                <p id="requestStatusText" data-i18n="statusIdleDesc">We will show the preview and file buttons in this same panel.</p>
+                            </div>
+                        </div>
+                        <div class="quick-legend">
+                            <span data-i18n="legend1">Public TikTok links only</span>
+                            <span data-i18n="legend2">No app install</span>
+                            <span data-i18n="legend3">Mobile and desktop</span>
+                        </div>
+                        <div class="workspace-feedback">
+                            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+                            <div id="progressContainer" class="progress-container" style="display: none;">
+                                <div class="progress-info">
+                                    <span id="progressText" data-i18n="downloading">Downloading...</span>
+                                    <span id="progressPercent">0%</span>
+                                </div>
+                                <div class="progress-bar-wrapper">
+                                    <div id="progressBar" class="progress-bar"></div>
+                                </div>
+                                <div class="progress-details">
+                                    <span id="progressSize">0 MB</span>
+                                    <span id="progressSpeed">0 MB/s</span>
+                                </div>
+                            </div>
+
+                            <section id="resultSection" class="result-section" style="display: none;" tabindex="-1">
+                                <div class="result-shell">
+                                    <div class="result-head">
+                                        <span class="result-badge" data-i18n="resultReadyLabel">Ready</span>
+                                        <h3 class="result-heading" data-i18n="resultReadyTitle">Download options are ready</h3>
+                                        <p class="result-summary" data-i18n="resultReadyDesc">Choose the format you want from this video.</p>
+                                    </div>
+                                    <div class="video-thumbnail-container">
+                        <img id="videoThumbnail" src="" alt="Video thumbnail" class="video-thumbnail" data-i18n-alt="videoThumbnailAlt">
+                                        <div class="play-overlay">
+                                            <svg width="48" height="48" viewBox="0 0 24 24" fill="white">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="result-copy">
+                                        <div class="video-info">
+                                            <h3 id="videoTitle" class="video-title"></h3>
+                                            <div class="video-author-info">
+                                                <img id="authorAvatar" src="" alt="Author" class="author-avatar" data-i18n-alt="authorAlt">
+                                                <span class="video-author">@<span id="videoAuthor"></span></span>
+                                            </div>
+                                        </div>
+                                        <div class="download-options">
+                                            <button id="downloadSD" class="btn btn-download" data-i18n="downloadSD" title="Standard Definition - Smaller file size, faster download" data-i18n-title="downloadSDTitle">
+                                                <span data-i18n="downloadSD">Download SD</span>
+                                            </button>
+                                            <button id="downloadHD" class="btn btn-download btn-hd" data-i18n="downloadHD" title="High Definition - Better quality, larger file size" data-i18n-title="downloadHDTitle">
+                                                <span data-i18n="downloadHD">Download HD</span>
+                                            </button>
+                                            <button id="downloadMP3" class="btn btn-download btn-mp3" data-i18n="downloadAudio" title="Extract and download audio only" data-i18n-title="downloadAudioTitle">
+                                                <span data-i18n="downloadAudio">Download MP3</span>
+                                            </button>
+                                            <button id="downloadImage" class="btn btn-download btn-image" data-i18n="downloadImage" title="Download video thumbnail/image" data-i18n-title="downloadImageTitle">
+                                                <span data-i18n="downloadImage">Download Image</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="utility-rack">
+                    <a class="utility-tile utility-strong" href="/tiktok-cover-downloader">
+                        <strong data-i18n="utilityCoverTitle">Cover Downloader</strong>
+                        <span data-i18n="utilityCoverDesc">Get the post thumbnail only</span>
+                    </a>
+                    <a class="utility-tile" href="/tiktok-link-resolver">
+                        <strong data-i18n="utilityResolverTitle">Link Resolver</strong>
+                        <span data-i18n="utilityResolverDesc">Check short links before download</span>
+                    </a>
+                    <a class="utility-tile" href="/tiktok-video-metadata">
+                        <strong data-i18n="utilityMetadataTitle">Metadata Viewer</strong>
+                        <span data-i18n="utilityMetadataDesc">Inspect title, author, ID, assets</span>
+                    </a>
+                    <a class="utility-tile" href="/save-tiktok-audio-mp3">
+                        <strong data-i18n="utilityMp3GuideTitle">MP3 Guide</strong>
+                        <span data-i18n="utilityMp3GuideDesc">Fix common audio extraction issues</span>
+                    </a>
+                </section>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="surface-panel">
+                <div class="section-head">
+                    <h2 data-i18n="overviewTitle">Everything on one screen</h2>
+                    <p data-i18n="overviewDesc">Most visitors come to save one asset quickly. The homepage now shows the downloader, helper utilities, and support pages without making people hunt through long sections.</p>
+                </div>
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <span class="overview-tag" data-i18n="overviewTag1">Main output</span>
+                        <h3 data-i18n="overviewCard1Title">Video and audio</h3>
+                        <p data-i18n="overviewCard1Desc">Download public TikTok posts in SD, HD, or MP3 from the same preview state.</p>
+                    </div>
+                    <div class="overview-item">
+                        <span class="overview-tag" data-i18n="overviewTag2">Support utility</span>
+                        <h3 data-i18n="overviewCard2Title">Cover, link, metadata</h3>
+                        <p data-i18n="overviewCard2Desc">Open the exact helper page when you do not need the full downloader flow.</p>
+                    </div>
+                    <div class="overview-item">
+                        <span class="overview-tag" data-i18n="overviewTag3">Knowledge</span>
+                        <h3 data-i18n="overviewCard3Title">Guides and rights</h3>
+                        <p data-i18n="overviewCard3Desc">Use the resource center for troubleshooting, editorial policy, and responsible use guidance.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="utility-map">
+                <div class="section-head">
+                    <h2 data-i18n="toolMapTitle">Choose the right tool fast</h2>
+                    <p data-i18n="toolMapDesc">Each page has one clear job. Start with the action you want, not with a generic menu.</p>
+                </div>
+                <div class="tool-grid">
+                    <a class="tool-card" href="/">
+                        <small data-i18n="toolCard1Label">Main tool</small>
+                        <h3 data-i18n="toolCard1Title">Video Downloader</h3>
+                        <p data-i18n="toolCard1Desc">Best when you want MP4, HD, MP3, or cover from one public TikTok URL.</p>
+                    </a>
+                    <a class="tool-card" href="/tiktok-cover-downloader">
+                        <small data-i18n="toolCard2Label">Utility</small>
+                        <h3 data-i18n="toolCard2Title">Cover Downloader</h3>
+                        <p data-i18n="toolCard2Desc">Get the public cover image only, without going through a full download workflow.</p>
+                    </a>
+                    <a class="tool-card" href="/tiktok-link-resolver">
+                        <small data-i18n="toolCard3Label">Utility</small>
+                        <h3 data-i18n="toolCard3Title">Link Resolver</h3>
+                        <p data-i18n="toolCard3Desc">Check short links, repost links, and public visibility before trying again.</p>
+                    </a>
+                    <a class="tool-card" href="/tiktok-video-metadata">
+                        <small data-i18n="toolCard4Label">Utility</small>
+                        <h3 data-i18n="toolCard4Title">Metadata Viewer</h3>
+                        <p data-i18n="toolCard4Desc">Inspect title, author, ID, cover availability, HD availability, and audio state.</p>
+                    </a>
+                    <a class="tool-card" href="/how-to-download-tiktok-videos">
+                        <small data-i18n="toolCard5Label">Guide</small>
+                        <h3 data-i18n="toolCard5Title">Download Guide</h3>
+                        <p data-i18n="toolCard5Desc">Use this when a public link fails or quality is lower than expected.</p>
+                    </a>
+                    <a class="tool-card" href="/creator-rights">
+                        <small data-i18n="toolCard6Label">Policy</small>
+                        <h3 data-i18n="toolCard6Title">Creator Rights</h3>
+                        <p data-i18n="toolCard6Desc">Understand what downloading allows and what rights still remain with the creator.</p>
+                    </a>
+                </div>
+            </section>
+
+            <section class="compact-steps">
+                <div class="section-head">
+                    <h2 data-i18n="howToUse">How to use</h2>
+                    <p data-i18n="stepsIntro">Three quick steps, no filler.</p>
+                </div>
+                <div class="steps-row">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3 data-i18n="step1Title">Copy the TikTok video link</h3>
+                        <p data-i18n="step1Desc">Copy the TikTok video link.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3 data-i18n="step2Title">Paste it into the box above</h3>
+                        <p data-i18n="step2Desc">Paste it into the box above.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3 data-i18n="step3Title">Choose format and download instantly</h3>
+                        <p data-i18n="step3Desc">Choose format (No Watermark, MP4, MP3) and download instantly.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="resource-strip">
+                <div class="section-head">
+                    <h2 data-i18n="knowledgeTitle">Knowledge and trust pages</h2>
+                    <p data-i18n="knowledgeDesc">These pages support usability, trust, and AdSense review quality without crowding the homepage.</p>
+                </div>
+                <div class="resource-links">
+                    <a href="/blog" data-i18n="resourceLink1">Resource Center</a>
+                    <a href="/save-tiktok-audio-mp3" data-i18n="resourceLink2">MP3 Guide</a>
+                    <a href="/editorial-policy" data-i18n="resourceLink3">Editorial Policy</a>
+                    <a href="/about" data-i18n="resourceLink4">About Tik1s</a>
+                    <a href="/tiktok-link-resolver" data-i18n="resourceLink5">Link Resolver Guide</a>
+                    <a href="/creator-rights" data-i18n="resourceLink6">Creator Rights</a>
+                </div>
+            </section>
+
+            <section class="faq-section">
+                <div class="section-head">
+                    <h2 data-i18n="faqTitle">Frequently Asked Questions</h2>
+                    <p data-i18n="faqIntro">Only the questions that affect actual use.</p>
+                </div>
+                <div class="faq-container">
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span data-i18n="faq1Question">Is Tik1s free?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p data-i18n="faq1Answer">Yes, completely free.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span data-i18n="faq2Question">Can I download without watermark?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p data-i18n="faq2Answer">Yes, choose "No Watermark".</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span data-i18n="faq5Question">Can I download MP3 audio?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p data-i18n="faq5Answer">Yes.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question">
+                            <span data-i18n="faq9Question">Can I download private videos?</span>
+                            <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                        <div class="faq-answer">
+                            <p data-i18n="faq9Answer">No.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <div class="footer-brand">
+                <strong>Tik1s</strong>
+                <p data-i18n="footerBrandDesc">TikTok utility hub for public downloads, metadata checks, and support guides.</p>
+            </div>
+            <div class="footer-links">
+                <a href="/" data-i18n="home">Home</a>
+                <a href="/blog" data-i18n="blog">Blog</a>
+                <a href="/about" data-i18n="about">About</a>
+                <a href="/creator-rights" data-i18n="creatorRights">Creator Rights</a>
+                <a href="/editorial-policy" data-i18n="editorialPolicy">Editorial Policy</a>
+                <a href="/tiktok-cover-downloader" data-i18n="coverDownloader">Cover Downloader</a>
+                <a href="/tiktok-link-resolver" data-i18n="linkResolver">Link Resolver</a>
+                <a href="/tiktok-video-metadata" data-i18n="metadataViewer">Metadata Viewer</a>
+                <a href="/privacy" data-i18n="privacy">Privacy Policy</a>
+                <a href="/terms" data-i18n="terms">Terms of Service</a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

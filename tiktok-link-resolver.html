@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Link Resolver</title>
+    <meta name="description" content="Resolve TikTok short links into previewable post data including title, author, video ID, and available download assets.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://tik1s.com/tiktok-link-resolver">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .tool-page { max-width: 960px; margin: 0 auto; padding: 92px 20px 72px; }
+        .tool-card, .tool-panel { background: #fff; border: 1px solid #dde5ef; border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(14, 30, 52, 0.06); }
+        .tool-card { margin: 24px 0; }
+        .tool-form { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+        .tool-input { flex: 1 1 420px; padding: 14px 16px; border: 1px solid #cfd8e3; border-radius: 14px; font-size: 1rem; }
+        .tool-button { border: 0; border-radius: 14px; padding: 14px 20px; background: #0b69ff; color: #fff; font-weight: 700; cursor: pointer; }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 20px; }
+        .tool-item { background: #f6f8fb; border: 1px solid #dde5ef; border-radius: 14px; padding: 16px; }
+        .tool-item span { display: block; color: #6b7280; font-size: 0.875rem; margin-bottom: 6px; }
+        .tool-value { word-break: break-word; color: #1f2937; font-weight: 600; }
+        .tool-error { color: #c62828; margin-top: 16px; display: none; }
+        .tool-result { display: none; }
+        .tool-links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+        .tool-links a, .back-link { color: #0b69ff; text-decoration: none; font-weight: 600; }
+        .tool-panel ul { margin: 14px 0 0 20px; color: #4b5563; line-height: 1.8; }
+        .tool-page p { color: #4b5563; line-height: 1.8; }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change language" data-i18n-aria-label="changeLanguage">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLang">EN</span>
+        </button>
+        <div class="lang-dropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="hi">Hindi</button>
+            <button class="lang-option" data-lang="vi">Vietnamese</button>
+            <button class="lang-option" data-lang="id">Indonesian</button>
+        </div>
+    </div>
+
+    <main class="tool-page">
+        <a href="/" class="back-link" data-i18n="backLink">Back to homepage</a>
+        <h1 data-i18n="heading">TikTok Link Resolver</h1>
+        <p data-i18n="intro">Paste a TikTok short link or full public post URL to see what the tool can resolve before you decide to download anything. This is useful for support, QA, moderation, and content operations.</p>
+
+        <section class="tool-card">
+            <h2 data-i18n="cardTitle">Resolve a public TikTok link</h2>
+            <div class="tool-form">
+                <input id="toolUrl" class="tool-input" type="url" placeholder="Paste TikTok URL" data-i18n-placeholder="inputPlaceholder">
+                <button id="toolButton" class="tool-button" type="button" data-i18n="buttonIdle">Resolve Link</button>
+            </div>
+            <div id="toolError" class="tool-error"></div>
+            <div id="toolResult" class="tool-result">
+                <div class="tool-grid">
+                    <div class="tool-item"><span data-i18n="labelTitle">Title</span><div id="resolvedTitle" class="tool-value"></div></div>
+                    <div class="tool-item"><span data-i18n="labelAuthor">Author</span><div id="resolvedAuthor" class="tool-value"></div></div>
+                    <div class="tool-item"><span data-i18n="labelVideoId">Video ID</span><div id="resolvedVideoId" class="tool-value"></div></div>
+                    <div class="tool-item"><span data-i18n="labelHd">HD available</span><div id="resolvedHd" class="tool-value"></div></div>
+                    <div class="tool-item"><span data-i18n="labelMp3">MP3 available</span><div id="resolvedMp3" class="tool-value"></div></div>
+                    <div class="tool-item"><span data-i18n="labelCover">Cover available</span><div id="resolvedCover" class="tool-value"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="tool-panel">
+            <h2 data-i18n="whyTitle">Why this helps</h2>
+            <p data-i18n="whyDesc">Many users paste shortened or reposted TikTok links and do not know whether the issue is the URL, the post visibility, or the format. Resolving the link first gives a faster answer than trying multiple downloads blindly.</p>
+            <div class="tool-links">
+                <a href="/tiktok-cover-downloader" data-i18n="link1">Try cover downloader</a>
+                <a href="/tiktok-video-metadata" data-i18n="link2">Open metadata viewer</a>
+                <a href="/how-to-download-tiktok-videos" data-i18n="link3">Read the troubleshooting guide</a>
+                <a href="/creator-rights" data-i18n="link4">Read creator rights guidance</a>
+            </div>
+        </section>
+
+        <section class="tool-panel" data-i18n-html="checklist"></section>
+        <section class="tool-panel" data-i18n-html="faq"></section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p data-i18n="footerCopy">© 2026 Tik1s. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="/" data-i18n="footerHome">Home</a>
+                <span>|</span>
+                <a href="/blog" data-i18n="footerBlog">Resource Center</a>
+                <span>|</span>
+                <a href="/about" data-i18n="footerAbout">About</a>
+                <span>|</span>
+                <a href="/privacy" data-i18n="footerPrivacy">Privacy Policy</a>
+                <span>|</span>
+                <a href="/terms" data-i18n="footerTerms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.pageTranslations = {
+            en: {
+                changeLanguage: "Change language",
+                pageTitle: "TikTok Link Resolver",
+                pageDescription: "Resolve TikTok short links into previewable post data including title, author, video ID, and available download assets.",
+                backLink: "Back to homepage",
+                heading: "TikTok Link Resolver",
+                intro: "Paste a TikTok short link or full public post URL to see what the tool can resolve before you decide to download anything. This is useful for support, QA, moderation, and content operations.",
+                cardTitle: "Resolve a public TikTok link",
+                inputPlaceholder: "Paste TikTok URL",
+                buttonIdle: "Resolve Link",
+                buttonLoading: "Resolving...",
+                labelTitle: "Title",
+                labelAuthor: "Author",
+                labelVideoId: "Video ID",
+                labelHd: "HD available",
+                labelMp3: "MP3 available",
+                labelCover: "Cover available",
+                whyTitle: "Why this helps",
+                whyDesc: "Many users paste shortened or reposted TikTok links and do not know whether the issue is the URL, the post visibility, or the format. Resolving the link first gives a faster answer than trying multiple downloads blindly.",
+                link1: "Try cover downloader",
+                link2: "Open metadata viewer",
+                link3: "Read the troubleshooting guide",
+                link4: "Read creator rights guidance",
+                checklist: "<h2>What to check after you resolve a link</h2><ul><li>Confirm the title and author match the post you expected.</li><li>Use the HD, MP3, and cover fields to see which assets are actually exposed.</li><li>If everything resolves but download still fails, the issue is usually on the asset side rather than the URL itself.</li><li>If nothing resolves, verify the post is still public and not limited by region, age, or removal.</li></ul>",
+                faq: "<h2>FAQ</h2><p><strong>Can a short link work while the post is unavailable?</strong> Yes. A short URL can still exist even when the final post is private, removed, or region-limited.</p><p><strong>Why use this before downloading?</strong> It helps separate URL problems from asset problems so you can retry with the right next step.</p>",
+                emptyUrl: "Please paste a TikTok URL.",
+                errorInvalidUrl: "Invalid URL. Please enter a valid TikTok link.",
+                errorRateLimit: "Too many requests. Please try again later.",
+                resolveFailed: "Unable to resolve this TikTok URL.",
+                unavailableValue: "Unavailable",
+                yesValue: "Yes",
+                noValue: "No",
+                footerCopy: "© 2026 Tik1s. All rights reserved.",
+                footerHome: "Home",
+                footerBlog: "Resource Center",
+                footerAbout: "About",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            hi: {
+                changeLanguage: "भाषा बदलें",
+                pageTitle: "TikTok Link Resolver",
+                pageDescription: "TikTok short links को title, author, video ID और available assets जैसी previewable post data में resolve करें।",
+                backLink: "होमपेज पर वापस जाएँ",
+                heading: "TikTok Link Resolver",
+                intro: "TikTok short link या full public post URL पेस्ट करें ताकि download करने से पहले पता चले कि टूल क्या resolve कर सकता है। यह support, QA, moderation और content operations के लिए उपयोगी है।",
+                cardTitle: "Public TikTok link resolve करें",
+                inputPlaceholder: "TikTok URL पेस्ट करें",
+                buttonIdle: "लिंक resolve करें",
+                buttonLoading: "Resolve किया जा रहा है...",
+                labelTitle: "शीर्षक",
+                labelAuthor: "लेखक",
+                labelVideoId: "वीडियो ID",
+                labelHd: "HD उपलब्ध",
+                labelMp3: "MP3 उपलब्ध",
+                labelCover: "Cover उपलब्ध",
+                whyTitle: "यह क्यों उपयोगी है",
+                whyDesc: "कई यूज़र shortened या reposted TikTok links पेस्ट करते हैं और समझ नहीं पाते कि समस्या URL में है, post visibility में है या format में। पहले link resolve करने से बिना बार-बार download try किए तेज़ उत्तर मिल जाता है।",
+                link1: "Cover downloader आज़माएँ",
+                link2: "Metadata viewer खोलें",
+                link3: "Troubleshooting guide पढ़ें",
+                link4: "Creator rights guidance पढ़ें",
+                checklist: "<h2>Link resolve होने के बाद क्या जाँचें</h2><ul><li>देखें कि title और author वही हैं जिसकी आपको उम्मीद थी।</li><li>HD, MP3 और cover fields से समझें कि वास्तव में कौन-कौन से assets उपलब्ध हैं।</li><li>अगर सब resolve हो रहा है लेकिन download fail है, तो समस्या अक्सर URL में नहीं बल्कि asset side में होती है।</li><li>अगर कुछ भी resolve नहीं होता, तो देखें कि post अभी भी public है या region, age, या removal से सीमित तो नहीं है।</li></ul>",
+                faq: "<h2>FAQ</h2><p><strong>क्या short link काम कर सकता है जबकि post उपलब्ध न हो?</strong> हाँ। Short URL बचा रह सकता है, भले ही final post private, removed, या region-limited हो।</p><p><strong>Download से पहले इसका उपयोग क्यों करें?</strong> इससे URL समस्या और asset समस्या अलग करना आसान होता है ताकि अगला कदम सही चुना जा सके।</p>",
+                emptyUrl: "कृपया एक TikTok URL पेस्ट करें।",
+                errorInvalidUrl: "अमान्य URL. कृपया एक वैध TikTok लिंक दर्ज करें।",
+                errorRateLimit: "बहुत अधिक अनुरोध हो गए हैं। कृपया बाद में फिर से प्रयास करें।",
+                resolveFailed: "इस TikTok URL को resolve नहीं किया जा सका।",
+                unavailableValue: "उपलब्ध नहीं",
+                yesValue: "हाँ",
+                noValue: "नहीं",
+                footerCopy: "© 2026 Tik1s. सर्वाधिकार सुरक्षित।",
+                footerHome: "होम",
+                footerBlog: "रिसोर्स सेंटर",
+                footerAbout: "About",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            vi: {
+                changeLanguage: "Đổi ngôn ngữ",
+                pageTitle: "TikTok Link Resolver",
+                pageDescription: "Giải link rút gọn TikTok thành dữ liệu preview như title, author, video ID và các asset có thể tải.",
+                backLink: "Quay lại trang chủ",
+                heading: "TikTok Link Resolver",
+                intro: "Dán link rút gọn hoặc full URL bài TikTok công khai để xem công cụ có thể resolve được gì trước khi bạn quyết định tải xuống. Trang này hữu ích cho support, QA, moderation và content operations.",
+                cardTitle: "Giải một link TikTok công khai",
+                inputPlaceholder: "Dán URL TikTok",
+                buttonIdle: "Giải link",
+                buttonLoading: "Đang giải...",
+                labelTitle: "Tiêu đề",
+                labelAuthor: "Tác giả",
+                labelVideoId: "Video ID",
+                labelHd: "Có HD",
+                labelMp3: "Có MP3",
+                labelCover: "Có cover",
+                whyTitle: "Vì sao công cụ này hữu ích",
+                whyDesc: "Nhiều người dán link TikTok rút gọn hoặc link repost nhưng không biết vấn đề nằm ở URL, trạng thái công khai của bài hay ở format. Resolve link trước sẽ cho câu trả lời nhanh hơn là thử tải mù nhiều lần.",
+                link1: "Thử cover downloader",
+                link2: "Mở metadata viewer",
+                link3: "Đọc hướng dẫn xử lý lỗi",
+                link4: "Đọc hướng dẫn quyền tác giả",
+                checklist: "<h2>Cần kiểm tra gì sau khi giải link</h2><ul><li>Xác nhận tiêu đề và tác giả đúng với bài bạn đang tìm.</li><li>Dựa vào các trường HD, MP3 và cover để biết asset nào thực sự đang được nguồn mở ra.</li><li>Nếu link resolve được nhưng tải vẫn lỗi, vấn đề thường nằm ở asset chứ không phải ở URL.</li><li>Nếu không resolve được gì, hãy kiểm tra bài còn công khai hay đã bị giới hạn theo vùng, độ tuổi hoặc đã bị gỡ.</li></ul>",
+                faq: "<h2>FAQ</h2><p><strong>Link rút gọn có thể còn hoạt động dù bài không còn xem được không?</strong> Có. Short URL có thể vẫn tồn tại dù bài gốc đã chuyển sang riêng tư, bị gỡ hoặc bị giới hạn theo khu vực.</p><p><strong>Vì sao nên dùng bước này trước khi tải?</strong> Nó giúp tách lỗi URL khỏi lỗi asset để bạn chọn đúng bước xử lý tiếp theo.</p>",
+                emptyUrl: "Vui lòng dán URL TikTok.",
+                errorInvalidUrl: "URL không hợp lệ. Vui lòng nhập link TikTok hợp lệ.",
+                errorRateLimit: "Bạn đang thao tác quá nhanh. Vui lòng thử lại sau.",
+                resolveFailed: "Không thể giải URL TikTok này.",
+                unavailableValue: "Không khả dụng",
+                yesValue: "Có",
+                noValue: "Không",
+                footerCopy: "© 2026 Tik1s. Đã đăng ký mọi quyền.",
+                footerHome: "Trang chủ",
+                footerBlog: "Trung tâm tài nguyên",
+                footerAbout: "Giới thiệu",
+                footerPrivacy: "Chính sách bảo mật",
+                footerTerms: "Điều khoản dịch vụ"
+            },
+            id: {
+                changeLanguage: "Ganti bahasa",
+                pageTitle: "TikTok Link Resolver",
+                pageDescription: "Selesaikan link pendek TikTok menjadi data posting yang bisa dipreview termasuk title, author, video ID, dan aset unduhan yang tersedia.",
+                backLink: "Kembali ke beranda",
+                heading: "TikTok Link Resolver",
+                intro: "Tempel short link TikTok atau URL posting publik lengkap untuk melihat apa yang bisa diselesaikan tool sebelum Anda memutuskan mengunduh apa pun. Ini berguna untuk support, QA, moderation, dan content operations.",
+                cardTitle: "Selesaikan link TikTok publik",
+                inputPlaceholder: "Tempel URL TikTok",
+                buttonIdle: "Selesaikan Link",
+                buttonLoading: "Sedang menyelesaikan...",
+                labelTitle: "Judul",
+                labelAuthor: "Penulis",
+                labelVideoId: "Video ID",
+                labelHd: "HD tersedia",
+                labelMp3: "MP3 tersedia",
+                labelCover: "Cover tersedia",
+                whyTitle: "Mengapa ini membantu",
+                whyDesc: "Banyak pengguna menempelkan link TikTok yang dipendekkan atau repost dan tidak tahu apakah masalahnya ada di URL, visibilitas posting, atau formatnya. Menyelesaikan link terlebih dahulu memberi jawaban yang lebih cepat daripada mencoba beberapa unduhan secara membabi buta.",
+                link1: "Coba cover downloader",
+                link2: "Buka metadata viewer",
+                link3: "Baca panduan troubleshooting",
+                link4: "Baca panduan hak kreator",
+                checklist: "<h2>Apa yang perlu dicek setelah link selesai diurai</h2><ul><li>Pastikan title dan author cocok dengan posting yang Anda cari.</li><li>Gunakan field HD, MP3, dan cover untuk melihat aset mana yang benar-benar tersedia.</li><li>Jika link berhasil diurai tetapi unduhan tetap gagal, masalah biasanya ada di sisi aset, bukan URL.</li><li>Jika tidak ada yang berhasil diurai, periksa apakah posting masih publik atau dibatasi oleh region, usia, atau penghapusan.</li></ul>",
+                faq: "<h2>FAQ</h2><p><strong>Apakah short link bisa tetap aktif saat posting tidak tersedia?</strong> Ya. Short URL bisa tetap ada walau posting akhirnya privat, dihapus, atau dibatasi wilayah.</p><p><strong>Mengapa memakai langkah ini sebelum mengunduh?</strong> Karena langkah ini membantu memisahkan masalah URL dari masalah aset sehingga langkah berikutnya lebih tepat.</p>",
+                emptyUrl: "Silakan tempel URL TikTok.",
+                errorInvalidUrl: "URL tidak valid. Silakan masukkan tautan TikTok yang valid.",
+                errorRateLimit: "Terlalu banyak permintaan. Silakan coba lagi nanti.",
+                resolveFailed: "Tidak dapat menyelesaikan URL TikTok ini.",
+                unavailableValue: "Tidak tersedia",
+                yesValue: "Ya",
+                noValue: "Tidak",
+                footerCopy: "© 2026 Tik1s. Seluruh hak cipta dilindungi.",
+                footerHome: "Beranda",
+                footerBlog: "Pusat sumber",
+                footerAbout: "Tentang",
+                footerPrivacy: "Kebijakan Privasi",
+                footerTerms: "Ketentuan Layanan"
+            }
+        };
+    </script>
+    <script src="/page-i18n.js"></script>
+    <script>
+        const input = document.getElementById('toolUrl');
+        const button = document.getElementById('toolButton');
+        const errorBox = document.getElementById('toolError');
+        const result = document.getElementById('toolResult');
+        let lastResultData = null;
+
+        function t(key, fallback = '') {
+            return window.pageI18n ? window.pageI18n.t(key, fallback) : (fallback || key);
+        }
+
+        function track(eventName, params = {}) {
+            if (!window.pageI18n || typeof window.pageI18n.track !== 'function') {
+                return;
+            }
+
+            window.pageI18n.track(eventName, Object.assign({
+                tool: 'tiktok_link_resolver',
+                page_type: 'utility',
+                site_language: window.pageI18n.getCurrentLang ? window.pageI18n.getCurrentLang() : 'en'
+            }, params));
+        }
+
+        function setButtonLoading(loading) {
+            button.disabled = loading;
+            button.textContent = loading ? t('buttonLoading', 'Resolving...') : t('buttonIdle', 'Resolve Link');
+        }
+
+        function renderResult(data) {
+            lastResultData = data;
+            document.getElementById('resolvedTitle').textContent = data.title || t('unavailableValue', 'Unavailable');
+            document.getElementById('resolvedAuthor').textContent = data.author || t('unavailableValue', 'Unavailable');
+            document.getElementById('resolvedVideoId').textContent = data.video_id || t('unavailableValue', 'Unavailable');
+            document.getElementById('resolvedHd').textContent = data.video_url_hd ? t('yesValue', 'Yes') : t('noValue', 'No');
+            document.getElementById('resolvedMp3').textContent = data.audio_url ? t('yesValue', 'Yes') : t('noValue', 'No');
+            document.getElementById('resolvedCover').textContent = data.thumbnail ? t('yesValue', 'Yes') : t('noValue', 'No');
+            result.style.display = 'block';
+        }
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.style.display = 'block';
+        }
+
+        function localizeError(message, fallbackKey) {
+            const normalized = String(message || '').trim();
+            const mapping = {
+                'Invalid URL. Please enter a TikTok link': t('errorInvalidUrl', t(fallbackKey)),
+                'URL must start with http:// or https://': t('errorInvalidUrl', t(fallbackKey)),
+                'Too many requests. Please try again later.': t('errorRateLimit', t(fallbackKey))
+            };
+
+            return mapping[normalized] || t(fallbackKey, message || '');
+        }
+
+        async function resolveLink() {
+            errorBox.style.display = 'none';
+            result.style.display = 'none';
+
+            const url = input.value.trim();
+            if (!url) {
+                track('tool_error', { error_message: 'empty_url' });
+                showError(t('emptyUrl', 'Please paste a TikTok URL.'));
+                return;
+            }
+
+            setButtonLoading(true);
+            track('tool_submit');
+
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(localizeError(data.error, 'resolveFailed'));
+                }
+
+                renderResult(data);
+                track('tool_success', {
+                    has_hd: Boolean(data.video_url_hd),
+                    has_audio: Boolean(data.audio_url),
+                    has_thumbnail: Boolean(data.thumbnail)
+                });
+            } catch (error) {
+                track('tool_error', { error_message: error.message || 'resolve_failed' });
+                showError(localizeError(error.message, 'resolveFailed'));
+            } finally {
+                setButtonLoading(false);
+            }
+        }
+
+        window.afterPageLanguageChange = function () {
+            setButtonLoading(false);
+            if (lastResultData) {
+                renderResult(lastResultData);
+            }
+        };
+
+        button.addEventListener('click', resolveLink);
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                resolveLink();
+            }
+        });
+    </script>
+</body>
+</html>

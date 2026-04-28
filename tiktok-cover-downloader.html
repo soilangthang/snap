@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Cover Downloader</title>
+    <meta name="description" content="Download TikTok cover images and thumbnails from public TikTok links. Useful for previews, references, and creator workflows.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://tik1s.com/tiktok-cover-downloader">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .tool-page { max-width: 960px; margin: 0 auto; padding: 92px 20px 72px; }
+        .tool-header p, .tool-card p, .tool-list li { color: #4b5563; line-height: 1.8; }
+        .tool-card, .tool-panel { background: #fff; border: 1px solid #dde5ef; border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(14, 30, 52, 0.06); }
+        .tool-card { margin: 24px 0; }
+        .tool-form { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+        .tool-input { flex: 1 1 420px; padding: 14px 16px; border: 1px solid #cfd8e3; border-radius: 14px; font-size: 1rem; }
+        .tool-button { border: 0; border-radius: 14px; padding: 14px 20px; background: #0b69ff; color: #fff; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
+        .tool-result { display: none; margin-top: 20px; }
+        .tool-result img { width: 100%; max-width: 360px; border-radius: 18px; border: 1px solid #dde5ef; display: block; margin-bottom: 16px; }
+        .tool-meta { display: grid; gap: 10px; margin: 16px 0; }
+        .tool-error { color: #c62828; margin-top: 16px; display: none; }
+        .tool-links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+        .tool-links a, .back-link { color: #0b69ff; text-decoration: none; font-weight: 600; }
+        .tool-list { margin-left: 20px; }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change language" data-i18n-aria-label="changeLanguage">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLang">EN</span>
+        </button>
+        <div class="lang-dropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="hi">Hindi</button>
+            <button class="lang-option" data-lang="vi">Vietnamese</button>
+            <button class="lang-option" data-lang="id">Indonesian</button>
+        </div>
+    </div>
+
+    <main class="tool-page">
+        <a href="/" class="back-link" data-i18n="backLink">Back to homepage</a>
+        <header class="tool-header">
+            <h1 data-i18n="heading">TikTok Cover Downloader</h1>
+            <p data-i18n="intro">Use this page when you only need the public thumbnail or cover image from a TikTok post. It is useful for reference decks, visual audits, editorial notes, or creator-approved workflows where downloading the whole video is unnecessary.</p>
+        </header>
+
+        <section class="tool-card">
+            <h2 data-i18n="cardTitle">Get the cover image</h2>
+            <p data-i18n="cardDesc">Paste a public TikTok URL. The tool will fetch the available cover image and let you download it directly.</p>
+            <div class="tool-form">
+                <input id="toolUrl" class="tool-input" type="url" placeholder="Paste TikTok URL" data-i18n-placeholder="inputPlaceholder">
+                <button id="toolButton" class="tool-button" type="button" data-i18n="buttonIdle">Fetch Cover</button>
+            </div>
+            <div id="toolError" class="tool-error"></div>
+            <div id="toolResult" class="tool-result">
+                <img id="coverImage" alt="TikTok cover image" data-i18n-alt="coverAlt">
+                <div class="tool-meta">
+                    <div><strong data-i18n="labelTitle">Title:</strong> <span id="coverTitle"></span></div>
+                    <div><strong data-i18n="labelAuthor">Author:</strong> <span id="coverAuthor"></span></div>
+                    <div><strong data-i18n="labelVideoId">Video ID:</strong> <span id="coverVideoId"></span></div>
+                </div>
+                <a id="coverDownloadLink" class="tool-button" href="#" download data-i18n="downloadLabel">Download Cover</a>
+            </div>
+        </section>
+
+        <section class="tool-panel">
+            <h2 data-i18n="usageTitle">When this tool is useful</h2>
+            <ul class="tool-list" data-i18n-html="usageList"></ul>
+            <div class="tool-links">
+                <a href="/tiktok-link-resolver" data-i18n="link1">Try the link resolver</a>
+                <a href="/tiktok-video-metadata" data-i18n="link2">Open metadata viewer</a>
+                <a href="/creator-rights" data-i18n="link3">Read creator rights guidance</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p data-i18n="footerCopy">© 2026 Tik1s. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="/" data-i18n="footerHome">Home</a>
+                <span>|</span>
+                <a href="/blog" data-i18n="footerBlog">Resource Center</a>
+                <span>|</span>
+                <a href="/about" data-i18n="footerAbout">About</a>
+                <span>|</span>
+                <a href="/privacy" data-i18n="footerPrivacy">Privacy Policy</a>
+                <span>|</span>
+                <a href="/terms" data-i18n="footerTerms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.pageTranslations = {
+            en: {
+                changeLanguage: "Change language",
+                pageTitle: "TikTok Cover Downloader",
+                pageDescription: "Download TikTok cover images and thumbnails from public TikTok links. Useful for previews, references, and creator workflows.",
+                backLink: "Back to homepage",
+                heading: "TikTok Cover Downloader",
+                intro: "Use this page when you only need the public thumbnail or cover image from a TikTok post. It is useful for reference decks, visual audits, editorial notes, or creator-approved workflows where downloading the whole video is unnecessary.",
+                cardTitle: "Get the cover image",
+                cardDesc: "Paste a public TikTok URL. The tool will fetch the available cover image and let you download it directly.",
+                inputPlaceholder: "Paste TikTok URL",
+                buttonIdle: "Fetch Cover",
+                buttonLoading: "Fetching...",
+                coverAlt: "TikTok cover image",
+                labelTitle: "Title:",
+                labelAuthor: "Author:",
+                labelVideoId: "Video ID:",
+                downloadLabel: "Download Cover",
+                usageTitle: "When this tool is useful",
+                usageList: "<li>You want a quick thumbnail without downloading the full post.</li><li>You need a visual reference for planning, review, or editorial notes.</li><li>You are documenting a public TikTok post in a creator-approved workflow.</li>",
+                link1: "Try the link resolver",
+                link2: "Open metadata viewer",
+                link3: "Read creator rights guidance",
+                emptyUrl: "Please paste a TikTok URL.",
+                errorInvalidUrl: "Invalid URL. Please enter a valid TikTok link.",
+                errorRateLimit: "Too many requests. Please try again later.",
+                unavailableCover: "Cover image not available for this link.",
+                fetchFailed: "Unable to fetch the cover image.",
+                unknownValue: "Unknown",
+                unavailableValue: "Unavailable",
+                footerCopy: "© 2026 Tik1s. All rights reserved.",
+                footerHome: "Home",
+                footerBlog: "Resource Center",
+                footerAbout: "About",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            hi: {
+                changeLanguage: "भाषा बदलें",
+                pageTitle: "TikTok Cover Downloader",
+                pageDescription: "Public TikTok links से TikTok cover images और thumbnails डाउनलोड करें। Preview, reference और creator workflows के लिए उपयोगी।",
+                backLink: "होमपेज पर वापस जाएँ",
+                heading: "TikTok Cover Downloader",
+                intro: "यह पेज तब उपयोगी है जब आपको किसी TikTok post से सिर्फ public thumbnail या cover image चाहिए। Full video डाउनलोड किए बिना visual reference लेने के लिए यह तेज़ तरीका है।",
+                cardTitle: "Cover image प्राप्त करें",
+                cardDesc: "एक public TikTok URL पेस्ट करें। टूल available cover image लाएगा और आपको उसे सीधे डाउनलोड करने देगा।",
+                inputPlaceholder: "TikTok URL पेस्ट करें",
+                buttonIdle: "कवर लाएँ",
+                buttonLoading: "लाया जा रहा है...",
+                coverAlt: "TikTok cover image",
+                labelTitle: "शीर्षक:",
+                labelAuthor: "लेखक:",
+                labelVideoId: "वीडियो ID:",
+                downloadLabel: "कवर डाउनलोड करें",
+                usageTitle: "यह टूल कब उपयोगी है",
+                usageList: "<li>जब आपको full post डाउनलोड किए बिना तेज़ thumbnail चाहिए.</li><li>जब planning, review या editorial notes के लिए visual reference चाहिए.</li><li>जब आप creator-approved workflow में public TikTok post document कर रहे हों.</li>",
+                link1: "Link resolver आज़माएँ",
+                link2: "Metadata viewer खोलें",
+                link3: "Creator rights guidance पढ़ें",
+                emptyUrl: "कृपया एक TikTok URL पेस्ट करें।",
+                errorInvalidUrl: "अमान्य URL. कृपया एक वैध TikTok लिंक दर्ज करें।",
+                errorRateLimit: "बहुत अधिक अनुरोध हो गए हैं। कृपया बाद में फिर से प्रयास करें।",
+                unavailableCover: "इस लिंक के लिए cover image उपलब्ध नहीं है।",
+                fetchFailed: "Cover image प्राप्त नहीं की जा सकी।",
+                unknownValue: "अज्ञात",
+                unavailableValue: "उपलब्ध नहीं",
+                footerCopy: "© 2026 Tik1s. सर्वाधिकार सुरक्षित।",
+                footerHome: "होम",
+                footerBlog: "रिसोर्स सेंटर",
+                footerAbout: "About",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            vi: {
+                changeLanguage: "Đổi ngôn ngữ",
+                pageTitle: "TikTok Cover Downloader",
+                pageDescription: "Tải cover image và thumbnail của TikTok từ các link công khai. Phù hợp cho preview, tham chiếu và workflow làm nội dung.",
+                backLink: "Quay lại trang chủ",
+                heading: "TikTok Cover Downloader",
+                intro: "Trang này phù hợp khi bạn chỉ cần thumbnail hoặc cover image công khai của một bài TikTok. Nó hữu ích cho việc lấy hình tham chiếu, rà soát hình ảnh hoặc các workflow đã được tác giả cho phép mà không cần tải cả video.",
+                cardTitle: "Lấy cover image",
+                cardDesc: "Dán một URL TikTok công khai. Công cụ sẽ lấy cover image khả dụng và cho phép bạn tải trực tiếp.",
+                inputPlaceholder: "Dán URL TikTok",
+                buttonIdle: "Lấy cover",
+                buttonLoading: "Đang lấy...",
+                coverAlt: "Ảnh cover TikTok",
+                labelTitle: "Tiêu đề:",
+                labelAuthor: "Tác giả:",
+                labelVideoId: "Video ID:",
+                downloadLabel: "Tải cover",
+                usageTitle: "Khi nào công cụ này hữu ích",
+                usageList: "<li>Khi bạn muốn lấy thumbnail nhanh mà không cần tải cả bài đăng.</li><li>Khi bạn cần hình tham chiếu cho lập kế hoạch, review hoặc ghi chú biên tập.</li><li>Khi bạn cần ghi nhận một bài TikTok công khai trong workflow đã được tác giả cho phép.</li>",
+                link1: "Thử link resolver",
+                link2: "Mở metadata viewer",
+                link3: "Đọc hướng dẫn quyền tác giả",
+                emptyUrl: "Vui lòng dán URL TikTok.",
+                errorInvalidUrl: "URL không hợp lệ. Vui lòng nhập link TikTok hợp lệ.",
+                errorRateLimit: "Bạn đang thao tác quá nhanh. Vui lòng thử lại sau.",
+                unavailableCover: "Link này không có cover image khả dụng.",
+                fetchFailed: "Không thể lấy cover image.",
+                unknownValue: "Không rõ",
+                unavailableValue: "Không khả dụng",
+                footerCopy: "© 2026 Tik1s. Đã đăng ký mọi quyền.",
+                footerHome: "Trang chủ",
+                footerBlog: "Trung tâm tài nguyên",
+                footerAbout: "Giới thiệu",
+                footerPrivacy: "Chính sách bảo mật",
+                footerTerms: "Điều khoản dịch vụ"
+            },
+            id: {
+                changeLanguage: "Ganti bahasa",
+                pageTitle: "TikTok Cover Downloader",
+                pageDescription: "Unduh cover image dan thumbnail TikTok dari link publik. Cocok untuk preview, referensi, dan workflow kreator.",
+                backLink: "Kembali ke beranda",
+                heading: "TikTok Cover Downloader",
+                intro: "Halaman ini cocok saat Anda hanya memerlukan thumbnail atau cover image publik dari sebuah posting TikTok. Berguna untuk referensi visual, audit konten, atau workflow yang disetujui kreator tanpa harus mengunduh seluruh videonya.",
+                cardTitle: "Ambil cover image",
+                cardDesc: "Tempel URL TikTok publik. Tool akan mengambil cover image yang tersedia dan memungkinkan Anda mengunduhnya langsung.",
+                inputPlaceholder: "Tempel URL TikTok",
+                buttonIdle: "Ambil Cover",
+                buttonLoading: "Sedang mengambil...",
+                coverAlt: "Gambar cover TikTok",
+                labelTitle: "Judul:",
+                labelAuthor: "Penulis:",
+                labelVideoId: "Video ID:",
+                downloadLabel: "Unduh Cover",
+                usageTitle: "Kapan tool ini berguna",
+                usageList: "<li>Saat Anda ingin thumbnail cepat tanpa mengunduh seluruh posting.</li><li>Saat Anda membutuhkan referensi visual untuk perencanaan, review, atau catatan editorial.</li><li>Saat Anda mendokumentasikan posting TikTok publik dalam workflow yang disetujui kreator.</li>",
+                link1: "Coba link resolver",
+                link2: "Buka metadata viewer",
+                link3: "Baca panduan hak kreator",
+                emptyUrl: "Silakan tempel URL TikTok.",
+                errorInvalidUrl: "URL tidak valid. Silakan masukkan tautan TikTok yang valid.",
+                errorRateLimit: "Terlalu banyak permintaan. Silakan coba lagi nanti.",
+                unavailableCover: "Cover image tidak tersedia untuk link ini.",
+                fetchFailed: "Tidak dapat mengambil cover image.",
+                unknownValue: "Tidak diketahui",
+                unavailableValue: "Tidak tersedia",
+                footerCopy: "© 2026 Tik1s. Seluruh hak cipta dilindungi.",
+                footerHome: "Beranda",
+                footerBlog: "Pusat sumber",
+                footerAbout: "Tentang",
+                footerPrivacy: "Kebijakan Privasi",
+                footerTerms: "Ketentuan Layanan"
+            }
+        };
+    </script>
+    <script src="/page-i18n.js"></script>
+    <script>
+        const input = document.getElementById('toolUrl');
+        const button = document.getElementById('toolButton');
+        const errorBox = document.getElementById('toolError');
+        const result = document.getElementById('toolResult');
+        const image = document.getElementById('coverImage');
+        const title = document.getElementById('coverTitle');
+        const author = document.getElementById('coverAuthor');
+        const videoId = document.getElementById('coverVideoId');
+        const downloadLink = document.getElementById('coverDownloadLink');
+        let lastResultData = null;
+
+        function t(key, fallback = '') {
+            return window.pageI18n ? window.pageI18n.t(key, fallback) : (fallback || key);
+        }
+
+        function track(eventName, params = {}) {
+            if (!window.pageI18n || typeof window.pageI18n.track !== 'function') {
+                return;
+            }
+
+            window.pageI18n.track(eventName, Object.assign({
+                tool: 'tiktok_cover_downloader',
+                page_type: 'utility',
+                site_language: window.pageI18n.getCurrentLang ? window.pageI18n.getCurrentLang() : 'en'
+            }, params));
+        }
+
+        function setButtonLoading(loading) {
+            button.disabled = loading;
+            button.textContent = loading ? t('buttonLoading', 'Fetching...') : t('buttonIdle', 'Fetch Cover');
+        }
+
+        function renderResult(data) {
+            lastResultData = data;
+            image.src = `/api/proxy-image?url=${encodeURIComponent(data.thumbnail)}`;
+            title.textContent = data.title || t('unknownValue', 'Unknown');
+            author.textContent = data.author || t('unknownValue', 'Unknown');
+            videoId.textContent = data.video_id || t('unavailableValue', 'Unavailable');
+            downloadLink.href = `/api/proxy-image?url=${encodeURIComponent(data.thumbnail)}`;
+            downloadLink.download = data.video_id ? `tiktok_cover_${data.video_id}.jpg` : 'tiktok_cover.jpg';
+            result.style.display = 'block';
+        }
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.style.display = 'block';
+        }
+
+        function localizeError(message, fallbackKey) {
+            const normalized = String(message || '').trim();
+            const mapping = {
+                'Invalid URL. Please enter a TikTok link': t('errorInvalidUrl', t(fallbackKey)),
+                'URL must start with http:// or https://': t('errorInvalidUrl', t(fallbackKey)),
+                'Too many requests. Please try again later.': t('errorRateLimit', t(fallbackKey))
+            };
+
+            return mapping[normalized] || t(fallbackKey, message || '');
+        }
+
+        async function fetchCover() {
+            errorBox.style.display = 'none';
+            result.style.display = 'none';
+
+            const url = input.value.trim();
+            if (!url) {
+                track('tool_error', { error_message: 'empty_url' });
+                showError(t('emptyUrl', 'Please paste a TikTok URL.'));
+                return;
+            }
+
+            setButtonLoading(true);
+            track('tool_submit');
+
+            try {
+                const response = await fetch('/api/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+                const data = await response.json();
+
+                if (!response.ok || !data.success || !data.thumbnail) {
+                    throw new Error(localizeError(data.error, data.thumbnail ? 'fetchFailed' : 'unavailableCover'));
+                }
+
+                renderResult(data);
+                track('tool_success', {
+                    has_thumbnail: true,
+                    has_video_id: Boolean(data.video_id)
+                });
+            } catch (error) {
+                track('tool_error', { error_message: error.message || 'fetch_cover_failed' });
+                showError(localizeError(error.message, 'fetchFailed'));
+            } finally {
+                setButtonLoading(false);
+            }
+        }
+
+        window.afterPageLanguageChange = function () {
+            setButtonLoading(false);
+            if (lastResultData) {
+                renderResult(lastResultData);
+            }
+        };
+
+        button.addEventListener('click', fetchCover);
+        downloadLink.addEventListener('click', () => {
+            track('asset_download_start', { asset_type: 'cover_image' });
+        });
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                fetchCover();
+            }
+        });
+    </script>
+</body>
+</html>

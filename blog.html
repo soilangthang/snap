@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tik1s Resource Center</title>
+    <meta name="description" content="Practical guides, troubleshooting notes, and policy pages for TikTok downloads, MP3 extraction, and responsible use.">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Tik1s Resource Center">
+    <meta property="og:description" content="Practical guides, troubleshooting notes, and policy pages for TikTok downloads, MP3 extraction, and responsible use.">
+    <meta property="twitter:title" content="Tik1s Resource Center">
+    <meta property="twitter:description" content="Practical guides, troubleshooting notes, and policy pages for TikTok downloads, MP3 extraction, and responsible use.">
+    <link rel="canonical" href="https://tik1s.com/blog">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .resource-page { max-width: 1040px; margin: 0 auto; padding: 92px 20px 72px; }
+        .resource-header { margin-bottom: 32px; }
+        .resource-header p { max-width: 760px; line-height: 1.8; color: #4b5563; }
+        .resource-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 24px 0 36px; }
+        .meta-card, .resource-card, .resource-panel { background: #fff; border: 1px solid #dde5ef; border-radius: 18px; padding: 22px; box-shadow: 0 16px 40px rgba(14, 30, 52, 0.06); }
+        .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .resource-card h2 { font-size: 1.2rem; margin-bottom: 10px; }
+        .resource-card p, .resource-panel p, .resource-panel li, .meta-card p { color: #4b5563; line-height: 1.7; }
+        .resource-card a, .resource-panel a, .back-link { color: #0b69ff; text-decoration: none; font-weight: 600; }
+        .resource-panel { margin-top: 28px; }
+        .resource-panel ul { margin-left: 20px; }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change language" data-i18n-aria-label="changeLanguage">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLang">EN</span>
+        </button>
+        <div class="lang-dropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="hi">Hindi</button>
+            <button class="lang-option" data-lang="vi">Vietnamese</button>
+            <button class="lang-option" data-lang="id">Indonesian</button>
+        </div>
+    </div>
+
+    <main class="resource-page">
+        <a href="/" class="back-link" data-i18n="backHome">Back to homepage</a>
+
+        <header class="resource-header">
+            <h1 data-i18n="pageHeading">Tik1s Resource Center</h1>
+            <p data-i18n="pageIntro">This section collects the pages that explain how the tool works, when downloads fail, what quality to expect, and how to use saved files responsibly.</p>
+        </header>
+
+        <section class="resource-meta">
+            <div class="meta-card" data-i18n-html="metaCard1"></div>
+            <div class="meta-card" data-i18n-html="metaCard2"></div>
+            <div class="meta-card" data-i18n-html="metaCard3"></div>
+        </section>
+
+        <section class="resource-grid">
+            <article class="resource-card">
+                <h2 data-i18n="card1Title">How to Download TikTok Videos Responsibly</h2>
+                <p data-i18n="card1Desc">A practical guide covering public links, output quality, failure reasons, and a troubleshooting checklist.</p>
+                <a href="/how-to-download-tiktok-videos" data-i18n="card1Link">Open guide</a>
+            </article>
+
+            <article class="resource-card">
+                <h2 data-i18n="card2Title">How to Save TikTok Audio as MP3</h2>
+                <p data-i18n="card2Desc">Explains when MP3 extraction works, what limits to expect, and the most reliable fallback path.</p>
+                <a href="/save-tiktok-audio-mp3" data-i18n="card2Link">Open guide</a>
+            </article>
+
+            <article class="resource-card">
+                <h2 data-i18n="card3Title">Creator Rights and Responsible Use</h2>
+                <p data-i18n="card3Desc">Clarifies the difference between downloading a public file and owning the rights to reuse it.</p>
+                <a href="/creator-rights" data-i18n="card3Link">Open guidance</a>
+            </article>
+
+            <article class="resource-card">
+                <h2 data-i18n="card4Title">Editorial Policy</h2>
+                <p data-i18n="card4Desc">Shows how Tik1s reviews, updates, and labels product guidance for visitors.</p>
+                <a href="/editorial-policy" data-i18n="card4Link">Open policy</a>
+            </article>
+
+            <article class="resource-card">
+                <h2 data-i18n="card5Title">TikTok Cover Downloader</h2>
+                <p data-i18n="card5Desc">Use this when you only need the public thumbnail or cover image.</p>
+                <a href="/tiktok-cover-downloader" data-i18n="card5Link">Open utility</a>
+            </article>
+
+            <article class="resource-card">
+                <h2 data-i18n="card6Title">TikTok Link Resolver</h2>
+                <p data-i18n="card6Desc">Resolve short links and verify what assets are available before downloading.</p>
+                <a href="/tiktok-link-resolver" data-i18n="card6Link">Open utility</a>
+            </article>
+
+            <article class="resource-card">
+                <h2 data-i18n="card7Title">TikTok Video Metadata Viewer</h2>
+                <p data-i18n="card7Desc">Check title, author, video ID, thumbnail, HD, and audio availability before saving.</p>
+                <a href="/tiktok-video-metadata" data-i18n="card7Link">Open utility</a>
+            </article>
+        </section>
+
+        <section class="resource-panel">
+            <h2 data-i18n="changedTitle">What changed in this section</h2>
+            <p data-i18n="changedDesc">Each page now has one clear job, a review date, and content written to help a visitor complete a task rather than skim generic marketing claims.</p>
+        </section>
+
+        <section class="resource-panel">
+            <h2 data-i18n="usageTitle">How to use these pages</h2>
+            <ul data-i18n-html="usageList"></ul>
+        </section>
+
+        <footer class="main-footer">
+            <div class="container">
+                <p data-i18n="footerCopy">© 2026 Tik1s. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="/" data-i18n="footerHome">Home</a>
+                    <span>|</span>
+                    <a href="/about" data-i18n="footerAbout">About</a>
+                    <span>|</span>
+                    <a href="/editorial-policy" data-i18n="footerPolicy">Editorial Policy</a>
+                    <span>|</span>
+                    <a href="/creator-rights" data-i18n="footerRights">Creator Rights</a>
+                    <span>|</span>
+                    <a href="/privacy" data-i18n="footerPrivacy">Privacy Policy</a>
+                    <span>|</span>
+                    <a href="/terms" data-i18n="footerTerms">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        window.pageTranslations = {
+            en: {
+                changeLanguage: "Change language",
+                pageTitle: "Tik1s Resource Center",
+                pageDescription: "Practical guides, troubleshooting notes, and policy pages for TikTok downloads, MP3 extraction, and responsible use.",
+                backHome: "Back to homepage",
+                pageHeading: "Tik1s Resource Center",
+                pageIntro: "This section collects the pages that explain how the tool works, when downloads fail, what quality to expect, and how to use saved files responsibly.",
+                metaCard1: "<p><strong>Last updated:</strong> March 31, 2026</p><p><strong>Maintained by:</strong> Tik1s editorial team</p>",
+                metaCard2: "<p><strong>Focus:</strong> public TikTok links, MP3 extraction, creator rights, troubleshooting, and utility workflows.</p>",
+                metaCard3: "<p><strong>Related pages:</strong> <a href=\"/about\">About</a>, <a href=\"/editorial-policy\">Editorial Policy</a>, <a href=\"/creator-rights\">Creator Rights</a>.</p>",
+                card1Title: "How to Download TikTok Videos Responsibly",
+                card1Desc: "A practical guide covering public links, output quality, failure reasons, and a troubleshooting checklist.",
+                card1Link: "Open guide",
+                card2Title: "How to Save TikTok Audio as MP3",
+                card2Desc: "Explains when MP3 extraction works, what limits to expect, and the most reliable fallback path.",
+                card2Link: "Open guide",
+                card3Title: "Creator Rights and Responsible Use",
+                card3Desc: "Clarifies the difference between downloading a public file and owning the rights to reuse it.",
+                card3Link: "Open guidance",
+                card4Title: "Editorial Policy",
+                card4Desc: "Shows how Tik1s reviews, updates, and labels product guidance for visitors.",
+                card4Link: "Open policy",
+                card5Title: "TikTok Cover Downloader",
+                card5Desc: "Use this when you only need the public thumbnail or cover image.",
+                card5Link: "Open utility",
+                card6Title: "TikTok Link Resolver",
+                card6Desc: "Resolve short links and verify what assets are available before downloading.",
+                card6Link: "Open utility",
+                card7Title: "TikTok Video Metadata Viewer",
+                card7Desc: "Check title, author, video ID, thumbnail, HD, and audio availability before saving.",
+                card7Link: "Open utility",
+                changedTitle: "What changed in this section",
+                changedDesc: "Each page now has one clear job, a review date, and content written to help a visitor complete a task rather than skim generic marketing claims.",
+                usageTitle: "How to use these pages",
+                usageList: "<li>Use the video guide when a public link fails or quality is lower than expected.</li><li>Use the MP3 guide when audio extraction works inconsistently.</li><li>Use the rights page before reposting, editing, or monetizing downloaded content.</li><li>Use the editorial policy to understand how Tik1s maintains product guidance.</li>",
+                footerCopy: "© 2026 Tik1s. All rights reserved.",
+                footerHome: "Home",
+                footerAbout: "About",
+                footerPolicy: "Editorial Policy",
+                footerRights: "Creator Rights",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            hi: {
+                changeLanguage: "भाषा बदलें",
+                pageTitle: "Tik1s Resource Center",
+                pageDescription: "TikTok download, MP3 extraction, troubleshooting और responsible use के लिए practical guides और policy pages.",
+                backHome: "होमपेज पर वापस जाएँ",
+                pageHeading: "Tik1s Resource Center",
+                pageIntro: "यह सेक्शन उन पेजों को एक जगह लाता है जो बताते हैं कि टूल कैसे काम करता है, डाउनलोड कब फेल होते हैं, किस quality की उम्मीद रखनी चाहिए और सेव की गई फाइलों का उपयोग ज़िम्मेदारी से कैसे करना चाहिए।",
+                metaCard1: "<p><strong>अंतिम अपडेट:</strong> 31 मार्च 2026</p><p><strong>देखरेख:</strong> Tik1s editorial team</p>",
+                metaCard2: "<p><strong>फ़ोकस:</strong> public TikTok links, MP3 extraction, creator rights, troubleshooting और utility workflows.</p>",
+                metaCard3: "<p><strong>संबंधित पेज:</strong> <a href=\"/about\">About</a>, <a href=\"/editorial-policy\">Editorial Policy</a>, <a href=\"/creator-rights\">Creator Rights</a>.</p>",
+                card1Title: "TikTok वीडियो को ज़िम्मेदारी से कैसे डाउनलोड करें",
+                card1Desc: "Public links, output quality, failure reasons और troubleshooting checklist पर practical guide.",
+                card1Link: "गाइड खोलें",
+                card2Title: "TikTok ऑडियो को MP3 के रूप में कैसे सेव करें",
+                card2Desc: "बताता है MP3 extraction कब काम करता है, किन limits की उम्मीद रखनी चाहिए और सबसे अच्छा fallback क्या है।",
+                card2Link: "गाइड खोलें",
+                card3Title: "Creator rights और responsible use",
+                card3Desc: "समझाता है कि public file डाउनलोड करना और उसे reuse करने का अधिकार होना अलग बातें हैं।",
+                card3Link: "मार्गदर्शन खोलें",
+                card4Title: "Editorial Policy",
+                card4Desc: "दिखाता है कि Tik1s visitors के लिए product guidance को कैसे review, update और label करता है।",
+                card4Link: "नीति खोलें",
+                card5Title: "TikTok Cover Downloader",
+                card5Desc: "जब आपको सिर्फ public thumbnail या cover image चाहिए तब यह उपयोगी है।",
+                card5Link: "यूटिलिटी खोलें",
+                card6Title: "TikTok Link Resolver",
+                card6Desc: "Short links resolve करें और download से पहले available assets verify करें।",
+                card6Link: "यूटिलिटी खोलें",
+                card7Title: "TikTok Video Metadata Viewer",
+                card7Desc: "सेव करने से पहले title, author, video ID, thumbnail, HD और audio availability देखें।",
+                card7Link: "यूटिलिटी खोलें",
+                changedTitle: "इस सेक्शन में क्या बदला",
+                changedDesc: "अब हर page का एक clear job है, review date है, और content visitor को generic marketing claims पढ़ने के बजाय वास्तविक task पूरा करने में मदद करता है।",
+                usageTitle: "इन पेजों का उपयोग कैसे करें",
+                usageList: "<li>Video guide तब उपयोग करें जब public link fail हो या quality उम्मीद से कम हो.</li><li>MP3 guide तब उपयोग करें जब audio extraction inconsistent हो.</li><li>Downloaded content repost, edit या monetize करने से पहले rights page पढ़ें.</li><li>Editorial policy से समझें कि Tik1s product guidance को कैसे maintain करता है.</li>",
+                footerCopy: "© 2026 Tik1s. सर्वाधिकार सुरक्षित।",
+                footerHome: "होम",
+                footerAbout: "About",
+                footerPolicy: "Editorial Policy",
+                footerRights: "Creator Rights",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            vi: {
+                changeLanguage: "Đổi ngôn ngữ",
+                pageTitle: "Trung tâm tài nguyên Tik1s",
+                pageDescription: "Các hướng dẫn thực dụng, ghi chú xử lý lỗi và trang chính sách cho việc tải TikTok, trích xuất MP3 và sử dụng có trách nhiệm.",
+                backHome: "Quay lại trang chủ",
+                pageHeading: "Trung tâm tài nguyên Tik1s",
+                pageIntro: "Khu vực này gom các trang giải thích công cụ hoạt động ra sao, khi nào tải bị lỗi, nên kỳ vọng chất lượng thế nào và cách dùng file đã lưu một cách có trách nhiệm.",
+                metaCard1: "<p><strong>Cập nhật lần cuối:</strong> 31/03/2026</p><p><strong>Phụ trách:</strong> đội ngũ biên tập Tik1s</p>",
+                metaCard2: "<p><strong>Trọng tâm:</strong> link TikTok công khai, trích xuất MP3, quyền tác giả, xử lý lỗi và các utility hỗ trợ.</p>",
+                metaCard3: "<p><strong>Trang liên quan:</strong> <a href=\"/about\">Giới thiệu</a>, <a href=\"/editorial-policy\">Chính sách biên tập</a>, <a href=\"/creator-rights\">Quyền tác giả</a>.</p>",
+                card1Title: "Cách tải video TikTok một cách có trách nhiệm",
+                card1Desc: "Hướng dẫn thực dụng về link công khai, chất lượng đầu ra, lý do lỗi và checklist xử lý sự cố.",
+                card1Link: "Mở hướng dẫn",
+                card2Title: "Cách lưu âm thanh TikTok thành MP3",
+                card2Desc: "Giải thích khi nào MP3 hoạt động, các giới hạn cần biết và đường fallback ổn định nhất.",
+                card2Link: "Mở hướng dẫn",
+                card3Title: "Quyền tác giả và cách sử dụng có trách nhiệm",
+                card3Desc: "Làm rõ khác biệt giữa việc tải một file công khai và quyền tái sử dụng nội dung đó.",
+                card3Link: "Mở hướng dẫn",
+                card4Title: "Chính sách biên tập",
+                card4Desc: "Cho biết Tik1s review, cập nhật và gắn nhãn nội dung hướng dẫn như thế nào.",
+                card4Link: "Mở chính sách",
+                card5Title: "TikTok Cover Downloader",
+                card5Desc: "Dùng khi bạn chỉ cần thumbnail hoặc cover image công khai.",
+                card5Link: "Mở utility",
+                card6Title: "TikTok Link Resolver",
+                card6Desc: "Giải link rút gọn và kiểm tra asset khả dụng trước khi tải.",
+                card6Link: "Mở utility",
+                card7Title: "TikTok Video Metadata Viewer",
+                card7Desc: "Xem title, author, video ID, thumbnail, HD và audio trước khi lưu.",
+                card7Link: "Mở utility",
+                changedTitle: "Phần này đã thay đổi gì",
+                changedDesc: "Mỗi trang giờ có một nhiệm vụ rõ ràng, có ngày review và nội dung được viết để giúp người dùng hoàn thành tác vụ thay vì chỉ lướt qua các câu quảng bá chung chung.",
+                usageTitle: "Nên dùng các trang này như thế nào",
+                usageList: "<li>Dùng hướng dẫn video khi link công khai bị lỗi hoặc chất lượng thấp hơn mong đợi.</li><li>Dùng hướng dẫn MP3 khi việc trích xuất audio hoạt động không ổn định.</li><li>Đọc trang quyền tác giả trước khi repost, chỉnh sửa hoặc kiếm tiền từ nội dung đã tải.</li><li>Dùng trang chính sách biên tập để hiểu Tik1s duy trì phần hướng dẫn ra sao.</li>",
+                footerCopy: "© 2026 Tik1s. Đã đăng ký mọi quyền.",
+                footerHome: "Trang chủ",
+                footerAbout: "Giới thiệu",
+                footerPolicy: "Chính sách biên tập",
+                footerRights: "Quyền tác giả",
+                footerPrivacy: "Chính sách bảo mật",
+                footerTerms: "Điều khoản dịch vụ"
+            },
+            id: {
+                changeLanguage: "Ganti bahasa",
+                pageTitle: "Pusat Sumber Tik1s",
+                pageDescription: "Panduan praktis, catatan troubleshooting, dan halaman kebijakan untuk unduhan TikTok, ekstraksi MP3, dan penggunaan yang bertanggung jawab.",
+                backHome: "Kembali ke beranda",
+                pageHeading: "Pusat Sumber Tik1s",
+                pageIntro: "Bagian ini mengumpulkan halaman yang menjelaskan cara kerja tool, kapan unduhan gagal, kualitas apa yang perlu diharapkan, dan cara menggunakan file yang disimpan secara bertanggung jawab.",
+                metaCard1: "<p><strong>Terakhir diperbarui:</strong> 31 Maret 2026</p><p><strong>Dikelola oleh:</strong> tim editorial Tik1s</p>",
+                metaCard2: "<p><strong>Fokus:</strong> link TikTok publik, ekstraksi MP3, hak kreator, troubleshooting, dan workflow utility.</p>",
+                metaCard3: "<p><strong>Halaman terkait:</strong> <a href=\"/about\">Tentang</a>, <a href=\"/editorial-policy\">Kebijakan Editorial</a>, <a href=\"/creator-rights\">Hak Kreator</a>.</p>",
+                card1Title: "Cara mengunduh video TikTok dengan bertanggung jawab",
+                card1Desc: "Panduan praktis tentang link publik, kualitas output, penyebab gagal, dan checklist troubleshooting.",
+                card1Link: "Buka panduan",
+                card2Title: "Cara menyimpan audio TikTok sebagai MP3",
+                card2Desc: "Menjelaskan kapan MP3 bekerja, batas yang perlu diketahui, dan fallback yang paling andal.",
+                card2Link: "Buka panduan",
+                card3Title: "Hak kreator dan penggunaan yang bertanggung jawab",
+                card3Desc: "Menjelaskan perbedaan antara mengunduh file publik dan memiliki hak untuk menggunakannya kembali.",
+                card3Link: "Buka panduan",
+                card4Title: "Kebijakan Editorial",
+                card4Desc: "Menunjukkan bagaimana Tik1s meninjau, memperbarui, dan memberi label panduan produk.",
+                card4Link: "Buka kebijakan",
+                card5Title: "TikTok Cover Downloader",
+                card5Desc: "Gunakan saat Anda hanya memerlukan thumbnail atau cover image publik.",
+                card5Link: "Buka utility",
+                card6Title: "TikTok Link Resolver",
+                card6Desc: "Selesaikan tautan pendek dan verifikasi aset yang tersedia sebelum mengunduh.",
+                card6Link: "Buka utility",
+                card7Title: "TikTok Video Metadata Viewer",
+                card7Desc: "Lihat title, author, video ID, thumbnail, HD, dan audio sebelum menyimpan.",
+                card7Link: "Buka utility",
+                changedTitle: "Apa yang berubah di bagian ini",
+                changedDesc: "Sekarang setiap halaman punya satu tugas yang jelas, tanggal review, dan isi yang membantu pengunjung menyelesaikan tugas nyata.",
+                usageTitle: "Cara memakai halaman ini",
+                usageList: "<li>Gunakan panduan video saat link publik gagal atau kualitas lebih rendah dari yang diharapkan.</li><li>Gunakan panduan MP3 saat ekstraksi audio tidak konsisten.</li><li>Baca halaman hak kreator sebelum repost, mengedit, atau memonetisasi konten yang diunduh.</li><li>Gunakan kebijakan editorial untuk memahami bagaimana Tik1s menjaga panduan produk.</li>",
+                footerCopy: "© 2026 Tik1s. Seluruh hak cipta dilindungi.",
+                footerHome: "Beranda",
+                footerAbout: "Tentang",
+                footerPolicy: "Kebijakan Editorial",
+                footerRights: "Hak Kreator",
+                footerPrivacy: "Kebijakan Privasi",
+                footerTerms: "Ketentuan Layanan"
+            }
+        };
+    </script>
+    <script src="/page-i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Page Not Found - Tik1s</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .error-page { max-width: 620px; margin: 0 auto; padding: 120px 20px 72px; text-align: center; }
+        .error-page p { color: #526075; line-height: 1.8; margin-top: 12px; }
+        .error-page a { color: #0b69ff; text-decoration: none; font-weight: 700; display: inline-block; margin-top: 24px; }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change language" data-i18n-aria-label="changeLanguage">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLang">EN</span>
+        </button>
+        <div class="lang-dropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="hi">Hindi</button>
+            <button class="lang-option" data-lang="vi">Vietnamese</button>
+            <button class="lang-option" data-lang="id">Indonesian</button>
+        </div>
+    </div>
+
+    <main class="error-page">
+        <h1 data-i18n="heading">404</h1>
+        <p data-i18n="message">The page you requested could not be found.</p>
+        <a href="/" data-i18n="backLink">Back to homepage</a>
+    </main>
+
+    <script>
+        window.pageTranslations = {
+            en: {
+                changeLanguage: "Change language",
+                pageTitle: "Page Not Found - Tik1s",
+                pageDescription: "",
+                heading: "404",
+                message: "The page you requested could not be found.",
+                backLink: "Back to homepage"
+            },
+            hi: {
+                changeLanguage: "भाषा बदलें",
+                pageTitle: "Page Not Found - Tik1s",
+                pageDescription: "",
+                heading: "404",
+                message: "आपके द्वारा माँगा गया पेज नहीं मिला।",
+                backLink: "होमपेज पर वापस जाएँ"
+            },
+            vi: {
+                changeLanguage: "Đổi ngôn ngữ",
+                pageTitle: "Không tìm thấy trang - Tik1s",
+                pageDescription: "",
+                heading: "404",
+                message: "Trang bạn yêu cầu không tồn tại.",
+                backLink: "Quay lại trang chủ"
+            },
+            id: {
+                changeLanguage: "Ganti bahasa",
+                pageTitle: "Halaman Tidak Ditemukan - Tik1s",
+                pageDescription: "",
+                heading: "404",
+                message: "Halaman yang Anda minta tidak ditemukan.",
+                backLink: "Kembali ke beranda"
+            }
+        };
+    </script>
+    <script src="/page-i18n.js"></script>
+</body>
+</html>

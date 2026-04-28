@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Tik1s</title>
+    <meta name="description" content="About Tik1s: what the site does, what it supports, how it handles guidance, and how to contact the team.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://tik1s.com/about">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .content-page { max-width: 920px; margin: 0 auto; padding: 92px 20px 72px; }
+        .back-link { color: #0b69ff; text-decoration: none; font-weight: 700; }
+        .content-kicker { margin: 18px 0 10px; color: #0b69ff; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.82rem; }
+        .content-intro, .content-body p, .content-body li, .content-meta p { color: #46515f; line-height: 1.8; }
+        .content-meta, .content-note { margin-top: 24px; padding: 20px 22px; border-radius: 18px; border: 1px solid #dbe3ee; background: rgba(255, 255, 255, 0.92); box-shadow: 0 16px 40px rgba(14, 30, 52, 0.06); }
+        .content-body { margin-top: 28px; display: grid; gap: 26px; }
+        .content-body h2 { margin-bottom: 10px; }
+        .content-body ul { margin-left: 22px; }
+        .content-links { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px; }
+        .content-links a { color: #0b69ff; text-decoration: none; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button class="lang-btn" id="langBtn" aria-label="Change language" data-i18n-aria-label="changeLanguage">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span id="currentLang">EN</span>
+        </button>
+        <div class="lang-dropdown">
+            <button class="lang-option" data-lang="en">English</button>
+            <button class="lang-option" data-lang="hi">Hindi</button>
+            <button class="lang-option" data-lang="vi">Vietnamese</button>
+            <button class="lang-option" data-lang="id">Indonesian</button>
+        </div>
+    </div>
+
+    <main class="content-page">
+        <a href="/" class="back-link" data-i18n="backLink">Back to homepage</a>
+        <p class="content-kicker" data-i18n="kicker">About</p>
+        <h1 data-i18n="heading">About Tik1s</h1>
+        <p class="content-intro" data-i18n="intro">Tik1s is a TikTok utility hub focused on public video downloads, MP3 extraction, cover images, link checks, and practical support pages.</p>
+
+        <section class="content-meta" data-i18n-html="meta"></section>
+        <section class="content-body" data-i18n-html="body"></section>
+
+        <div class="content-links">
+            <a href="/blog" data-i18n="link1">Open the resource center</a>
+            <a href="/editorial-policy" data-i18n="link2">Read editorial policy</a>
+            <a href="/creator-rights" data-i18n="link3">Read creator rights guidance</a>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="container">
+            <p data-i18n="footerCopy">© 2026 Tik1s. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="/" data-i18n="footerHome">Home</a>
+                <span>|</span>
+                <a href="/blog" data-i18n="footerBlog">Resource Center</a>
+                <span>|</span>
+                <a href="/privacy" data-i18n="footerPrivacy">Privacy Policy</a>
+                <span>|</span>
+                <a href="/terms" data-i18n="footerTerms">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        window.pageTranslations = {
+            en: {
+                changeLanguage: "Change language",
+                pageTitle: "About Tik1s",
+                pageDescription: "About Tik1s: what the site does, what it supports, how it handles guidance, and how to contact the team.",
+                backLink: "Back to homepage",
+                kicker: "About",
+                heading: "About Tik1s",
+                intro: "Tik1s is a TikTok utility hub focused on public video downloads, MP3 extraction, cover images, link checks, and practical support pages.",
+                meta: "<p><strong>Maintained by:</strong> Tik1s editorial and product team</p><p><strong>Contact:</strong> <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a></p>",
+                body: "<section><h2>What the site offers</h2><ul><li>Main downloader for public TikTok posts.</li><li>MP3 extraction when audio is available.</li><li>Dedicated tools for cover download, link resolution, and metadata checks.</li><li>Support pages for troubleshooting, creator rights, and editorial standards.</li></ul></section><section><h2>What the site does not promise</h2><ul><li>Access to private or friends-only content.</li><li>Guaranteed HD availability for every post.</li><li>Ownership or reuse rights over downloaded media.</li><li>Perfect compatibility with every upstream format change.</li></ul></section><section><h2>How we keep the service useful</h2><p>We focus on a small set of tasks people actually need: saving public files, checking what assets are available, understanding common failure modes, and explaining the limits around reuse. We prefer a narrow, reliable scope over a large set of unrelated tools.</p></section><section><h2>How to contact us</h2><p>If you have questions, feedback, or rights-related reports, email <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a>. Include the relevant URL and enough context for review.</p></section>",
+                link1: "Open the resource center",
+                link2: "Read editorial policy",
+                link3: "Read creator rights guidance",
+                footerCopy: "© 2026 Tik1s. All rights reserved.",
+                footerHome: "Home",
+                footerBlog: "Resource Center",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            hi: {
+                changeLanguage: "भाषा बदलें",
+                pageTitle: "About Tik1s",
+                pageDescription: "Tik1s के बारे में: साइट क्या करती है, क्या सपोर्ट करती है, guidance कैसे संभालती है और टीम से कैसे संपर्क करें।",
+                backLink: "होमपेज पर वापस जाएँ",
+                kicker: "About",
+                heading: "About Tik1s",
+                intro: "Tik1s एक TikTok utility hub है जो public video downloads, MP3 extraction, cover images, link checks और practical support pages पर केंद्रित है।",
+                meta: "<p><strong>देखरेख:</strong> Tik1s editorial और product team</p><p><strong>संपर्क:</strong> <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a></p>",
+                body: "<section><h2>साइट क्या देती है</h2><ul><li>Public TikTok posts के लिए main downloader.</li><li>जब audio उपलब्ध हो तब MP3 extraction.</li><li>Cover download, link resolution और metadata checks के लिए dedicated tools.</li><li>Troubleshooting, creator rights और editorial standards के लिए support pages.</li></ul></section><section><h2>साइट क्या promise नहीं करती</h2><ul><li>Private या friends-only content तक पहुँच.</li><li>हर post के लिए HD availability की guarantee.</li><li>Downloaded media पर ownership या reuse rights.</li><li>हर upstream format change के साथ perfect compatibility.</li></ul></section><section><h2>हम सेवा को उपयोगी कैसे रखते हैं</h2><p>हम उन छोटे लेकिन ज़रूरी tasks पर ध्यान देते हैं जिनकी लोगों को सच में ज़रूरत होती है: public files सेव करना, available assets देखना, common failure modes समझना, और reuse की सीमाएँ साफ़ करना। हम बिखरे हुए tools की बड़ी सूची के बजाय स्पष्ट scope रखते हैं।</p></section><section><h2>हमसे कैसे संपर्क करें</h2><p>यदि आपके पास सवाल, feedback या rights-related report है, तो <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a> पर लिखें। Review के लिए relevant URL और context साथ भेजें।</p></section>",
+                link1: "रिसोर्स सेंटर खोलें",
+                link2: "Editorial policy पढ़ें",
+                link3: "Creator rights guidance पढ़ें",
+                footerCopy: "© 2026 Tik1s. सर्वाधिकार सुरक्षित।",
+                footerHome: "होम",
+                footerBlog: "रिसोर्स सेंटर",
+                footerPrivacy: "Privacy Policy",
+                footerTerms: "Terms of Service"
+            },
+            vi: {
+                changeLanguage: "Đổi ngôn ngữ",
+                pageTitle: "Giới thiệu Tik1s",
+                pageDescription: "Thông tin về Tik1s: site làm gì, hỗ trợ gì, duy trì phần hướng dẫn ra sao và cách liên hệ với đội ngũ.",
+                backLink: "Quay lại trang chủ",
+                kicker: "Giới thiệu",
+                heading: "Giới thiệu Tik1s",
+                intro: "Tik1s là một utility hub cho TikTok, tập trung vào tải video công khai, trích xuất MP3, cover image, kiểm tra link và các trang hỗ trợ thực dụng.",
+                meta: "<p><strong>Phụ trách:</strong> đội ngũ sản phẩm và biên tập Tik1s</p><p><strong>Liên hệ:</strong> <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a></p>",
+                body: "<section><h2>Site này cung cấp gì</h2><ul><li>Downloader chính cho các bài TikTok công khai.</li><li>Trích xuất MP3 khi audio khả dụng.</li><li>Các tool riêng cho cover download, link resolution và metadata checks.</li><li>Các trang hỗ trợ về xử lý lỗi, quyền tác giả và tiêu chuẩn biên tập.</li></ul></section><section><h2>Site này không hứa điều gì</h2><ul><li>Truy cập nội dung riêng tư hoặc chỉ bạn bè.</li><li>Bảo đảm HD có sẵn cho mọi bài đăng.</li><li>Chuyển quyền sở hữu hay quyền tái sử dụng media đã tải.</li><li>Tương thích hoàn hảo với mọi thay đổi format từ upstream.</li></ul></section><section><h2>Cách chúng tôi giữ dịch vụ hữu ích</h2><p>Chúng tôi tập trung vào một nhóm việc nhỏ nhưng người dùng thật sự cần: lưu file công khai, kiểm tra asset khả dụng, hiểu các lỗi thường gặp và làm rõ ranh giới tái sử dụng. Chúng tôi chọn phạm vi hẹp nhưng đáng tin hơn là một danh sách dài các tool rời rạc.</p></section><section><h2>Cách liên hệ</h2><p>Nếu bạn có câu hỏi, góp ý hoặc báo cáo liên quan đến quyền, hãy gửi email tới <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a>. Hãy kèm URL liên quan và ngữ cảnh đủ để xem xét.</p></section>",
+                link1: "Mở trung tâm tài nguyên",
+                link2: "Đọc chính sách biên tập",
+                link3: "Đọc hướng dẫn quyền tác giả",
+                footerCopy: "© 2026 Tik1s. Đã đăng ký mọi quyền.",
+                footerHome: "Trang chủ",
+                footerBlog: "Trung tâm tài nguyên",
+                footerPrivacy: "Chính sách bảo mật",
+                footerTerms: "Điều khoản dịch vụ"
+            },
+            id: {
+                changeLanguage: "Ganti bahasa",
+                pageTitle: "Tentang Tik1s",
+                pageDescription: "Tentang Tik1s: apa yang dikerjakan situs, apa yang didukung, bagaimana panduan dikelola, dan cara menghubungi tim.",
+                backLink: "Kembali ke beranda",
+                kicker: "Tentang",
+                heading: "Tentang Tik1s",
+                intro: "Tik1s adalah utility hub TikTok yang berfokus pada unduhan video publik, ekstraksi MP3, cover image, pemeriksaan link, dan halaman dukungan yang praktis.",
+                meta: "<p><strong>Dikelola oleh:</strong> tim produk dan editorial Tik1s</p><p><strong>Kontak:</strong> <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a></p>",
+                body: "<section><h2>Apa yang ditawarkan situs ini</h2><ul><li>Downloader utama untuk posting TikTok publik.</li><li>Ekstraksi MP3 saat audio tersedia.</li><li>Tool khusus untuk cover download, link resolution, dan metadata checks.</li><li>Halaman dukungan untuk troubleshooting, hak kreator, dan standar editorial.</li></ul></section><section><h2>Apa yang tidak dijanjikan situs ini</h2><ul><li>Akses ke konten private atau friends-only.</li><li>Jaminan HD untuk setiap posting.</li><li>Kepemilikan atau hak reuse atas media yang diunduh.</li><li>Kompatibilitas sempurna dengan setiap perubahan format upstream.</li></ul></section><section><h2>Bagaimana kami menjaga layanan tetap berguna</h2><p>Kami fokus pada sejumlah kecil tugas yang benar-benar dibutuhkan orang: menyimpan file publik, memeriksa aset yang tersedia, memahami mode kegagalan umum, dan menjelaskan batas reuse. Kami memilih cakupan yang sempit namun andal dibanding daftar panjang tool yang tidak saling terkait.</p></section><section><h2>Cara menghubungi kami</h2><p>Jika Anda punya pertanyaan, masukan, atau laporan terkait hak, kirim email ke <a href=\"mailto:contact@tik1s.com\">contact@tik1s.com</a>. Sertakan URL terkait dan konteks yang cukup untuk peninjauan.</p></section>",
+                link1: "Buka pusat sumber",
+                link2: "Baca kebijakan editorial",
+                link3: "Baca panduan hak kreator",
+                footerCopy: "© 2026 Tik1s. Seluruh hak cipta dilindungi.",
+                footerHome: "Beranda",
+                footerBlog: "Pusat sumber",
+                footerPrivacy: "Kebijakan Privasi",
+                footerTerms: "Ketentuan Layanan"
+            }
+        };
+    </script>
+    <script src="/page-i18n.js"></script>
+</body>
+</html>
